@@ -116,7 +116,7 @@ function useMondrian() {
     setColors(newColors);
   }
 
-  return { generate, rects, setHasBlack };
+  return { generate, generateMondrian , rects, setHasBlack };
 
 }
 

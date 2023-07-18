@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect } from "../utils";
+import { CustomRect, findIntersectionInXLeft, findIntersectionInXRight } from "../utils";
 import useMondrian from "./useMondrian";
 
 interface Mondrian {
@@ -7,25 +7,33 @@ interface Mondrian {
 }
 
 function use3DMondrian() {
-  const { generate: generateMondrian } = useMondrian();
+  const {  generateMondrian, generate } = useMondrian();
   const [ mondrians, setMondrians] = useState<Mondrian[]>([]);
 
 
-  function generate(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
-    const mondrianRects = generateMondrian(canvasWidth, canvasHeight, nbIterations);
-    const mondrian2Rects = generateMondrian(canvasWidth, canvasHeight, nbIterations);
-    const mondrian3Rects = generateMondrian(canvasWidth, canvasHeight, nbIterations);
+  function generate3D(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
+    const xPad = canvasWidth * 0.05;
+    const yPad = canvasHeight * 0.05;
+    let accRects : CustomRect[] = [];
+
+
+
+    const mondrianRects = generate(canvasWidth, canvasHeight, nbIterations);
+    console.log(findIntersectionInXLeft(0, mondrianRects));
+    console.log(findIntersectionInXRight(canvasWidth, mondrianRects));
+    const mondrianLeftRects = generate(canvasWidth, canvasHeight, nbIterations);
+    const mondrianTopRects = generate(canvasWidth, canvasHeight, nbIterations);
 
     const mondrians : Mondrian[] = [
       { rects: mondrianRects },
-      { rects: mondrian2Rects },
-      { rects: mondrian3Rects }
+      { rects: mondrianLeftRects },
+      { rects: mondrianTopRects }
     ];
     setMondrians(mondrians);
   }
 
 
-  return { generate, mondrians };
+  return { generate: generate3D, mondrians };
 
 }
 
