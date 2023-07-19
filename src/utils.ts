@@ -30,3 +30,19 @@ export function customRectString(rect: CustomRect) : string {
     return `(${rect.x1}, ${rect.y1}) -> (${rect.x2}, ${rect.y2})`;
 }
 
+export function findIntersectionInXLeft(minX: number, children: CustomRect[]) : CustomRect[] {
+    return children.filter(child => child.x1 === minX);
+}
+
+export function findIntersectionInXRight(maxX: number, children: CustomRect[]) : CustomRect[] {
+    return children.filter(child => child.x2 === maxX);
+}
+
+export function findIntersectionInYTop(minY: number, children: CustomRect[]) : CustomRect[] {
+    return children.filter(child => child.y1 === minY);
+}
+
+
+export function findIntersectionInYBottom(maxY: number, children: CustomRect[]) : CustomRect[] {
+    return children.filter(child => child.y2 === maxY);
+}
