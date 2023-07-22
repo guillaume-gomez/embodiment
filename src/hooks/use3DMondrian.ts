@@ -7,14 +7,14 @@ interface Mondrian {
 }
 
 function use3DMondrian() {
-  const {  generateMondrian, generate } = useMondrian();
+  const {  /*generateMondrian,*/ generate } = useMondrian();
   const [ mondrians, setMondrians] = useState<Mondrian[]>([]);
 
 
   function generate3D(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
-    const xPad = canvasWidth * 0.05;
-    const yPad = canvasHeight * 0.05;
-    let accRects : CustomRect[] = [];
+    //const xPad = canvasWidth * 0.05;
+    //const yPad = canvasHeight * 0.05;
+    //let accRects : CustomRect[] = [];
 
 
 
