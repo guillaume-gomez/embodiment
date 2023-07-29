@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import use3DMondrian from "./hooks/use3DMondrian";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
-import { customRectString } from "./utils";
+import { customRectString, findIntersectionInXLeft, findIntersectionInYTop } from "./utils";
 import { useFullscreen } from "rooks";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       <h1 className="text-3xl font-bold underline">
         Embodiment
       </h1>
-      <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
+      <button className="btn btn-accent" onClick={() => generate(width,height, 3)}>Generate</button>
       {
         mondrians.map(mondrian =>
           (
@@ -28,12 +28,24 @@ function App() {
                 <h2 className="card-title">Result</h2>
                 <div className="mockup-code">
                   {
-                    mondrian.rects.map(rects =>
-                      (<pre>
-                        <code>{customRectString(rects)}</code>
-                      </pre>)
+                    mondrian.rects.map(rect =>
+                      (
+                        <pre>
+                          <code>{customRectString(rect)}</code>
+                        </pre>
+                      )
                     )
                   }
+                </div>
+                <div className="mockup-code">
+                  <pre>
+                    <code>
+                      { findIntersectionInXLeft(0, mondrian.rects).map(rect => customRectString(rect)) }
+                    </code>
+                    <code>
+                      { findIntersectionInYTop(0, mondrian.rects).map(rect => customRectString(rect)) }
+                    </code>
+                  </pre>
                 </div>
                 <div>
                    <MondrianCanvas
