@@ -19,7 +19,7 @@ function App() {
       <h1 className="text-3xl font-bold underline">
         Embodiment
       </h1>
-      <button className="btn btn-accent" onClick={() => generate(width,height, 2)}>Generate</button>
+      <button className="btn btn-accent" onClick={() => generate(width,height, 5)}>Generate</button>
       {
         mondrians.map((mondrian, index) =>
           (
