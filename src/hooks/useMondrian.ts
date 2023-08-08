@@ -36,25 +36,28 @@ function useMondrian() {
     limit: number
   ) : CustomRect[] {
     let rects : CustomRect[] = [];
-    let stackRects : CustomRect[] = [rect]
+    let stackRects : CustomRect[] = [rect];
     let depth = 1;
 
     while(depth <= limit) {
       console.log("prodondeur ",depth);
-      const currentStackRects = stackRects.length;
-      for(let index = 0; index < currentStackRects; index++)  {
-        const rectsArray = splitRects(stackRects[index], xPad, yPad);
+      const stackRectsLength = stackRects.length;
+
+      for(let index = 0; index < stackRectsLength; index++) {
+        const rectToSplitCandidate = stackRects[index];
+        const rectsArray = splitRects(rectToSplitCandidate, xPad, yPad);
         if(rectsArray.length === 2) {
           stackRects.push(...rectsArray);
+        } else {
+          rects.push(rectToSplitCandidate);
         }
-        else {
-          rects.push(stackRects[index]);
-        }
-        stackRects.splice(index, 1);
       }
+      stackRects.splice(0,stackRectsLength);
+      console.log(`------${depth}-------`)
+      console.log(JSON.stringify(stackRects))
       depth = depth + 1;
     }
-    return [...rects, ...stackRects];
+    return [...stackRects,...rects];
   }
 
 
