@@ -8,8 +8,8 @@ function App() {
   const { generate, mondrians } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
-  const [width] = useState<number>(300);
-  const [height] = useState<number>(300);
+  const [width] = useState<number>(350);
+  const [height] = useState<number>(350);
   const {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
@@ -26,6 +26,16 @@ function App() {
             <div className="card bg-primary text-primary-content">
                <div className="card-body">
                 <h2 className="card-title">{mondrian.title}</h2>
+                <div>
+                   <MondrianCanvas
+                      ref={canvasActionsRef}
+                      width={width}
+                      height={height}
+                      thickness={2}
+                      rects={mondrian.rects}
+                      toggleFullScreen={toggleFullscreen}
+                    />
+                </div>
                 <div className="mockup-code">
                   {
                     mondrian.rects.map(rect =>
@@ -68,16 +78,6 @@ function App() {
                     }
                   </>
                 }
-                <div>
-                   <MondrianCanvas
-                      ref={canvasActionsRef}
-                      width={width}
-                      height={height}
-                      thickness={2}
-                      rects={mondrian.rects}
-                      toggleFullScreen={toggleFullscreen}
-                    />
-                </div>
               </div>
             </div>
           )
