@@ -29,57 +29,30 @@ function useMondrian() {
   const [rects, setRects] = useState<CustomRect[]>([]);
   const [colors, setColors] = useState<string[]>(defaultColors);
 
-  function generateMondrianItterative(
-    rect: CustomRect,
+  function generateMondrian(
     xPad: number,
     yPad: number,
-    limit: number
+    nodes : CustomRect[]
   ) : CustomRect[] {
     let rects : CustomRect[] = [];
-    let stackRects : CustomRect[] = [rect]
-    let depth = 1;
+    let stackRects : CustomRect[] = nodes.slice();
 
-    while(depth <= limit) {
-      console.log("prodondeur ",depth);
-      const currentStackRects = stackRects.length;
-      for(let index = 0; index < currentStackRects; index++)  {
-        const rectsArray = splitRects(stackRects[index], xPad, yPad);
-        if(rectsArray.length === 2) {
-          stackRects.push(...rectsArray);
-        }
-        else {
-          rects.push(stackRects[index]);
-        }
-        stackRects.splice(index, 1);
+    const stackRectsLength = stackRects.length;
+    for(let index = 0; index < stackRectsLength; index++) {
+      const rectToSplitCandidate = stackRects[index];
+      const rectsArray = splitRects(rectToSplitCandidate, xPad, yPad);
+      if(rectsArray.length === 2) {
+        stackRects.push(...rectsArray);
+      } else {
+        rects.push(rectToSplitCandidate);
       }
-      depth = depth + 1;
     }
-    return [...rects, ...stackRects];
+    stackRects.splice(0,stackRectsLength);
+
+    return [...stackRects,...rects];
   }
 
 
-  function generateMondrian(
-      rect: CustomRect,
-      xPad: number,
-      yPad: number,
-      accRects: CustomRect[],
-      depth: number = 0,
-      limit: number = 1,
-    ) {
-    if (depth === limit) {
-      // dangerous :)
-      accRects.push(rect);
-      return;
-    }
-
-    const rectsArray = splitRects(rect, xPad, yPad);
-    if(rectsArray.length === 2) {
-      generateMondrian(rectsArray[0], xPad, yPad, accRects, depth + 1, limit);
-      generateMondrian(rectsArray[1], xPad, yPad, accRects, depth + 1, limit);
-    } else {
-      accRects.push(rect);
-    }
-  }
 
   function splitRects(rect: CustomRect, xPad: number, yPad: number) : [CustomRect, CustomRect] | [] {
      // Check the rectangle is enough large and tall
@@ -110,29 +83,20 @@ function useMondrian() {
     // magic number to avoid to little rects
     const xPad = canvasWidth * 0.05;
     const yPad = canvasHeight * 0.05;
-    let accRects : CustomRect[] = [];
-    generateMondrian(
-       {x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"},
-       xPad,
-       yPad,
-       accRects,
-       0,
-       nbIterations
-      );
-    setRects(accRects.slice());
-    return accRects;
-  }
+    
+    let rects : CustomRect[] = [];
+    let stackRects : CustomRect[] = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}];
+    let depth = 1;
 
-  function generateItterative(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
-    // magic number to avoid to little rects
-    const xPad = canvasWidth * 0.05;
-    const yPad = canvasHeight * 0.05;
-    return generateMondrianItterative(
-      {x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"},
-      xPad,
-      yPad,
-      nbIterations
-      );
+    while(depth <= nbIterations) {
+      console.log("prodondeur ",depth);
+      stackRects = generateMondrian(xPad, yPad, stackRects);
+      
+      depth = depth + 1;
+    }
+    const results =  [...stackRects,...rects];
+    setRects(results)
+    return results;
   }
 
   function randomColor() {
@@ -156,7 +120,7 @@ function useMondrian() {
     setColors(newColors);
   }
 
-  return { generate: generateItterative, generateMondrian , rects, setHasBlack };
+  return { generate, generateMondrian,  rects, setHasBlack };
 
 }
 

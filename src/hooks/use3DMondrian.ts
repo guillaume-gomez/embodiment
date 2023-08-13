@@ -19,7 +19,7 @@ function use3DMondrian() {
     const mondrianRects = generate(canvasWidth, canvasHeight, nbIterations);
 
     let mondrianLeftRects = findIntersectionInXLeft(0, mondrianRects);
-    generateMondrian(
+    /*generateMondrian(
       {x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"},
       xPad,
       yPad,
@@ -34,12 +34,12 @@ function use3DMondrian() {
       yPad,
        mondrianTopRects,
       0
-    );
+    );*/
 
     const mondrians : Mondrian[] = [
       { rects: mondrianRects, title: "bottom" },
-      { rects: mondrianLeftRects, title: "left" },
-      { rects: mondrianTopRects, title: "top" }
+      { rects: mondrianRects, title: "left" },
+      { rects: mondrianRects, title: "top" }
     ];
     setMondrians(mondrians);
   }
