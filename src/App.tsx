@@ -10,6 +10,7 @@ function App() {
   const fullscreenContainerRef = useRef<Element>(null);
   const [width] = useState<number>(350);
   const [height] = useState<number>(350);
+  const [rowMode, setRowMode] = useState<boolean>(false);
   const {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
@@ -20,7 +21,13 @@ function App() {
         Embodiment
       </h1>
       <button className="btn btn-accent" onClick={() => generate(width,height, 3)}>Generate</button>
-      {
+      <div className="form-control">
+        <label className="label cursor-pointer">
+          <span className="label-text">Row Mode</span>
+          <input type="checkbox" className="toggle" checked={rowMode} onClick={() => setRowMode(!rowMode)} />
+        </label>
+      </div>
+      { rowMode ?
         mondrians.map((mondrian, index) =>
           (
             <div className="card bg-primary text-primary-content">
@@ -81,7 +88,21 @@ function App() {
               </div>
             </div>
           )
-        )
+        ) :
+        <div className="flex flex-row gap-2">
+          {
+            mondrians.map((mondrian, index) =>
+              <MondrianCanvas
+                ref={canvasActionsRef}
+                width={width}
+                height={height}
+                thickness={2}
+                rects={mondrian.rects}
+                toggleFullScreen={toggleFullscreen}
+              />
+            )
+          }
+        </div>
       }
     </div>
   )
