@@ -89,9 +89,7 @@ function useMondrian() {
     let depth = 1;
 
     while(depth <= nbIterations) {
-      console.log("prodondeur ",depth);
       stackRects = generateMondrian(xPad, yPad, stackRects);
-      
       depth = depth + 1;
     }
     const results =  [...stackRects,...rects];
