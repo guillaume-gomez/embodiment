@@ -4,7 +4,7 @@ import useMondrian from "./useMondrian";
 
 interface Mondrian {
   rects: CustomRect[];
-  title: "bottom" | "left" | "top";
+  title: "bottom" | "right" | "top";
 }
 
 function use3DMondrian() {
