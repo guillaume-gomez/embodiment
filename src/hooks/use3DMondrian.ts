@@ -1,10 +1,18 @@
 import { useState } from 'react'; 
-import { CustomRect, findIntersectionInXRight, differenceOnX, differenceOnY, findIntersectionInYBottom } from "../utils";
+import {
+  CustomRect,
+  findIntersectionInXRight,
+  findIntersectionInXLeft,
+  differenceOnX,
+  differenceOnY,
+  findIntersectionInYBottom,
+  findIntersectionInYTop
+} from "../utils";
 import useMondrian from "./useMondrian";
 
 interface Mondrian {
   rects: CustomRect[];
-  title: "bottom" | "right" | "center";
+  title: "top"| "left" | "bottom" | "right" | "center";
 }
 
 function use3DMondrian() {
@@ -17,12 +25,17 @@ function use3DMondrian() {
     const yPad = canvasHeight * 0.05;
 
     const mondrianCenter = generate(canvasWidth, canvasHeight, nbIterations);
-    const mondrianRights = generateMondrianRight(mondrianCenter, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
+    const mondrianLeft = generateMondrianLeft(mondrianCenter, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
+    const mondrianRight = generateMondrianRight(mondrianCenter, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
     const mondrianBottom = generateMondrianBottom(mondrianCenter, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
+    const mondrianTop = generateMondrianTop(mondrianCenter, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
+
 
     const mondrians : Mondrian[] = [
+      { rects: mondrianTop, title: "top" },
+      { rects: mondrianLeft, title: "left" },
       { rects: mondrianCenter, title: "center" },
-      { rects: mondrianRights, title: "right" },
+      { rects: mondrianRight, title: "right" },
       { rects: mondrianBottom, title: "bottom" }
     ];
     setMondrians(mondrians);
@@ -61,7 +74,22 @@ function use3DMondrian() {
     return [...mondrianLeftRects, ...stackRects];
   }
 
+  function generateMondrianLeft(
+    mondrianRects: CustomRect[],
+    canvasWidth: number,
+    canvasHeight: number,
+    xPad: number,
+    yPad: number,
+    nbIterations: number
+  ) {
+    const mondrianRightRects = moveToRight(findIntersectionInXLeft(0, mondrianRects), canvasWidth);
 
+    let stackRects : CustomRect[] = mondrianRightRects.map(mondrianRightRect =>
+      differenceOnX({x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, mondrianRightRect)
+    );
+    stackRects = generateMondrianSubDivision(stackRects, xPad, yPad, nbIterations);
+    return [...mondrianRightRects, ...stackRects];
+  }
 
   function generateMondrianBottom(
     mondrianRects: CustomRect[],
@@ -81,15 +109,45 @@ function use3DMondrian() {
     return [...mondrianBottomRects, ...stackRects];
   }
 
+  function generateMondrianTop(
+    mondrianRects: CustomRect[],
+    canvasWidth: number,
+    canvasHeight: number,
+    xPad: number,
+    yPad: number,
+    nbIterations: number
+  ) {
+    const mondrianTopRects = moveToBottom(findIntersectionInYTop(0, mondrianRects), canvasHeight);
+
+    let stackRects : CustomRect[] = mondrianTopRects.map(mondrianTopRect =>
+      differenceOnY({x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, mondrianTopRect)
+    );
+    stackRects = generateMondrianSubDivision(stackRects, xPad, yPad, nbIterations);
+
+    return [...mondrianTopRects, ...stackRects];
+  }
+
   function moveToLeft(rightRects: CustomRect[]): CustomRect[] {
     return rightRects.map(rightRect =>
       ({ x1: 0, x2: (rightRect.x2 - rightRect.x1), y1: rightRect.y1, y2: rightRect.y2, color: rightRect.color })
     )
   }
 
+  function moveToRight(leftRects: CustomRect[], xMax: number): CustomRect[] {
+    return leftRects.map(leftRect =>
+      ({ x1: (xMax - (leftRect.x2 - leftRect.x1)), x2: xMax, y1: leftRect.y1, y2: leftRect.y2, color: leftRect.color })
+    )
+  }
+
   function moveToTop(bottomRects: CustomRect[]): CustomRect[] {
     return bottomRects.map(bottomRect =>
       ({ x1: bottomRect.x1, x2: bottomRect.x2, y1: 0, y2: (bottomRect.y2 - bottomRect.y1), color: bottomRect.color })
+    )
+  }
+
+  function moveToBottom(topRects: CustomRect[], yMax: number): CustomRect[] {
+    return topRects.map(topRect =>
+      ({ x1: topRect.x1, x2: topRect.x2, y1: (yMax - (topRect.y2 - topRect.y1)), y2: yMax, color: topRect.color })
     )
   }
 

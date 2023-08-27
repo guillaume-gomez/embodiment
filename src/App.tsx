@@ -13,26 +13,37 @@ function App() {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
 
+  function computeClassName(index: number) {
+    if(index === 0 || index === 4) {
+      return "col-start-2 col-span-3";
+    }
+
+    return "";
+
+  }
+
   return (
     <div className="flex flex-col gap-2 items-center">
       <h1 className="text-3xl font-bold underline">
         Embodiment
       </h1>
       <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
-      <div className={`grid grid-cols-2 gap-2`}>
+      <div className={`grid grid-cols-3 gap-2`}>
         {
-          mondrians.map((mondrian) =>
-            <MondrianCanvas
-              ref={canvasActionsRef}
-              width={width}
-              height={height}
-              thickness={2}
-              rects={mondrian.rects}
-              toggleFullScreen={toggleFullscreen}
-            />
+          mondrians.map((mondrian, index) =>
+            <div className={computeClassName(index)}>
+              <MondrianCanvas
+                ref={canvasActionsRef}
+                width={width}
+                height={height}
+                thickness={2}
+                rects={mondrian.rects}
+                toggleFullScreen={toggleFullscreen}
+              />
+            </div>
           )
         }
-      </div>
+      </div>²
     </div>
   )
 }
