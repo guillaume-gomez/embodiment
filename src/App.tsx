@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
-import use3DMondrian from "./hooks/use3DMondrian";
+import useConnectedMondrian from "./hooks/useConnectedMondrian";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
 import { useFullscreen } from "rooks";
 
 function App() {
-  const { generate, mondrians } = use3DMondrian();
+  const { generate, mondrians } = useConnectedMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
   const [width] = useState<number>(500);
@@ -27,8 +27,8 @@ function App() {
       <h1 className="text-3xl font-bold underline">
         Embodiment
       </h1>
-      <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
-      <div className={`grid grid-cols-3 gap-2`}>
+      <button className="btn btn-accent" onClick={() => generate(width,height, 6)}>Generate</button>
+      <div className="grid grid-cols-3 gap-2">
         {
           mondrians.map((mondrian, index) =>
             <div className={computeClassName(index)}>
@@ -43,7 +43,7 @@ function App() {
             </div>
           )
         }
-      </div>²
+      </div>
     </div>
   )
 }

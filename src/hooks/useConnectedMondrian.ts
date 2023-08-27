@@ -15,7 +15,7 @@ interface Mondrian {
   title: "top"| "left" | "bottom" | "right" | "center";
 }
 
-function use3DMondrian() {
+function useConnectedMondrian() {
   const {  generateMondrian, generate } = useMondrian();
   const [ mondrians, setMondrians] = useState<Mondrian[]>([]);
 
@@ -156,4 +156,4 @@ function use3DMondrian() {
 
 }
 
-export default use3DMondrian;
+export default useConnectedMondrian;
