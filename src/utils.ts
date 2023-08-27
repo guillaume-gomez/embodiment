@@ -42,7 +42,47 @@ export function findIntersectionInYTop(minY: number, children: CustomRect[]) : C
     return children.filter(child => child.y1 === minY);
 }
 
-
 export function findIntersectionInYBottom(maxY: number, children: CustomRect[]) : CustomRect[] {
     return children.filter(child => child.y2 === maxY);
+}
+
+export function differenceOnX(rectMain: CustomRect, rectDivide: CustomRect) : CustomRect {
+    const y1 = rectDivide.y1;
+    const y2 = rectDivide.y2;
+
+    // rectDivide is on the left
+    if(rectDivide.x2 < rectMain.x2) {
+       const x1 = rectDivide.x2;
+       const x2 = rectMain.x2;
+
+       return { x1, y1, x2, y2, color: rectDivide.color };
+
+   } else {
+
+        const x1 = rectMain.x1;
+        const x2 = rectDivide.x1;
+
+        return { x1, y1, x2, y2, color: rectDivide.color };
+   }
+}
+
+
+export function differenceOnY(rectMain: CustomRect, rectDivide: CustomRect) : CustomRect {
+    const x1 = rectDivide.x1;
+    const x2 = rectDivide.x2;
+
+    // rectDivide is above
+    if(rectDivide.y2 < rectMain.y2) {
+       const y1 = rectDivide.y2;
+       const y2 = rectMain.y2;
+
+       return { x1, y1, x2, y2, color: rectDivide.color };
+
+   } else {
+
+        const y1 = rectMain.y1;
+        const y2 = rectDivide.y1;
+
+        return { x1, y1, x2, y2, color: rectDivide.color };
+   }
 }

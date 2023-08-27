@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, findIntersectionInXLeft, findIntersectionInYTop } from "../utils";
+import { CustomRect, findIntersectionInXRight, differenceOnX, differenceOnY, findIntersectionInYBottom } from "../utils";
 import useMondrian from "./useMondrian";
 
 interface Mondrian {
@@ -17,25 +17,75 @@ function use3DMondrian() {
     const yPad = canvasHeight * 0.05;
 
     const mondrianRects = generate(canvasWidth, canvasHeight, nbIterations);
+    const mondrianRights = generateMondrianRight(mondrianRects, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
+    const mondrianTop = generateMondrianTop(mondrianRects, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
 
-    const mondrianLeftRects = findIntersectionInXLeft(0, mondrianRects);
-    let rects : CustomRect[] = [];
-    let stackRects : CustomRect[] = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, ...mondrianLeftRects];
+
+
+    const mondrians : Mondrian[] = [
+      { rects: mondrianRects, title: "bottom" },
+      { rects: mondrianRights, title: "right" },
+      { rects: mondrianTop, title: "top" }
+    ];
+    setMondrians(mondrians);
+  }
+
+  function generateMondrianRight(
+    mondrianRects: CustomRect[],
+    canvasWidth: number,
+    canvasHeight: number,
+    xPad: number,
+    yPad: number,
+    nbIterations: number
+  ) {
+    const mondrianLeftRects = moveToLeft(findIntersectionInXRight(canvasWidth, mondrianRects));
+
+    let stackRects : CustomRect[] = mondrianLeftRects.map(mondrianLeftRect =>
+      differenceOnX({x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, mondrianLeftRect)
+    );
     let depth = 2;
 
     while(depth <= nbIterations) {
       stackRects = generateMondrian(xPad, yPad, stackRects);
       depth = depth + 1;
     }
-    const mondrianLefts =  [...stackRects,...rects];
 
+    return [...mondrianLeftRects, ...stackRects];
+  }
 
-    const mondrians : Mondrian[] = [
-      { rects: mondrianRects, title: "bottom" },
-      { rects: mondrianLefts, title: "right" },
-      /*{ rects: mondrianRects, title: "top" }*/
-    ];
-    setMondrians(mondrians);
+  function generateMondrianTop(
+    mondrianRects: CustomRect[],
+    canvasWidth: number,
+    canvasHeight: number,
+    xPad: number,
+    yPad: number,
+    nbIterations: number
+  ) {
+    const mondrianTopRects = moveToTop(findIntersectionInYBottom(canvasHeight, mondrianRects));
+
+    let stackRects : CustomRect[] = mondrianTopRects.map(mondrianTopRect =>
+      differenceOnY({x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, mondrianTopRect)
+    );
+    let depth = 2;
+
+    while(depth <= nbIterations) {
+      stackRects = generateMondrian(xPad, yPad, stackRects);
+      depth = depth + 1;
+    }
+
+    return [...mondrianTopRects, ...stackRects];
+  }
+
+  function moveToLeft(rightRects: CustomRect[]): CustomRect[] {
+    return rightRects.map(rightRect =>
+      ({ x1: 0, x2: (rightRect.x2 - rightRect.x1), y1: rightRect.y1, y2: rightRect.y2, color: rightRect.color })
+    )
+  }
+
+  function moveToTop(bottomRects: CustomRect[]): CustomRect[] {
+    return bottomRects.map(bottomRect =>
+      ({ x1: bottomRect.x1, x2: bottomRect.x2, y1: 0, y2: (bottomRect.y2 - bottomRect.y1), color: bottomRect.color })
+    )
   }
 
 
