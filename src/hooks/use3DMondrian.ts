@@ -4,7 +4,7 @@ import useMondrian from "./useMondrian";
 
 interface Mondrian {
   rects: CustomRect[];
-  title: "bottom" | "right" | "top";
+  title: "bottom" | "right" | "center";
 }
 
 function use3DMondrian() {
@@ -16,18 +16,32 @@ function use3DMondrian() {
     const xPad = canvasWidth * 0.05;
     const yPad = canvasHeight * 0.05;
 
-    const mondrianRects = generate(canvasWidth, canvasHeight, nbIterations);
-    const mondrianRights = generateMondrianRight(mondrianRects, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
-    const mondrianTop = generateMondrianTop(mondrianRects, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
-
-
+    const mondrianCenter = generate(canvasWidth, canvasHeight, nbIterations);
+    const mondrianRights = generateMondrianRight(mondrianCenter, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
+    const mondrianBottom = generateMondrianBottom(mondrianCenter, canvasWidth, canvasHeight, xPad, yPad, nbIterations);
 
     const mondrians : Mondrian[] = [
-      { rects: mondrianRects, title: "bottom" },
+      { rects: mondrianCenter, title: "center" },
       { rects: mondrianRights, title: "right" },
-      { rects: mondrianTop, title: "top" }
+      { rects: mondrianBottom, title: "bottom" }
     ];
     setMondrians(mondrians);
+  }
+
+  function generateMondrianSubDivision(
+    stackRects: CustomRect[],
+    xPad: number,
+    yPad: number,
+    nbIterations: number
+  ) {
+    let depth = 2;
+
+    while(depth <= nbIterations) {
+      stackRects = generateMondrian(xPad, yPad, stackRects);
+      depth = depth + 1;
+    }
+
+    return stackRects;
   }
 
   function generateMondrianRight(
@@ -43,17 +57,13 @@ function use3DMondrian() {
     let stackRects : CustomRect[] = mondrianLeftRects.map(mondrianLeftRect =>
       differenceOnX({x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, mondrianLeftRect)
     );
-    let depth = 2;
-
-    while(depth <= nbIterations) {
-      stackRects = generateMondrian(xPad, yPad, stackRects);
-      depth = depth + 1;
-    }
-
+    stackRects = generateMondrianSubDivision(stackRects, xPad, yPad, nbIterations);
     return [...mondrianLeftRects, ...stackRects];
   }
 
-  function generateMondrianTop(
+
+
+  function generateMondrianBottom(
     mondrianRects: CustomRect[],
     canvasWidth: number,
     canvasHeight: number,
@@ -61,19 +71,14 @@ function use3DMondrian() {
     yPad: number,
     nbIterations: number
   ) {
-    const mondrianTopRects = moveToTop(findIntersectionInYBottom(canvasHeight, mondrianRects));
+    const mondrianBottomRects = moveToTop(findIntersectionInYBottom(canvasHeight, mondrianRects));
 
-    let stackRects : CustomRect[] = mondrianTopRects.map(mondrianTopRect =>
-      differenceOnY({x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, mondrianTopRect)
+    let stackRects : CustomRect[] = mondrianBottomRects.map(mondrianBottomRect =>
+      differenceOnY({x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, mondrianBottomRect)
     );
-    let depth = 2;
+    stackRects = generateMondrianSubDivision(stackRects, xPad, yPad, nbIterations);
 
-    while(depth <= nbIterations) {
-      stackRects = generateMondrian(xPad, yPad, stackRects);
-      depth = depth + 1;
-    }
-
-    return [...mondrianTopRects, ...stackRects];
+    return [...mondrianBottomRects, ...stackRects];
   }
 
   function moveToLeft(rightRects: CustomRect[]): CustomRect[] {
