@@ -1,16 +1,14 @@
 import { useRef, useState } from "react";
 import use3DMondrian from "./hooks/use3DMondrian";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
-import { customRectString, findIntersectionInXLeft, findIntersectionInYTop } from "./utils";
 import { useFullscreen } from "rooks";
 
 function App() {
   const { generate, mondrians } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
-  const [width] = useState<number>(350);
-  const [height] = useState<number>(350);
-  const [rowMode, setRowMode] = useState<boolean>(false);
+  const [width] = useState<number>(500);
+  const [height] = useState<number>(500);
   const {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
@@ -20,90 +18,21 @@ function App() {
       <h1 className="text-3xl font-bold underline">
         Embodiment
       </h1>
-      <button className="btn btn-accent" onClick={() => generate(width,height, 3)}>Generate</button>
-      <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Row Mode</span>
-          <input type="checkbox" className="toggle" checked={rowMode} onClick={() => setRowMode(!rowMode)} />
-        </label>
-      </div>
-      { rowMode ?
-        mondrians.map((mondrian, index) =>
-          (
-            <div className="card bg-primary text-primary-content">
-               <div className="card-body">
-                <h2 className="card-title">{mondrian.title}</h2>
-                <div>
-                   <MondrianCanvas
-                      ref={canvasActionsRef}
-                      width={width}
-                      height={height}
-                      thickness={2}
-                      rects={mondrian.rects}
-                      toggleFullScreen={toggleFullscreen}
-                    />
-                </div>
-                <div className="mockup-code">
-                  {
-                    mondrian.rects.map(rect =>
-                      (
-                        <pre>
-                          <code>{customRectString(rect)}</code>
-                        </pre>
-                      )
-                    )
-                  }
-                </div>
-                {
-                  index > 0 &&
-                  <>
-                    {
-                      mondrian.title === "left" && <div className="mockup-code">
-                        {
-                          findIntersectionInXLeft(0, mondrians[0].rects).map(rect =>
-                            (
-                              <pre>
-                                <code>{customRectString(rect)}</code>
-                              </pre>
-                            )
-                          )
-                        }
-                      </div>
-                    }
-                    {
-                      mondrian.title === "top" && <div className="mockup-code">
-                      {
-                        findIntersectionInYTop(0, mondrians[0].rects).map(rect =>
-                          (
-                            <pre>
-                              <code>{customRectString(rect)}</code>
-                            </pre>
-                          )
-                        )
-                      }
-                      </div>
-                    }
-                  </>
-                }
-              </div>
-            </div>
+      <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
+      <div className={`grid grid-cols-2 gap-2`}>
+        {
+          mondrians.map((mondrian) =>
+            <MondrianCanvas
+              ref={canvasActionsRef}
+              width={width}
+              height={height}
+              thickness={2}
+              rects={mondrian.rects}
+              toggleFullScreen={toggleFullscreen}
+            />
           )
-        ) :
-        <div className="flex flex-row gap-2">
-          {
-            mondrians.map((mondrian, index) =>
-              <MondrianCanvas
-                ref={canvasActionsRef}
-                width={width}
-                height={height}
-                thickness={2}
-                rects={mondrian.rects}
-                toggleFullScreen={toggleFullscreen}
-              />
-            )
-          }
-        </div>
-      }
+        }
+      </div>
     </div>
   )
 }
