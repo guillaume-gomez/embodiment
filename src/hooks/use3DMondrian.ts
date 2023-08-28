@@ -1,6 +1,7 @@
 import { useState } from 'react'; 
 import { CustomRect } from "../utils";
 import useMondrian from "./useMondrian";
+import { sample } from "lodash";
 
 interface Mondrian {
   rects: CustomRect[];
@@ -14,8 +15,10 @@ function use3DMondrian() {
   const [ mondrianYZ, setMondrianYZ] = useState<Mondrian>({title: "right", rects: []});
   const [ mondrianZX, setMondrianZX] = useState<Mondrian>({title: "left", rects: []});
 
-  function ruleA() {
-
+  function ruleA(xPad: number, yPad: number) {
+    const candidate = sample(mondrianXY.rects);
+    const newRects = splitRectsControlled(candidate, xPad, yPad, "horizontal");
+    setMondrianXY({...mondrianXY, rects: [...mondrianXY.rects, ...newRects] })
   }
 
   function ruleB() {
