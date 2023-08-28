@@ -19,7 +19,7 @@ function App() {
         Embodiment
       </h1>
       <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
-      <div className={`grid grid-cols-2 gap-2`}>
+      <div className="flex flex-col gap-2">
         {
           mondrians.map((mondrian) =>
             <MondrianCanvas
