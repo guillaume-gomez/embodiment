@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
 import use3DMondrian from "./hooks/use3DMondrian";
+import MondrianThreeJs from "./MondrianThreeJs";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
 import { useFullscreen } from "rooks";
 
 function App() {
-  const { generate, mondrianXY } = use3DMondrian();
+  const { generate, mondrianXY, mondrianYZ, mondrianZX } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
   const [width] = useState<number>(500);
@@ -25,10 +26,33 @@ function App() {
             width={width}
             height={height}
             thickness={2}
+            rects={mondrianYZ.rects}
+            toggleFullScreen={toggleFullscreen}
+          />
+          <MondrianCanvas
+            ref={canvasActionsRef}
+            width={width}
+            height={height}
+            thickness={2}
+            rects={mondrianZX.rects}
+            toggleFullScreen={toggleFullscreen}
+          />
+          <MondrianCanvas
+            ref={canvasActionsRef}
+            width={width}
+            height={height}
+            thickness={2}
             rects={mondrianXY.rects}
             toggleFullScreen={toggleFullscreen}
           />
       </div>
+      <MondrianThreeJs
+        width={width}
+        height={height}
+        thickness={15}
+        rects={mondrianXY.rects}
+        toggleFullScreen={() => {}}
+      />
     </div>
   )
 }

@@ -59,7 +59,7 @@ function useMondrian() {
     direction: "vertical"| "horizontal") : [CustomRect, CustomRect] | [] {
       const { x1, x2, y1, y2 } = rect;
 
-      if (direction === "horizontal") {
+      if (direction === "vertical") {
           const x = randInt(rect.x1 + xPad, rect.x2 - xPad);
           const r1 = { x1, y1, x2: x, y2, color: randomColor() };
           const r2 = { x1: x, y1, x2, y2, color: randomColor() };
