@@ -15,25 +15,32 @@ function use3DMondrian() {
   const [ mondrianYZ, setMondrianYZ] = useState<Mondrian>({title: "right", rects: []});
   const [ mondrianZX, setMondrianZX] = useState<Mondrian>({title: "left", rects: []});
 
-  function ruleA(xPad: number, yPad: number, rects: CustomRect[]) {
+  function ruleABC(xPad: number, yPad: number, rects: CustomRect[], direction: "horizontal" | "vertical") {
     const candidate = sample(rects);
-    const newRects = splitRectsControlled(candidate, xPad, yPad, "horizontal");
-    setMondrianXY({...mondrianXY, rects: [...mondrianXY.rects, ...newRects] })
-    setMondrianYZ({...mondrianYZ, rects: [...mondrianYZ.rects, ...newRects] })
+    const newRects = splitRectsControlled(candidate, xPad, yPad, direction);
+
+    if(newRects.length === 0) {
+      return rects;
+    }
+
+    const rectsWithoutCandidate = rects.filter(rect =>
+      rect.x1 !== candidate.x1 ||
+      rect.x2 !== candidate.x2 ||
+      rect.y1 !== candidate.y1 ||
+      rect.y2 !== candidate.y2
+    );
+
+    return [...rectsWithoutCandidate, ...newRects];
+  }
+
+  function ruleA(xPad: number, yPad: number, rects: CustomRect[]) {
+    return ruleABC(xPad, yPad, rects, "horizontal");
   }
 
   function ruleB(xPad: number, yPad: number, rects: CustomRect[]) {
-    const candidate = sample(rects);
-    const newRects
-     = splitRectsControlled(candidate, xPad, yPad, "horizontal");
-    setMondrianYZ({...mondrianXY, rects: [...mondrianYZ.rects, ...newRects] })
+    return ruleABC(xPad, yPad, rects, "vertical");
   }
 
-  function ruleC(xPad: number, yPad: number, rects: CustomRect[]) {
-    const candidate = sample(rects);
-    const newRects = splitRectsControlled(candidate, xPad, yPad, "horizontal");
-    setMondrianZX({...mondrianXY, rects: [...mondrianZX.rects, ...newRects] })
-  }
 
   function ruleD() {
 
@@ -68,9 +75,17 @@ function use3DMondrian() {
 
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
-    ruleA(xPad, yPad, initRect);
-    ruleB(xPad, yPad, initRect);
-    ruleC(xPad, yPad, initRect);
+    let rectsA = ruleA(xPad, yPad, initRect);
+    setMondrianXY({...mondrianXY, rects: [...rectsA] });
+    setMondrianZX({...mondrianZX, rects: [...rectsA] });
+
+    let rectsB = ruleB(xPad, yPad, initRect);
+    setMondrianYZ({...mondrianYZ, rects: [...rectsB]});
+
+
+
+    //ruleB(xPad, yPad, initRect);
+    //ruleC(xPad, yPad, initRect);
   }
 
 
