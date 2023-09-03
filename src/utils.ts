@@ -46,3 +46,17 @@ export function findIntersectionInYTop(minY: number, children: CustomRect[]) : C
 export function findIntersectionInYBottom(maxY: number, children: CustomRect[]) : CustomRect[] {
     return children.filter(child => child.y2 === maxY);
 }
+
+export function isEqual(rectToCompare: CustomRect, rectCompared: CustomRect): boolean {
+    return rectToCompare.x1 === rectCompared.x1 &&
+      rectToCompare.x2 === rectCompared.x2 &&
+      rectToCompare.y1 === rectCompared.y1 &&
+      rectToCompare.y2 === rectCompared.y2
+}
+
+
+export function filterWithRest(rects: CustomRect[], predicate: Function) : [CustomRect[], CustomRect[]] {
+    const rectsMatchingCondition = rects.filter(rect => predicate(rect));
+    const rectsNotMatchingCondition = rects.filter(rect => !predicate(rect));
+    return [rectsMatchingCondition, rectsNotMatchingCondition];
+}

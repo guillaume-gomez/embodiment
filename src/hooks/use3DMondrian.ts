@@ -1,6 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect } from "../utils";
-import useMondrian from "./useMondrian";
+import { CustomRect, randInt, heightRect, widthRect, isEqual, filterWithRest } from "../utils";
 import { sample } from "lodash";
 
 interface Mondrian {
@@ -10,14 +9,89 @@ interface Mondrian {
 
 
 function use3DMondrian() {
-  const {  generateMondrian, generate, splitRectsControlled } = useMondrian();
   const [ mondrianXY, setMondrianXY] = useState<Mondrian>({title: "bottom", rects: []});
   const [ mondrianYZ, setMondrianYZ] = useState<Mondrian>({title: "right", rects: []});
   const [ mondrianZX, setMondrianZX] = useState<Mondrian>({title: "left", rects: []});
 
+  function randomColor() {
+    return sample(["#f9dFF0", "#f900F0", "#0F00FD", "#9DFF00", "#FFFF00"]);
+  }
+
+
+  function splitRectsControlled(
+    rect: CustomRect,
+    xPad: number,
+    yPad: number,
+    direction: "vertical"| "horizontal",
+    splitValue: number
+
+    ) : [CustomRect, CustomRect] | [] {
+      const { x1, x2, y1, y2 } = rect;
+
+      if (direction === "vertical") {
+          const x = splitValue;
+          const r1 = { x1, y1, x2: x, y2, color: randomColor() };
+          const r2 = { x1: x, y1, x2, y2, color: randomColor() };
+          return [r1, r2];
+      } else {
+          const y = splitValue;
+          const r1 = { x1, y1, x2, y2: y, color: randomColor() };
+          const r2 = { x1, y1: y, x2, y2, color: randomColor() };
+          return [r1, r2];
+      }
+  }
+
+  function splitRectsControlledRandom(
+    rect: CustomRect,
+    xPad: number,
+    yPad: number,
+    direction: "vertical"| "horizontal") {
+    if(direction === "horizontal") {
+      return splitRectsControlled(rect, xPad, yPad, "horizontal", randInt(rect.x1 + xPad, rect.x2 - xPad));
+    } else {
+      return splitRectsControlled(rect, xPad, yPad, "vertical", randInt(rect.y1 + yPad, rect.y2 - yPad));
+    }
+  }
+
+  function splitRects(rect: CustomRect, xPad: number, yPad: number) : [CustomRect, CustomRect] | [] {
+    // Check the rectangle is enough large and tall
+    const width = widthRect(rect);
+    const height = heightRect(rect);
+
+    if (width < 2 * xPad || height < 2 * yPad) {
+      return [];
+    }
+
+    if(width > height) {
+      return splitRectsControlled(rect, xPad, yPad, "horizontal", randInt(rect.x1 + xPad, rect.x2 - xPad));
+    } else {
+      return splitRectsControlled(rect, xPad, yPad, "vertical", randInt(rect.y1 + yPad, rect.y2 - yPad));
+    }
+}
+
+  function chunkRects(rects: CustomRect[], xPad: number, yPad: number, direction: "horizontal"|"vertical", x: number, y:number) {
+    if(direction === "horizontal") {
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect.y1 > y && rect.y2 < y);
+      const rectsChunked = rectsToBeChunk.map(rectToBeChunk => 
+          splitRectsControlled(rectToBeChunk,xPad, yPad, "horizontal", x)
+      );
+      return [...rectsChunked, ...others];
+    } else {
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect => rect.x1 > x && rect.x2 < x);
+      const rectsChunked = rectsToBeChunk.map(rectToBeChunk => 
+          splitRectsControlled(rectToBeChunk,xPad, yPad, "vertical", y)
+      );
+      return [...rectsChunked, ...others];
+    }
+  }
+
   function ruleABC(xPad: number, yPad: number, rects: CustomRect[], direction: "horizontal" | "vertical") {
     const candidate = sample(rects);
-    const newRects = splitRectsControlled(candidate, xPad, yPad, direction);
+    const cut = direction === "horizontal" ?
+      randInt(candidate.x1 + xPad, candidate.x2 - xPad) :
+      randInt(candidate.y1 + yPad, candidate.y2 - yPad)
+    ;
+    const newRects = splitRectsControlled(candidate, xPad, yPad, direction, cut);
 
     if(newRects.length === 0) {
       return rects;
@@ -30,14 +104,16 @@ function use3DMondrian() {
       rect.y2 !== candidate.y2
     );
 
-    return [...rectsWithoutCandidate, ...newRects];
+    return [[...rectsWithoutCandidate, ...newRects], cut];
   }
 
   function ruleA(xPad: number, yPad: number, rects: CustomRect[]) {
+    // cut should be here
     return ruleABC(xPad, yPad, rects, "horizontal");
   }
 
   function ruleB(xPad: number, yPad: number, rects: CustomRect[]) {
+    // cut should be here
     return ruleABC(xPad, yPad, rects, "vertical");
   }
 
@@ -75,12 +151,17 @@ function use3DMondrian() {
 
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
-    let rectsA = ruleA(xPad, yPad, initRect);
+    let [rectsA, cut] = ruleA(xPad, yPad, initRect);
+    [rectsA, cut] = ruleA(xPad, yPad, rectsA);
+
+
     setMondrianXY({...mondrianXY, rects: [...rectsA] });
     setMondrianZX({...mondrianZX, rects: [...rectsA] });
 
+
     let rectsB = ruleB(xPad, yPad, initRect);
     setMondrianYZ({...mondrianYZ, rects: [...rectsB]});
+
 
 
 
