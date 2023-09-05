@@ -4,6 +4,7 @@ import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
 import { customRectString, findIntersectionInXLeft, findIntersectionInYTop } from "./utils";
 import { useFullscreen } from "rooks";
 import Navbar from "./components/NavBar";
+import Footer from "./components/Footer";
 
 function App() {
   const { generate, mondrians } = use3DMondrian();
@@ -87,6 +88,7 @@ function App() {
           )
         }
       </div>
+      <Footer />
     </div>
   )
 }
