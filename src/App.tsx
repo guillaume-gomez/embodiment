@@ -20,7 +20,7 @@ function App() {
         Embodiment
       </h1>
       <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-row gap-2">
           <MondrianCanvas
             ref={canvasActionsRef}
             width={width}
@@ -34,7 +34,7 @@ function App() {
             width={width}
             height={height}
             thickness={2}
-            rects={mondrianZX.rects}
+            rects={mondrianXY.rects}
             toggleFullScreen={toggleFullscreen}
           />
           <MondrianCanvas
@@ -42,7 +42,7 @@ function App() {
             width={width}
             height={height}
             thickness={2}
-            rects={mondrianXY.rects}
+            rects={mondrianZX.rects}
             toggleFullScreen={toggleFullscreen}
           />
       </div>
