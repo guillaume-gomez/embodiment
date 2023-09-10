@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, findIntersectionInXLeft, findIntersectionInYTop } from "../utils";
+import { CustomRect, findIntersectionInXLeft } from "../utils";
 import useMondrian from "./useMondrian";
 
 interface Mondrian {
