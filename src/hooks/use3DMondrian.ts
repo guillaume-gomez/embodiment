@@ -30,7 +30,7 @@ function use3DMondrian() {
     ) : [CustomRect, CustomRect] | [] {
       const { x1, x2, y1, y2 } = rect;
 
-      if (line === "vertical") {
+      if (line.direction === "vertical") {
           const x = line.coord;
           const r1 = { x1, y1, x2: x, y2, color: randomColor() };
           const r2 = { x1: x, y1, x2, y2, color: randomColor() };
@@ -52,24 +52,29 @@ function use3DMondrian() {
       return [];
     }
 
+
     if(width > height) {
-      return splitRectsControlled(rect, xPad, yPad, "horizontal", randInt(rect.x1 + xPad, rect.x2 - xPad));
+      return splitRectsControlled(rect, xPad, yPad, {direction: "horizontal", coord: randInt(rect.x1 + xPad, rect.x2 - xPad)});
     } else {
-      return splitRectsControlled(rect, xPad, yPad, "vertical", randInt(rect.y1 + yPad, rect.y2 - yPad));
+      return splitRectsControlled(rect, xPad, yPad, {direction: "vertical", coord: randInt(rect.y1 + yPad, rect.y2 - yPad)});
     }
 }
 
-  function chunkRects(rects: CustomRect[], xPad: number, yPad: number, line: Line) {
+  function chunkRects(rects: CustomRect[], xPad: number, yPad: number, line: Line) : CustomRect[] {
     if(line.direction === "horizontal") {
-      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect.y1 > line.coord && rect.y2 < line.coord);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk => 
-          splitRectsControlled(rectToBeChunk, xPad, yPad, line.direction, line.coord)
+      console.log(line.coord)
+      console.log(rects)
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect.y1 >= line.coord && rect.y2 <= line.coord);
+      console.log(rectsToBeChunk)
+      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
+          splitRectsControlled(rectToBeChunk, xPad, yPad, line)
       );
+      //console.log(others)
       return [...rectsChunked, ...others];
     } else {
-      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect => rect.x1 > line.coord && rect.x2 < line.coord);
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect => rect.y1 > line.coord && rect.y2 < line.coord);
       const rectsChunked = rectsToBeChunk.map(rectToBeChunk => 
-          splitRectsControlled(rectToBeChunk,xPad, yPad, line.direction, line.coord)
+          splitRectsControlled(rectToBeChunk,xPad, yPad, line)
       );
       return [...rectsChunked, ...others];
     }
@@ -82,7 +87,7 @@ function use3DMondrian() {
       randInt(candidate.y1 + yPad, candidate.y2 - yPad)
     ;
 
-    const line = { direction: "horizontal", coord: cut };
+    const line = { direction, coord: cut };
 
     const newRects = splitRectsControlled(candidate, xPad, yPad, line);
 
@@ -145,22 +150,14 @@ function use3DMondrian() {
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
     let [rectsA, _line] = ruleA(xPad, yPad, initRect);
-    const [rectsAA, _line1] = ruleA(xPad, yPad, rectsA);
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAA] });
-    setMondrianZX({...mondrianZX, rects: [...rectsAA] });
+    const rectsB = chunkRects(rectsA, xPad, yPad, _line);
 
 
-    let [rectsB, _line2] = ruleB(xPad, yPad, initRect);
+
+    setMondrianXY({...mondrianXY, rects: [...rectsA] });
+    setMondrianZX({...mondrianZX, rects: [...rectsA] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsB]});
-
-    //chunkRects(xPad, yPad, "horizontal", x, y)
-
-
-
-
-    //ruleB(xPad, yPad, initRect);
-    //ruleC(xPad, yPad, initRect);
   }
 
 
