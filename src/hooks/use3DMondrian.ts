@@ -1,6 +1,6 @@
 import { useState } from 'react'; 
 import { CustomRect, randInt, heightRect, widthRect, isEqual, filterWithRest } from "../utils";
-import { sample } from "lodash";
+import { sample, flatten } from "lodash";
 
 interface Mondrian {
   rects: CustomRect[];
@@ -62,21 +62,17 @@ function use3DMondrian() {
 
   function chunkRects(rects: CustomRect[], xPad: number, yPad: number, line: Line) : CustomRect[] {
     if(line.direction === "horizontal") {
-      console.log(line.coord)
-      console.log(rects)
-      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect.y1 >= line.coord && rect.y2 <= line.coord);
-      console.log(rectsToBeChunk)
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => line.coord >= rect.y1 && line.coord <= rect.y2);
       const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
-          splitRectsControlled(rectToBeChunk, xPad, yPad, line)
+          splitRectsControlled(rectToBeChunk, xPad, yPad, {direction: "vertical", coord: line.coord })
       );
-      //console.log(others)
-      return [...rectsChunked, ...others];
+      return [...flatten(rectsChunked), ...others];
     } else {
-      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect => rect.y1 > line.coord && rect.y2 < line.coord);
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect => line.coord >= rect.x1 && line.coord <= rect.x2);
       const rectsChunked = rectsToBeChunk.map(rectToBeChunk => 
-          splitRectsControlled(rectToBeChunk,xPad, yPad, line)
+          splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "horizontal", coord: line.coord })
       );
-      return [...rectsChunked, ...others];
+      return [...flatten(rectsChunked), ...others];
     }
   }
 
@@ -151,7 +147,7 @@ function use3DMondrian() {
 
     let [rectsA, _line] = ruleA(xPad, yPad, initRect);
 
-    const rectsB = chunkRects(rectsA, xPad, yPad, _line);
+    const rectsB = chunkRects(initRect, xPad, yPad, _line);
 
 
 
