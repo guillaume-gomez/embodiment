@@ -76,7 +76,7 @@ function use3DMondrian() {
     }
   }
 
-  function ruleABC(xPad: number, yPad: number, rects: CustomRect[], direction: "horizontal" | "vertical") {
+  function ruleABC(xPad: number, yPad: number, rects: CustomRect[], direction: "horizontal" | "vertical") : [CustomRect[], Line] {
     const candidate = sample(rects);
     const cut = direction === "horizontal" ?
       randInt(candidate.x1 + xPad, candidate.x2 - xPad) :
@@ -111,6 +111,11 @@ function use3DMondrian() {
     return ruleABC(xPad, yPad, rects, "vertical");
   }
 
+  function ruleC(xPad: number, yPad: number, rects: CustomRect[]) {
+    // cut should be here
+    return ruleABC(xPad, yPad, rects, "horizontal");
+  }
+
 
   function ruleD() {
 
@@ -129,33 +134,21 @@ function use3DMondrian() {
     const xPad = canvasWidth * 0.05;
     const yPad = canvasHeight * 0.05;
 
-    //const mondrianXYRects = generate(canvasWidth, canvasHeight, nbIterations);
-    //setMondrianXY({ ...mondrianXY, rects: mondrianXYRects });
-
-    /*const mondrianLeftRects = findIntersectionInXLeft(0, mondrianRects);
-    let rects : CustomRect[] = [];
-    let stackRects : CustomRect[] = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}, ...mondrianLeftRects];
-    let depth = 2;
-
-    while(depth <= nbIterations) {
-      stackRects = generateMondrian(xPad, yPad, stackRects);
-      depth = depth + 1;
-    }
-    const mondrianLefts =  [...stackRects,...rects];*/
-
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
-    let [rectsA, _line] = ruleA(xPad, yPad, initRect);
+    const [rectsA, lineA] = ruleA(xPad, yPad, initRect);
+    //const [rectsAA, lineAA] = ruleA(xPad, yPad, rectsA);
 
-    const rectsB = chunkRects(initRect, xPad, yPad, _line);
+    //const [rectsB, lineB] = ruleB(xPad, yPad, initRect);
+    //const [rectsBB, lineBB] = ruleB(xPad, yPad, rectsB);
 
-
+    //const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
+    //const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsC);
 
     setMondrianXY({...mondrianXY, rects: [...rectsA] });
-    setMondrianZX({...mondrianZX, rects: [...rectsA] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsB]});
+    //setMondrianYZ({...mondrianYZ, rects: [...rectsBB]});
+    //setMondrianZX({...mondrianZX, rects: [...rectsCC] });
   }
-
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX };
 
