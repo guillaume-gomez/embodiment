@@ -14,6 +14,8 @@ function App() {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
 
+  console.log(mondrianXY.rects)
+
   return (
     <div className="flex flex-col gap-2 items-center">
       <h1 className="text-3xl font-bold underline">
@@ -49,7 +51,7 @@ function App() {
       <MondrianThreeJs
         width={width}
         height={height}
-        thickness={15}
+        thickness={5}
         rects={mondrianXY.rects}
         toggleFullScreen={() => {}}
       />
