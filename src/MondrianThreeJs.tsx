@@ -10,7 +10,9 @@ interface MondrianThreeJsProps {
   width: number;
   height: number;
   thickness: number;
-  rects: CustomRect[];
+  rectsXY: CustomRect[];
+  rectsYZ: CustomRect[];
+  rectsZX: CustomRect[];
   toggleFullScreen: (target: EventTarget) => void;
 }
 
@@ -19,9 +21,23 @@ function randomBetween(min: number, max: number) : number {
 }
 
 
-function MondrianThreeJs({width , height, thickness, rects, toggleFullScreen} : MondrianThreeJsProps ): React.ReactElement {
+function MondrianThreeJs({
+  width,
+  height,
+  thickness,
+  rectsXY,
+  rectsYZ,
+  rectsZX,
+  toggleFullScreen
+} : MondrianThreeJsProps ): React.ReactElement {
   const [depthBorder, setDepthBorder] = useState<number>(0.1);
   const [hasBorder, setHasBorder] = useState<boolean>(true);
+
+  const mondrianConfigs = [
+    { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-1,0] },
+    { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-1,0,0] },
+    { rects: rectsZX, rotation: [0,-Math.PI/2,0], position: [1,0,0] }
+  ]
 
   function computePosition(rect: CustomRect) : [number, number, number] {
     const [x, y] = centerRect(rect);
@@ -49,19 +65,26 @@ function MondrianThreeJs({width , height, thickness, rects, toggleFullScreen} : 
       }}
     >
       <color attach="background" args={[0x797979]} />
-      { hasBorder && <Borders rects={rects} thickness={thickness} depth={depthBorder} /> }
       {
-        rects.map((rect, index) => {
-          return (
-            <ColoredBox
-              key={index}
-              rect={rect}
-              thickness={thickness}
-              depth={0.15}
-              meshProps={{position: computePosition(rect)}}
-            />
-          );
-        })
+        mondrianConfigs.map( ({rects, rotation, position}) =>
+          <group position={position} rotation={rotation}>
+          { hasBorder && <Borders rects={rects} thickness={thickness} depth={depthBorder} /> }
+          {
+            rects.map((rect, index) => {
+              return (
+                <ColoredBox
+                  key={index}
+                  rect={rect}
+                  thickness={thickness}
+                  depth={0.15}
+                  meshProps={{position: computePosition(rect)}}
+                />
+              );
+            })
+          }
+          </group>
+
+        )
       }
       <ambientLight args={[0xffffff]} intensity={0.5} position={[0, 0.5, 0.5]} />
       <directionalLight position={[0, 0, 5]} intensity={0.5} />

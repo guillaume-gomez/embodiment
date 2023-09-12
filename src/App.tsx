@@ -52,7 +52,9 @@ function App() {
         width={width}
         height={height}
         thickness={5}
-        rects={mondrianXY.rects}
+        rectsXY={mondrianXY.rects}
+        rectsYZ={mondrianYZ.rects}
+        rectsZX={mondrianZX.rects}
         toggleFullScreen={() => {}}
       />
     </div>

@@ -139,15 +139,15 @@ function use3DMondrian() {
     const [rectsA, lineA] = ruleA(xPad, yPad, initRect);
     //const [rectsAA, lineAA] = ruleA(xPad, yPad, rectsA);
 
-    //const [rectsB, lineB] = ruleB(xPad, yPad, initRect);
+    const [rectsB, lineB] = ruleB(xPad, yPad, initRect);
     //const [rectsBB, lineBB] = ruleB(xPad, yPad, rectsB);
 
-    //const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
+    const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
     //const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsC);
 
     setMondrianXY({...mondrianXY, rects: [...rectsA] });
-    //setMondrianYZ({...mondrianYZ, rects: [...rectsBB]});
-    //setMondrianZX({...mondrianZX, rects: [...rectsCC] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectsB]});
+    setMondrianZX({...mondrianZX, rects: [...rectsC] });
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX };
