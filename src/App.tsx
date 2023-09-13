@@ -16,22 +16,24 @@ function App() {
   } = useFullscreen({ target: fullscreenContainerRef });
 
   return (
-    <div className="bg-base-300 flex flex-col gap-2 items-center">
+    <div className="bg-base-300 flex flex-col gap-2 items-center h-screen">
       <Navbar />
-      <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
-      <div className="flex flex-col gap-2">
-        {
-          mondrians.map((mondrian) =>
-            <MondrianCanvas
-              ref={canvasActionsRef}
-              width={width}
-              height={height}
-              thickness={2}
-              rects={mondrian.rects}
-              toggleFullScreen={toggleFullscreen}
-            />
-          )
-        }
+      <div className="grow">
+        <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
+        <div className="flex flex-col gap-2">
+          {
+            mondrians.map((mondrian) =>
+              <MondrianCanvas
+                ref={canvasActionsRef}
+                width={width}
+                height={height}
+                thickness={2}
+                rects={mondrian.rects}
+                toggleFullScreen={toggleFullscreen}
+              />
+            )
+          }
+        </div>
       </div>
       <Footer />
     </div>
