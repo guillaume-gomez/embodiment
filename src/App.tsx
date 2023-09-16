@@ -3,6 +3,8 @@ import use3DMondrian from "./hooks/use3DMondrian";
 import MondrianThreeJs from "./MondrianThreeJs";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
 import { useFullscreen } from "rooks";
+import Navbar from "./components/NavBar";
+import Footer from "./components/Footer";
 
 function App() {
   const { generate, mondrianXY, mondrianYZ, mondrianZX } = use3DMondrian();
@@ -14,7 +16,7 @@ function App() {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
 
-  console.log(mondrianXY.rects)
+  //console.log(mondrianXY.rects)
 
   return (
     <div className="flex flex-col gap-2 items-center">
@@ -57,6 +59,7 @@ function App() {
         rectsZX={mondrianZX.rects}
         toggleFullScreen={() => {}}
       />
+      <Footer />
     </div>
   )
 }
