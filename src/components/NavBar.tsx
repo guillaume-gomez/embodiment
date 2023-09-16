@@ -1,7 +1,7 @@
 
 function NavBar() {
     return (
-        <div className="navbar bg-base-100">
+        <div className="navbar bg-neutral">
           <div className="flex-1">
             <a className="btn btn-ghost normal-case text-xl">Embodiment</a>
           </div>

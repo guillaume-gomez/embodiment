@@ -16,9 +16,9 @@ function App() {
   } = useFullscreen({ target: fullscreenContainerRef });
 
   return (
-    <div className="bg-base-300 flex flex-col gap-2 items-center h-screen">
+    <div className="flex flex-col gap-2 items-center h-screen">
       <Navbar />
-      <div className="grow">
+      <div className="grow flex flex-col gap-3">
         <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
         <div className="flex flex-col gap-2">
           {
