@@ -3,6 +3,11 @@ import use3DMondrian from "./hooks/use3DMondrian";
 import MondrianThreeJs from "./MondrianThreeJs";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
 import { useFullscreen } from "rooks";
+import Navbar from "./components/NavBar";
+import Footer from "./components/Footer";
+
+const PROJECT_NAME : string = "Embodiment";
+const GITHUB_REPOSITORY_URL : string = "http://github.io/guillaume-gomez/embodiment";
 
 function App() {
   const { generate, mondrianXY, mondrianYZ, mondrianZX } = use3DMondrian();
@@ -17,7 +22,12 @@ function App() {
   console.log(mondrianXY.rects)
 
   return (
-    <div className="flex flex-col gap-2 items-center">
+    <div className="flex flex-col gap-2 items-center h-screen">
+      <Navbar
+        projectTitle={PROJECT_NAME}
+        githubRepositoryUrl={GITHUB_REPOSITORY_URL}
+      />
+    <div className="grow flex flex-col gap-3">
       <h1 className="text-3xl font-bold underline">
         Embodiment
       </h1>
@@ -57,6 +67,8 @@ function App() {
         rectsZX={mondrianZX.rects}
         toggleFullScreen={() => {}}
       />
+    </div>
+      <Footer />
     </div>
   )
 }
