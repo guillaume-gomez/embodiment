@@ -17,7 +17,10 @@ function App() {
 
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
-      <Navbar />
+      <Navbar
+        projectTitle={import.meta.env.VITE_PROJECT_NAME}
+        githubRepositoryUrl={import.meta.env.VITE_GITHUB_REPOSITORY_URL}
+      />
       <div className="grow flex flex-col gap-3">
         <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
         <div className="flex flex-col gap-2">
