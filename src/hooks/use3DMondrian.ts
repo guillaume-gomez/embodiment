@@ -78,13 +78,12 @@ function use3DMondrian() {
 
   function ruleABC(xPad: number, yPad: number, rects: CustomRect[], direction: "horizontal" | "vertical") : [CustomRect[], Line] {
     const candidate = sample(rects);
-    const cut = direction === "horizontal" ?
+    const cut = direction === "vertical" ?
       randInt(candidate.x1 + xPad, candidate.x2 - xPad) :
       randInt(candidate.y1 + yPad, candidate.y2 - yPad)
     ;
 
     const line = { direction, coord: cut };
-
     const newRects = splitRectsControlled(candidate, xPad, yPad, line);
 
     if(newRects.length === 0) {
@@ -136,18 +135,18 @@ function use3DMondrian() {
 
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
-    const [rectsA, lineA] = ruleA(xPad, yPad, initRect);
-    //const [rectsAA, lineAA] = ruleA(xPad, yPad, rectsA);
+    const [rectsA, _lineA] = ruleA(xPad, yPad, initRect);
+    const [rectsAA, _lineAA] = ruleA(xPad, yPad, rectsA);
 
-    const [rectsB, lineB] = ruleB(xPad, yPad, initRect);
-    //const [rectsBB, lineBB] = ruleB(xPad, yPad, rectsB);
+    const [rectsB, _lineB] = ruleB(xPad, yPad, initRect);
+    const [rectsBB, _lineBB] = ruleB(xPad, yPad, rectsB);
 
-    const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
-    //const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsC);
+    const [rectsC, _lineC] = ruleC(xPad, yPad, initRect);
+    const [rectsCC, _lineCC] = ruleC(xPad, yPad, rectsC);
 
-    setMondrianXY({...mondrianXY, rects: [...rectsA] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsB]});
-    setMondrianZX({...mondrianZX, rects: [...rectsC] });
+    setMondrianXY({...mondrianXY, rects: [...rectsAA] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectsBB] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCC] });
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX };

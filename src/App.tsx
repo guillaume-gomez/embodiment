@@ -19,7 +19,7 @@ function App() {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
 
-  console.log(mondrianXY.rects)
+  //console.log(mondrianXY.rects)
 
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
@@ -58,6 +58,7 @@ function App() {
             toggleFullScreen={toggleFullscreen}
           />
       </div>
+      <div className="flex flex-row">
       <MondrianThreeJs
         width={width}
         height={height}
@@ -67,6 +68,8 @@ function App() {
         rectsZX={mondrianZX.rects}
         toggleFullScreen={() => {}}
       />
+      <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
+      </div>
     </div>
       <Footer />
     </div>
