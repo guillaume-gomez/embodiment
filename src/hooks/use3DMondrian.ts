@@ -69,7 +69,7 @@ function use3DMondrian() {
       return [...flatten(rectsChunked), ...others];
     } else {
       const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect => line.coord >= rect.x1 && line.coord <= rect.x2);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk => 
+      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
           splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "horizontal", coord: line.coord })
       );
       return [...flatten(rectsChunked), ...others];
@@ -85,6 +85,10 @@ function use3DMondrian() {
 
     const line = { direction, coord: cut };
     const newRects = splitRectsControlled(candidate, xPad, yPad, line);
+    console.log("newRects")
+    console.log(line)
+    console.log(newRects)
+    console.log(candidate)
 
     if(newRects.length === 0) {
       return rects;
@@ -97,6 +101,8 @@ function use3DMondrian() {
       rect.y2 !== candidate.y2
     );
 
+    console.log([...rectsWithoutCandidate, ...newRects])
+    console.log("ending")
     return [[...rectsWithoutCandidate, ...newRects], line];
   }
 

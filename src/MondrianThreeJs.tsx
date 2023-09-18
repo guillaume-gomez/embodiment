@@ -29,9 +29,9 @@ function MondrianThreeJs({
   const [hasBorder, _setHasBorder] = useState<boolean>(true);
 
   const mondrianConfigs = [
-    { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-1,0] },
-    { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-1,0,0] },
-    { rects: rectsZX, rotation: [0,-Math.PI/2,0], position: [1,0,0] }
+    { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-0.75,0] },
+    { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-0.75,0,0] },
+    { rects: rectsZX, rotation: [0,-Math.PI/2,0], position: [0.75,0,0] }
   ]
 
   function computePosition(rect: CustomRect) : [number, number, number] {
