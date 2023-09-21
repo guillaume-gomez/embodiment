@@ -38,7 +38,7 @@ function App() {
           }
         </div>
       </div>
-      <Footer />
+      <Footer githubRepositoryUrl="google.com" />
     </div>
   )
 }
