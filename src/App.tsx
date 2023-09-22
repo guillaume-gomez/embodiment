@@ -5,6 +5,9 @@ import { useFullscreen } from "rooks";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
 
+const githubRepositoryUrl = "www.github.io/guillaume-gomez/embodiment";
+const projectName ="Embodiment";
+
 function App() {
   const { generate, mondrians } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
@@ -18,8 +21,8 @@ function App() {
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
       <Navbar
-        projectTitle={import.meta.env.VITE_PROJECT_NAME}
-        githubRepositoryUrl={import.meta.env.VITE_GITHUB_REPOSITORY_URL}
+        projectTitle={projectName}
+        githubRepositoryUrl={githubRepositoryUrl}
       />
       <div className="grow flex flex-col gap-3">
         <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
@@ -38,7 +41,7 @@ function App() {
           }
         </div>
       </div>
-      <Footer githubRepositoryUrl="google.com" />
+      <Footer githubRepositoryUrl={githubRepositoryUrl} />
     </div>
   )
 }
