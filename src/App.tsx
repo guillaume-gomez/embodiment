@@ -62,7 +62,7 @@ function App() {
       <MondrianThreeJs
         width={width}
         height={height}
-        thickness={5}
+        thickness={25}
         rectsXY={mondrianXY.rects}
         rectsYZ={mondrianYZ.rects}
         rectsZX={mondrianZX.rects}

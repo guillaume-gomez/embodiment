@@ -118,7 +118,7 @@ function use3DMondrian() {
 
   function ruleC(xPad: number, yPad: number, rects: CustomRect[]) {
     // cut should be here
-    return ruleABC(xPad, yPad, rects, "horizontal");
+    return ruleABC(xPad, yPad, rects, "vertical");
   }
 
 
