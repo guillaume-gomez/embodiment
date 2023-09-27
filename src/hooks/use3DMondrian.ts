@@ -19,7 +19,7 @@ function use3DMondrian() {
   const [ mondrianZX, setMondrianZX] = useState<Mondrian>({title: "left", rects: []});
 
   function randomColor() {
-    return sample(["#f9dFF0", "#f900F0", "#0F00FD", "#9DFF00", "#FFFF00", "#AAFF88"]);
+    return sample(["#f9dFF0", "#f900F0", "#0F00FD", "#9DFF00", "#FFFF00", "#AAFF88", "#00F4FD", "#F50999"]);
   }
 
   function splitRectsControlled(
@@ -64,13 +64,13 @@ function use3DMondrian() {
     if(line.direction === "horizontal") {
       const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => line.coord >= rect.y1 && line.coord <= rect.y2);
       const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
-          splitRectsControlled(rectToBeChunk, xPad, yPad, {direction: "vertical", coord: line.coord })
+          splitRectsControlled(rectToBeChunk, xPad, yPad, {direction: "horizontal", coord: line.coord })
       );
       return [...flatten(rectsChunked), ...others];
     } else {
-      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => rect => line.coord >= rect.x1 && line.coord <= rect.x2);
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => line.coord >= rect.x1 && line.coord <= rect.x2);
       const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
-          splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "horizontal", coord: line.coord })
+          splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "vertical", coord: line.coord })
       );
       return [...flatten(rectsChunked), ...others];
     }
@@ -85,10 +85,6 @@ function use3DMondrian() {
 
     const line = { direction, coord: cut };
     const newRects = splitRectsControlled(candidate, xPad, yPad, line);
-    console.log("newRects")
-    console.log(line)
-    console.log(newRects)
-    console.log(candidate)
 
     if(newRects.length === 0) {
       return rects;
@@ -101,8 +97,6 @@ function use3DMondrian() {
       rect.y2 !== candidate.y2
     );
 
-    console.log([...rectsWithoutCandidate, ...newRects])
-    console.log("ending")
     return [[...rectsWithoutCandidate, ...newRects], line];
   }
 
@@ -113,7 +107,7 @@ function use3DMondrian() {
 
   function ruleB(xPad: number, yPad: number, rects: CustomRect[]) {
     // cut should be here
-    return ruleABC(xPad, yPad, rects, "vertical");
+    return ruleABC(xPad, yPad, rects, "horizontal");
   }
 
   function ruleC(xPad: number, yPad: number, rects: CustomRect[]) {
@@ -142,15 +136,19 @@ function use3DMondrian() {
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
     const [rectsA, _lineA] = ruleA(xPad, yPad, initRect);
-    const [rectsAA, _lineAA] = ruleA(xPad, yPad, rectsA);
-
     const [rectsB, _lineB] = ruleB(xPad, yPad, initRect);
+    const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
+
+    const rectsASplit = chunkRects(rectsA, xPad, yPad, lineC);
+
+    const [rectsAA, _lineAA] = ruleA(xPad, yPad, rectsASplit);
     const [rectsBB, _lineBB] = ruleB(xPad, yPad, rectsB);
+    const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsC);
 
-    const [rectsC, _lineC] = ruleC(xPad, yPad, initRect);
-    const [rectsCC, _lineCC] = ruleC(xPad, yPad, rectsC);
+    const rectsAASplit = chunkRects(rectsAA, xPad, yPad, lineCC);
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAA] });
+
+    setMondrianXY({...mondrianXY, rects: [...rectsAASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBB] });
     setMondrianZX({...mondrianZX, rects: [...rectsCC] });
   }
