@@ -26,14 +26,17 @@ function App() {
         <div className="flex flex-col gap-2">
           {
             mondrians.map((mondrian) =>
-              <MondrianCanvas
-                ref={canvasActionsRef}
-                width={width}
-                height={height}
-                thickness={2}
-                rects={mondrian.rects}
-                toggleFullScreen={toggleFullscreen}
-              />
+              <div>
+                <p className="text-xl">{mondrian.title}</p>
+                <MondrianCanvas
+                  ref={canvasActionsRef}
+                  width={width}
+                  height={height}
+                  thickness={2}
+                  rects={mondrian.rects}
+                  toggleFullScreen={toggleFullscreen}
+                />
+              </div>
             )
           }
         </div>
