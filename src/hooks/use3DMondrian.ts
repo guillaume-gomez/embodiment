@@ -19,7 +19,7 @@ function use3DMondrian() {
   const [ mondrianZX, setMondrianZX] = useState<Mondrian>({title: "left", rects: []});
 
   function randomColor() {
-    return sample(["#f9dFF0", "#f900F0", "#0F00FD", "#9DFF00", "#FFFF00", "#AAFF88", "#00F4FD", "#F50999"]);
+    return sample(["#FF6700", "#EBEBEB", "#3A6EA5", "#004E98", "#621B00", "#2F10FF", "#E89005", "#E70E02", "#E2F89C", "#BDC4A7", "#632B30" ]);
   }
 
   function splitRectsControlled(
@@ -135,22 +135,32 @@ function use3DMondrian() {
 
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
-    const [rectsA, _lineA] = ruleA(xPad, yPad, initRect);
-    const [rectsB, _lineB] = ruleB(xPad, yPad, initRect);
+    const [rectsA, lineA] = ruleA(xPad, yPad, initRect);
+    const [rectsB, lineB] = ruleB(xPad, yPad, initRect);
     const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
 
     const rectsASplit = chunkRects(rectsA, xPad, yPad, lineC);
+    const rectsBSplit = chunkRects(rectsB, xPad, yPad, lineA);
+    const rectsCSplit = chunkRects(rectsC, xPad, yPad, lineB);
 
-    const [rectsAA, _lineAA] = ruleA(xPad, yPad, rectsASplit);
-    const [rectsBB, _lineBB] = ruleB(xPad, yPad, rectsB);
+    const [rectsAA, lineAA] = ruleA(xPad, yPad, rectsASplit);
+    const [rectsBB, lineBB] = ruleB(xPad, yPad, rectsB);
     const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsC);
 
     const rectsAASplit = chunkRects(rectsAA, xPad, yPad, lineCC);
+    const rectsBBSplit = chunkRects(rectsBB, xPad, yPad, lineAA);
+    const rectsCCSplit = chunkRects(rectsCC, xPad, yPad, lineBB);
 
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAASplit] });
+    //chunk for BB and CC doesnt work
+
+    //setMondrianXY({...mondrianXY, rects: [...rectsAA] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBB] });
     setMondrianZX({...mondrianZX, rects: [...rectsCC] });
+
+    setMondrianXY({...mondrianXY, rects: [...rectsAASplit] });
+    //setMondrianYZ({...mondrianYZ, rects: [...rectsBBSplit] });
+    //setMondrianZX({...mondrianZX, rects: [...rectsCCSplit] });
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX };
