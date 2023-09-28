@@ -2,14 +2,17 @@ import { useState } from 'react';
 import { CustomRect, findIntersectionInXLeft } from "../utils";
 import useMondrian from "./useMondrian";
 
+type TitleType = "bottom" | "right" | "top";
+
 interface Mondrian {
   rects: CustomRect[];
-  title: "bottom" | "right" | "top";
+  title: TitleType;
 }
 
 function use3DMondrian() {
   const {  generateMondrian, generate } = useMondrian();
   const [ mondrians, setMondrians] = useState<Mondrian[]>([]);
+  const [history, setHistory] = useState<Mondrian[]>([]);
 
 
   function generate3D(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
@@ -35,11 +38,16 @@ function use3DMondrian() {
       { rects: mondrianLefts, title: "right" },
       /*{ rects: mondrianRects, title: "top" }*/
     ];
+    setHistory(mondrians);
     setMondrians(mondrians);
   }
 
+  function historyByTitle(selectedTitle: TitleType) : Mondrian[] {
+    return history.filter(({title}) => selectedTitle === title);
+  }
 
-  return { generate: generate3D, mondrians };
+
+  return { generate: generate3D, mondrians, historyByTitle };
 
 }
 
