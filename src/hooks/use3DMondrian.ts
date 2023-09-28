@@ -58,21 +58,29 @@ function use3DMondrian() {
     } else {
       return splitRectsControlled(rect, xPad, yPad, {direction: "vertical", coord: randInt(rect.y1 + yPad, rect.y2 - yPad)});
     }
-}
+  }
+
+  function chunkRectsVertical(rects: CustomRect[], xPad: number, yPad: number, coord: number ) {
+      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.x1 && coord <= rect.x2);
+      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
+          splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "vertical", coord })
+      );
+      return [...flatten(rectsChunked), ...others];
+  }
+
+  function chunkRectsHorizontal(rects: CustomRect[], xPad: number, yPad: number, coord: number) {
+    const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.y1 && coord <= rect.y2);
+      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
+          splitRectsControlled(rectToBeChunk, xPad, yPad, {direction: "horizontal", coord })
+      );
+      return [...flatten(rectsChunked), ...others];
+  }
 
   function chunkRects(rects: CustomRect[], xPad: number, yPad: number, line: Line) : CustomRect[] {
     if(line.direction === "horizontal") {
-      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => line.coord >= rect.y1 && line.coord <= rect.y2);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
-          splitRectsControlled(rectToBeChunk, xPad, yPad, {direction: "horizontal", coord: line.coord })
-      );
-      return [...flatten(rectsChunked), ...others];
+      return chunkRectsHorizontal(rects, xPad, yPad, line.coord);
     } else {
-      const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => line.coord >= rect.x1 && line.coord <= rect.x2);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
-          splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "vertical", coord: line.coord })
-      );
-      return [...flatten(rectsChunked), ...others];
+      return chunkRectsVertical(rects, xPad, yPad, line.coord);
     }
   }
 
@@ -130,8 +138,8 @@ function use3DMondrian() {
   }
 
   function generate3D(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
-    const xPad = canvasWidth * 0.05;
-    const yPad = canvasHeight * 0.05;
+    const xPad = canvasWidth * 0.1;
+    const yPad = canvasHeight * 0.1;
 
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
@@ -139,28 +147,21 @@ function use3DMondrian() {
     const [rectsB, lineB] = ruleB(xPad, yPad, initRect);
     const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
 
-    const rectsASplit = chunkRects(rectsA, xPad, yPad, lineC);
-    const rectsBSplit = chunkRects(rectsB, xPad, yPad, lineA);
-    const rectsCSplit = chunkRects(rectsC, xPad, yPad, lineB);
+    const rectsASplit = chunkRectsVertical(rectsA, xPad, yPad, lineC.coord);
+    const rectsBSplit = chunkRectsVertical(rectsB, xPad, yPad, canvasWidth - lineA.coord);
+    const rectsCSplit = chunkRectsHorizontal(rectsC, xPad, yPad, lineB.coord);
 
     const [rectsAA, lineAA] = ruleA(xPad, yPad, rectsASplit);
-    const [rectsBB, lineBB] = ruleB(xPad, yPad, rectsB);
-    const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsC);
+    const [rectsBB, lineBB] = ruleB(xPad, yPad, rectsBSplit);
+    const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsCSplit);
 
-    const rectsAASplit = chunkRects(rectsAA, xPad, yPad, lineCC);
-    const rectsBBSplit = chunkRects(rectsBB, xPad, yPad, lineAA);
-    const rectsCCSplit = chunkRects(rectsCC, xPad, yPad, lineBB);
-
-
-    //chunk for BB and CC doesnt work
-
-    //setMondrianXY({...mondrianXY, rects: [...rectsAA] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsBB] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCC] });
+    const rectsAASplit = chunkRectsVertical(rectsAA, xPad, yPad, lineCC.coord);
+    const rectsBBSplit = chunkRectsVertical(rectsBB, xPad, yPad, canvasWidth - lineAA.coord);
+    const rectsCCSplit = chunkRectsHorizontal(rectsCC, xPad, yPad, lineBB.coord);
 
     setMondrianXY({...mondrianXY, rects: [...rectsAASplit] });
-    //setMondrianYZ({...mondrianYZ, rects: [...rectsBBSplit] });
-    //setMondrianZX({...mondrianZX, rects: [...rectsCCSplit] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectsBBSplit] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCCSplit] });
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX };
