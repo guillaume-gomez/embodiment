@@ -9,11 +9,12 @@ const githubRepositoryUrl = "www.github.io/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
-  const { generate, mondrians } = use3DMondrian();
+  const { generate, mondrians, historyByTitle } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
   const [width] = useState<number>(500);
   const [height] = useState<number>(500);
+  const [historyTitle, setHistoryTitle] = useState<string>("bottom");
   const {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
@@ -44,6 +45,32 @@ function App() {
           }
         </div>
       </div>
+      <div>
+        <p className="text-xl">History</p>
+        <select
+          className="select select-primary w-full max-w-xs"
+          onChange={(e) => setHistoryTitle(e.target.value)}
+        >
+          {
+            ["bottom", "right", "top" ].map(title =>
+              <option>{title}</option>
+            )
+          }
+        </select>
+        {
+          historyByTitle(historyTitle).map(mondrian =>
+            <MondrianCanvas
+                ref={canvasActionsRef}
+                width={width}
+                height={height}
+                thickness={2}
+                rects={mondrian.rects}
+                toggleFullScreen={toggleFullscreen}
+              />
+          )
+        }
+      </div>
+
       <Footer githubRepositoryUrl={githubRepositoryUrl} />
     </div>
   )
