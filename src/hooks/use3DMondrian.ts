@@ -43,7 +43,7 @@ function use3DMondrian() {
       }
   }
 
-  function splitRects(rect: CustomRect, xPad: number, yPad: number) : [CustomRect, CustomRect] | [] {
+  function _splitRects(rect: CustomRect, xPad: number, yPad: number) : [CustomRect, CustomRect] | [] {
     // Check the rectangle is enough large and tall
     const width = widthRect(rect);
     const height = heightRect(rect);
@@ -76,7 +76,7 @@ function use3DMondrian() {
       return [...flatten(rectsChunked), ...others];
   }
 
-  function chunkRects(rects: CustomRect[], xPad: number, yPad: number, line: Line) : CustomRect[] {
+  function _chunkRects(rects: CustomRect[], xPad: number, yPad: number, line: Line) : CustomRect[] {
     if(line.direction === "horizontal") {
       return chunkRectsHorizontal(rects, xPad, yPad, line.coord);
     } else {
@@ -84,8 +84,17 @@ function use3DMondrian() {
     }
   }
 
+  function rectsWithoutCandidate(rects: CustomRect[], candidate: CustomRect) : CustomRect[] {
+    return rects.filter(rect =>
+      rect.x1 !== candidate.x1 ||
+      rect.x2 !== candidate.x2 ||
+      rect.y1 !== candidate.y1 ||
+      rect.y2 !== candidate.y2
+    );
+  }
+
   function ruleABC(xPad: number, yPad: number, rects: CustomRect[], direction: "horizontal" | "vertical") : [CustomRect[], Line] {
-    const candidate = sample(rects);
+    const candidate: CustomRect = sample(rects);
     const cut = direction === "vertical" ?
       randInt(candidate.x1 + xPad, candidate.x2 - xPad) :
       randInt(candidate.y1 + yPad, candidate.y2 - yPad)
@@ -95,46 +104,44 @@ function use3DMondrian() {
     const newRects = splitRectsControlled(candidate, xPad, yPad, line);
 
     if(newRects.length === 0) {
-      return rects;
+      return [rects, line];
     }
 
-    const rectsWithoutCandidate = rects.filter(rect =>
-      rect.x1 !== candidate.x1 ||
-      rect.x2 !== candidate.x2 ||
-      rect.y1 !== candidate.y1 ||
-      rect.y2 !== candidate.y2
-    );
-
-    return [[...rectsWithoutCandidate, ...newRects], line];
+    return [[...rectsWithoutCandidate(rects, candidate), ...newRects], line];
   }
 
   function ruleA(xPad: number, yPad: number, rects: CustomRect[]) {
-    // cut should be here
     return ruleABC(xPad, yPad, rects, "horizontal");
   }
 
   function ruleB(xPad: number, yPad: number, rects: CustomRect[]) {
-    // cut should be here
     return ruleABC(xPad, yPad, rects, "horizontal");
   }
 
   function ruleC(xPad: number, yPad: number, rects: CustomRect[]) {
-    // cut should be here
     return ruleABC(xPad, yPad, rects, "vertical");
   }
 
+  function ruleDEF(xPad: number, yPad: number, rects: CustomRect[], direction: "horizontal" | "vertical") : [CustomRect[], Line] {
+    const candidate : CustomRect = sample(rects);
+    const [newRects, line] = ruleABC(xPad, yPad, [candidate], direction);
 
-  function ruleD() {
+    const rectsWithoutTheSelectedCandidate = rectsWithoutCandidate(rects, candidate);
 
+    return [[...rectsWithoutTheSelectedCandidate, ...newRects], line];
+  }
+
+  function ruleD(xPad: number, yPad: number, rects: CustomRect[]) {
+    return ruleDEF(xPad, yPad, rects, "horizontal");
   }
 
 
-  function ruleE() {
-
+  function ruleE(xPad: number, yPad: number, rects: CustomRect[]) {
+    return ruleDEF(xPad, yPad, rects, "horizontal");
   }
 
-  function ruleF() {
-
+  function ruleF(xPad: number, yPad: number, rects: CustomRect[]) {
+    return ruleDEF(xPad, yPad, rects, "vertical");
   }
 
   function generate3D(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
@@ -159,9 +166,13 @@ function use3DMondrian() {
     const rectsBBSplit = chunkRectsVertical(rectsBB, xPad, yPad, canvasWidth - lineAA.coord);
     const rectsCCSplit = chunkRectsHorizontal(rectsCC, xPad, yPad, lineBB.coord);
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAASplit] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsBBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCSplit] });
+    const [rectsAAA, _lineAAA] = ruleD(xPad, yPad, rectsAASplit);
+    const [rectsBBB, _lineBBB] = ruleE(xPad, yPad, rectsBBSplit);
+    const [rectsCCC, _lineCCC] = ruleF(xPad, yPad, rectsCCSplit);
+
+    setMondrianXY({...mondrianXY, rects: [...rectsAAA] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX };
