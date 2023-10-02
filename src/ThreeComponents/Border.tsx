@@ -10,7 +10,7 @@ interface BorderProps {
   meshProps?: JSX.IntrinsicElements['mesh'];
 }
 
-const material = new THREE.MeshStandardMaterial( { color: "black" } );
+const material = new THREE.MeshStandardMaterial( { color: 0x000000, opacity: 0.1, transparent:true } );
 
 function Border({rect, thickness, depth, meshProps}: BorderProps) {
   const { size: { width, height } } = useThree();
@@ -19,6 +19,9 @@ function Border({rect, thickness, depth, meshProps}: BorderProps) {
   const widthGeometry = useMemo(() => new THREE.BoxGeometry( widthRect(rect)/ width, thicknessHeight, depth ) , [rect, width, thicknessHeight, depth]);
   const heightGeometry = useMemo(() => new THREE.BoxGeometry( thicknessWidth, heightRect(rect) / height, depth ) , [rect, height, thicknessWidth, depth]);
   const [x, y] = useMemo(() => centerRect(rect), [rect]);
+
+
+
   return (
     <>
     <mesh
@@ -27,7 +30,7 @@ function Border({rect, thickness, depth, meshProps}: BorderProps) {
       position={[
         (rect.x1 + x)/ width,
         -(rect.y1 + thicknessHeight)/height,
-        0
+        depth/2
       ]
      }
       {...meshProps}
@@ -39,7 +42,7 @@ function Border({rect, thickness, depth, meshProps}: BorderProps) {
       position={[
         (rect.x1 + x)/ width ,
         -(rect.y2 + thicknessHeight)/height,
-        0
+        depth/2
       ]
      }
       {...meshProps}
@@ -51,7 +54,7 @@ function Border({rect, thickness, depth, meshProps}: BorderProps) {
       position={[
         (rect.x1 + thicknessWidth)/ width,
          -(rect.y1 + y)/height,
-         0
+         depth/2
         
       ]
      }
@@ -64,7 +67,7 @@ function Border({rect, thickness, depth, meshProps}: BorderProps) {
       position={[
         (rect.x2 + thicknessWidth)/ width ,
         -(rect.y1 + y)/height,
-        0
+        depth/2
       ]
      }
       {...meshProps}

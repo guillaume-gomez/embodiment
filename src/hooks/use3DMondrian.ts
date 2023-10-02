@@ -144,7 +144,7 @@ function use3DMondrian() {
     return ruleDEF(xPad, yPad, rects, "vertical");
   }
 
-  function generate3D(canvasWidth: number, canvasHeight: number, nbIterations: number = 3) {
+  function generate3D(canvasWidth: number, canvasHeight: number) {
     const xPad = canvasWidth * 0.1;
     const yPad = canvasHeight * 0.1;
 
@@ -170,9 +170,14 @@ function use3DMondrian() {
     const [rectsBBB, _lineBBB] = ruleE(xPad, yPad, rectsBBSplit);
     const [rectsCCC, _lineCCC] = ruleF(xPad, yPad, rectsCCSplit);
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAAA] });
+/*    setMondrianXY({...mondrianXY, rects: [...rectsAAA] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCCC] });*/
+
+
+    setMondrianXY({...mondrianXY, rects: [...rectsA] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectsB] });
+    setMondrianZX({...mondrianZX, rects: [...rectsC] });
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX };

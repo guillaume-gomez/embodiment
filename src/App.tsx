@@ -32,7 +32,7 @@ function App() {
       <h1 className="text-3xl font-bold underline">
         Embodiment
       </h1>
-      <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
+      <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
       <div className="flex flex-row gap-2">
           <div>
             <p className="text-xl">YZ</p>
@@ -78,7 +78,7 @@ function App() {
         rectsZX={mondrianZX.rects}
         toggleFullScreen={() => {}}
       />
-      <button className="btn btn-accent" onClick={() => generate(width,height, 4)}>Generate</button>
+      <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
       </div>
     </div>
       <Footer />
