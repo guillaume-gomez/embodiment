@@ -3,6 +3,7 @@ import { CustomRect, findIntersectionInXLeft } from "../utils";
 import useMondrian from "./useMondrian";
 
 type TitleType = "bottom" | "right" | "top";
+export type HistoryType = TitleType | "all";
 
 interface Mondrian {
   rects: CustomRect[];
@@ -42,7 +43,10 @@ function use3DMondrian() {
     setMondrians(mondrians);
   }
 
-  function historyByTitle(selectedTitle: TitleType) : Mondrian[] {
+  function historyByTitle(selectedTitle: HistoryType) : Mondrian[] {
+    if(selectedTitle === "all") {
+      return history;
+    }
     return history.filter(({title}) => selectedTitle === title);
   }
 

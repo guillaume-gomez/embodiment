@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import use3DMondrian from "./hooks/use3DMondrian";
+import use3DMondrian, { HistoryType } from "./hooks/use3DMondrian";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
 import { useFullscreen } from "rooks";
 import Navbar from "./components/NavBar";
@@ -14,7 +14,7 @@ function App() {
   const fullscreenContainerRef = useRef<Element>(null);
   const [width] = useState<number>(500);
   const [height] = useState<number>(500);
-  const [historyTitle, setHistoryTitle] = useState<string>("bottom");
+  const [historyTitle, setHistoryTitle] = useState<HistoryType>("bottom");
   const {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
@@ -49,11 +49,12 @@ function App() {
         <p className="text-xl">History</p>
         <select
           className="select select-primary w-full max-w-xs"
-          onChange={(e) => setHistoryTitle(e.target.value)}
+          onChange={(e) => setHistoryTitle(e.target.value as HistoryType)}
         >
+          <option value="all">all</option>
           {
             ["bottom", "right", "top" ].map(title =>
-              <option>{title}</option>
+              <option value={title}>{title}</option>
             )
           }
         </select>
