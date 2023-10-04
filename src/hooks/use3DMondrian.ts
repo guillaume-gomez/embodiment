@@ -180,9 +180,9 @@ function use3DMondrian() {
       { title: "top", rects:rectsCCCSplit }
     ]);
 
-/*    setMondrianXY({...mondrianXY, rects: [...rectsAAA] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCC] });*/
+    /*setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectsBSplit] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });*/
 
 
     setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });

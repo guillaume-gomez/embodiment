@@ -27,11 +27,12 @@ function MondrianThreeJs({
 } : MondrianThreeJsProps ): React.ReactElement {
   const [depthBorder, _setDepthBorder] = useState<number>(1);
   const [hasBorder, _setHasBorder] = useState<boolean>(false);
+  const depth = 0.15;
 
   const mondrianConfigs = [
-    { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-0.5 - (0/2),0] },
-    { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-0.5 - (0/2),0,0] },
-    { rects: rectsZX, rotation: [0,0,-2*Math.PI], position: [0,0,-0.5 - (0/2)] }
+    { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-0.5 - depth/2 ,0] },
+    { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-0.5 - depth/2,0,0] },
+    { rects: rectsZX, rotation: [0,0,-2*Math.PI], position: [0,0,-0.5 - depth/2] }
   ]
 
   function computePosition(rect: CustomRect) : [number, number, number] {
@@ -70,7 +71,7 @@ function MondrianThreeJs({
                   key={index}
                   rect={rect}
                   thickness={thickness}
-                  depth={0.15}
+                  depth={depth}
                   meshProps={{position: computePosition(rect)}}
                 />
               );
