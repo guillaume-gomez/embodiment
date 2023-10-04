@@ -1,3 +1,5 @@
+import GithubButton from "./GithubButton";
+
 
 interface NavBarProps {
   projectTitle: string;
@@ -12,9 +14,7 @@ function NavBar({projectTitle, githubRepositoryUrl} : NavBarProps) {
           </div>
           <div className="flex-none">
             <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-accent" onClick={()=> {window.location.href = githubRepositoryUrl}}>
-                  Github
-              </label>
+              <GithubButton githubRepositoryUrl={githubRepositoryUrl} />
             </div>
         </div>
     </div>

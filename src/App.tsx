@@ -1,21 +1,23 @@
 import { useRef, useState } from "react";
-import use3DMondrian from "./hooks/use3DMondrian";
 import MondrianThreeJs from "./MondrianThreeJs";
+import use3DMondrian, { HistoryType } from "./hooks/use3DMondrian";
 import MondrianCanvas, { ExternalActionInterface } from "./MondrianCanvas";
 import { useFullscreen } from "rooks";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
 
-const PROJECT_NAME : string = "Embodiment";
-const GITHUB_REPOSITORY_URL : string = "http://github.io/guillaume-gomez/embodiment";
+const githubRepositoryUrl = "www.github.io/guillaume-gomez/embodiment";
+const projectName ="Embodiment";
 
 function App() {
-  const { generate, mondrianXY, mondrianYZ, mondrianZX } = use3DMondrian();
+  const { generate, mondrianXY, mondrianYZ, mondrianZX, historyByTitle } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
   const [width] = useState<number>(500);
   const [height] = useState<number>(500);
   const thickness = 25;
+  const [historyTitle, setHistoryTitle] = useState<HistoryType>("bottom");
+
   const {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
@@ -25,8 +27,8 @@ function App() {
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
       <Navbar
-        projectTitle={PROJECT_NAME}
-        githubRepositoryUrl={GITHUB_REPOSITORY_URL}
+        projectTitle={projectName}
+        githubRepositoryUrl={githubRepositoryUrl}
       />
     <div className="grow flex flex-col gap-3">
       <h1 className="text-3xl font-bold underline">
@@ -81,7 +83,35 @@ function App() {
       <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
       </div>
     </div>
-      <Footer />
+      <div className="card bg-primary text-primary-content">
+        <div className="card-body">
+          <h2 className="card-title">History</h2>
+          <select
+            className="select select-primary w-full max-w-xs"
+            onChange={(e) => setHistoryTitle(e.target.value as HistoryType)}
+          >
+            <option value="all">all</option>
+            {
+              ["bottom", "right", "top" ].map(title =>
+                <option value={title}>{title}</option>
+              )
+            }
+          </select>
+          {
+            historyByTitle(historyTitle).map(mondrian =>
+              <MondrianCanvas
+                  ref={canvasActionsRef}
+                  width={width}
+                  height={height}
+                  thickness={2}
+                  rects={mondrian.rects}
+                  toggleFullScreen={toggleFullscreen}
+                />
+            )
+          }
+        </div>
+      </div>
+      <Footer githubRepositoryUrl={githubRepositoryUrl} />
     </div>
   )
 }
