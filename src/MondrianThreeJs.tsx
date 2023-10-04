@@ -26,7 +26,7 @@ function MondrianThreeJs({
   toggleFullScreen
 } : MondrianThreeJsProps ): React.ReactElement {
   const [depthBorder, _setDepthBorder] = useState<number>(1);
-  const [hasBorder, _setHasBorder] = useState<boolean>(true);
+  const [hasBorder, _setHasBorder] = useState<boolean>(false);
 
   const mondrianConfigs = [
     { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-0.5 - (0/2),0] },
