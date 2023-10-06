@@ -25,6 +25,7 @@ function App() {
         projectTitle={projectName}
         githubRepositoryUrl={githubRepositoryUrl}
       />
+      <button className="btn btn-secondary" onClick={() => generate(width, height)}>generate</button>
       <div className="card bg-primary text-primary-content">
         <div className="card-body">
           <h2 className="card-title">Results</h2>
