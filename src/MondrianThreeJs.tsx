@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import Borders from "./ThreeComponents/Borders";
 import ColoredBox from "./ThreeComponents/ColoredBox";
 import { CustomRect, centerRect } from "./utils";
+
+interface MondrianConfig {
+ rects: CustomRect[];
+ rotation: [number, number, number];
+ position: [number, number, number];
+}
 
 interface MondrianThreeJsProps {
   width: number;
@@ -29,7 +35,7 @@ function MondrianThreeJs({
   const [hasBorder, _setHasBorder] = useState<boolean>(false);
   const depth = 0.15;
 
-  const mondrianConfigs = [
+  const mondrianConfigs : MondrianConfig[] = [
     { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-0.5 - depth/2 ,0] },
     { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-0.5 - depth/2,0,0] },
     { rects: rectsZX, rotation: [0,0,-2*Math.PI], position: [0,0,-0.5 - depth/2] }

@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, randInt, heightRect, widthRect, isEqual, filterWithRest } from "../utils";
+import { CustomRect, randInt, filterWithRest } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";

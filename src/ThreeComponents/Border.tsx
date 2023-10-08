@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import {  useThree } from '@react-three/fiber';
 import { CustomRect, heightRect, widthRect, centerRect } from "../utils";
 
