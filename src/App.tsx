@@ -25,16 +25,47 @@ function App() {
         projectTitle={projectName}
         githubRepositoryUrl={githubRepositoryUrl}
       />
-      <button className="btn btn-secondary" onClick={() => generate(width, height)}>generate</button>
-      <div className="card bg-primary text-primary-content">
-        <div className="card-body">
-          <h2 className="card-title">Results</h2>
-          <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
+        <button className="btn btn-secondary" onClick={() => generate(width, height)}>generate</button>
+        <div className="card bg-primary text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">Results</h2>
+            <div className="flex flex-col gap-2">
+              {
+                mondrians.map((mondrian) =>
+                  <div>
+                    <p className="text-xl">{mondrian.title}</p>
+                    <MondrianCanvas
+                      ref={canvasActionsRef}
+                      width={width}
+                      height={height}
+                      thickness={2}
+                      rects={mondrian.rects}
+                      toggleFullScreen={toggleFullscreen}
+                    />
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        </div>
+        <div className="card bg-primary text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">History</h2>
+            <select
+              className="select select-primary w-full max-w-xs"
+              onChange={(e) => setHistoryTitle(e.target.value as HistoryType)}
+            >
+              <option value="all">all</option>
+              {
+                ["bottom", "right", "top" ].map(title =>
+                  <option value={title}>{title}</option>
+                )
+              }
+            </select>
             {
-              mondrians.map((mondrian) =>
-                <div>
-                  <p className="text-xl">{mondrian.title}</p>
-                  <MondrianCanvas
+              historyByTitle(historyTitle).map(mondrian =>
+                <MondrianCanvas
                     ref={canvasActionsRef}
                     width={width}
                     height={height}
@@ -42,41 +73,11 @@ function App() {
                     rects={mondrian.rects}
                     toggleFullScreen={toggleFullscreen}
                   />
-                </div>
               )
             }
           </div>
         </div>
       </div>
-      <div className="card bg-primary text-primary-content">
-        <div className="card-body">
-          <h2 className="card-title">History</h2>
-          <select
-            className="select select-primary w-full max-w-xs"
-            onChange={(e) => setHistoryTitle(e.target.value as HistoryType)}
-          >
-            <option value="all">all</option>
-            {
-              ["bottom", "right", "top" ].map(title =>
-                <option value={title}>{title}</option>
-              )
-            }
-          </select>
-          {
-            historyByTitle(historyTitle).map(mondrian =>
-              <MondrianCanvas
-                  ref={canvasActionsRef}
-                  width={width}
-                  height={height}
-                  thickness={2}
-                  rects={mondrian.rects}
-                  toggleFullScreen={toggleFullscreen}
-                />
-            )
-          }
-        </div>
-      </div>
-
       <Footer githubRepositoryUrl={githubRepositoryUrl} />
     </div>
   )
