@@ -26,89 +26,86 @@ function App() {
 
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
-      <Navbar
-        projectTitle={projectName}
-        githubRepositoryUrl={githubRepositoryUrl}
-      />
-    <div className="grow flex flex-col gap-3">
-      <h1 className="text-3xl font-bold underline">
-        Embodiment
-      </h1>
-      <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
-      <div className="flex flex-row gap-2">
-          <div>
-            <p className="text-xl">YZ</p>
-            <MondrianCanvas
-              ref={canvasActionsRef}
-              width={width}
-              height={height}
-              thickness={Math.floor(thickness/10)}
-              rects={mondrianYZ.rects}
-              toggleFullScreen={toggleFullscreen}
-            />
-          </div>
-          <div>
-            <p className="text-xl">XY</p>
-            <MondrianCanvas
-              ref={canvasActionsRef}
-              width={width}
-              height={height}
-              thickness={Math.floor(thickness/10)}
-              rects={mondrianXY.rects}
-              toggleFullScreen={toggleFullscreen}
-            />
-          </div>
-          <div>
-            <p className="text-xl">ZX</p>
-            <MondrianCanvas
-              ref={canvasActionsRef}
-              width={width}
-              height={height}
-              thickness={Math.floor(thickness/10)}
-              rects={mondrianZX.rects}
-              toggleFullScreen={toggleFullscreen}
-            />
-          </div>
-      </div>
-      <div className="flex flex-row">
-      <MondrianThreeJs
-        width={width}
-        height={height}
-        thickness={thickness}
-        rectsXY={mondrianXY.rects}
-        rectsYZ={mondrianYZ.rects}
-        rectsZX={mondrianZX.rects}
-        toggleFullScreen={() => {}}
-      />
-      <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
-      </div>
-    </div>
-      <div className="card bg-primary text-primary-content">
-        <div className="card-body">
-          <h2 className="card-title">History</h2>
-          <select
-            className="select select-primary w-full max-w-xs"
-            onChange={(e) => setHistoryTitle(e.target.value as HistoryType)}
-          >
-            <option value="all">all</option>
+        <Navbar
+          projectTitle={projectName}
+          githubRepositoryUrl={githubRepositoryUrl}
+        />
+      <div className="flex flex-col gap-3">
+        <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
+        <div className="flex flex-row gap-2">
+            <div>
+              <p className="text-xl">YZ</p>
+              <MondrianCanvas
+                ref={canvasActionsRef}
+                width={width}
+                height={height}
+                thickness={Math.floor(thickness/10)}
+                rects={mondrianYZ.rects}
+                toggleFullScreen={toggleFullscreen}
+              />
+            </div>
+            <div>
+              <p className="text-xl">XY</p>
+              <MondrianCanvas
+                ref={canvasActionsRef}
+                width={width}
+                height={height}
+                thickness={Math.floor(thickness/10)}
+                rects={mondrianXY.rects}
+                toggleFullScreen={toggleFullscreen}
+              />
+            </div>
+            <div>
+              <p className="text-xl">ZX</p>
+              <MondrianCanvas
+                ref={canvasActionsRef}
+                width={width}
+                height={height}
+                thickness={Math.floor(thickness/10)}
+                rects={mondrianZX.rects}
+                toggleFullScreen={toggleFullscreen}
+              />
+            </div>
+        </div>
+        <div className="flex flex-row">
+          <MondrianThreeJs
+            width={width}
+            height={height}
+            thickness={thickness}
+            rectsXY={mondrianXY.rects}
+            rectsYZ={mondrianYZ.rects}
+            rectsZX={mondrianZX.rects}
+            toggleFullScreen={() => {}}
+          />
+          <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
+        </div>
+        <div className="card bg-primary text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">History</h2>
+            <select
+              className="select select-primary w-full max-w-xs"
+              onChange={(e) => setHistoryTitle(e.target.value as HistoryType)}
+            >
+              <option value="all">all</option>
+              {
+                ["bottom", "right", "top" ].map(title =>
+                  <option value={title}>{title}</option>
+                )
+              }
+            </select>
             {
-              ["bottom", "right", "top" ].map(title =>
-                <option value={title}>{title}</option>
+              historyByTitle(historyTitle).map(mondrian =>
+                <MondrianCanvas
+                    ref={canvasActionsRef}
+                    width={width}
+                    height={height}
+                    thickness={2}
+                    rects={mondrian.rects}
+                    toggleFullScreen={toggleFullscreen}
+                  />
               )
             }
-          </select>
-          {
-            historyByTitle(historyTitle).map(mondrian =>
-              <MondrianCanvas
-                  ref={canvasActionsRef}
-                  width={width}
-                  height={height}
-                  thickness={2}
-                  rects={mondrian.rects}
-                  toggleFullScreen={toggleFullscreen}
-                />
-            )
-          }
+          </div>
         </div>
       </div>
       <Footer githubRepositoryUrl={githubRepositoryUrl} />
