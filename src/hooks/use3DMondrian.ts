@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, Line, randInt, filterWithRest } from "../utils";
+import { CustomRect, Line, randInt, filterWithRest, fromRectsToVolumes } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -192,14 +192,16 @@ function use3DMondrian() {
       { title: "top", rects:rectsCCCSplit }
     ]);
 
-    /*setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
+    setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });*/
+    setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });
+
+    console.log(fromRectsToVolumes(mondrianYZ.rects, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
 
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
+    /*setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });*/
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, historyByTitle };

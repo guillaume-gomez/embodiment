@@ -1,4 +1,4 @@
-import { sortBy } from "lodash";
+import { sortBy, flatten } from "lodash";
 
 export interface CustomRect{
   x1: number;
@@ -73,7 +73,7 @@ export function filterWithRest(rects: CustomRect[], predicate: Function) : [Cust
     return [rectsMatchingCondition, rectsNotMatchingCondition];
 }
 
-export function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : CustomRect3D {
+function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : CustomRect3D {
     return {
         z1,
         z2,
@@ -82,7 +82,7 @@ export function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number)
 }
 
 
-export function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
+function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
     const direction = linesCutting[0].direction;
 
     const sortLines = sortBy(linesCutting, 'coord');
@@ -101,4 +101,12 @@ export function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], 
         );
     }
     return customRects3D;
+}
+
+export function fromRectsToVolumes(rectsOrigin: CustomRect[], linesCutting: Line[], width: number, height: number) :CustomRect3D[] {
+    const max = linesCutting[0].direction === "vertical" ? width : height;
+    const customRect3DArray = rectsOrigin.map(rectOrigin => {
+        return fromRectToVolumes(rectOrigin, linesCutting, max);
+    });
+    return flatten(customRect3DArray);
 }
