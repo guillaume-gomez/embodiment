@@ -1,5 +1,5 @@
 import { CustomRect } from "../utils";
-import BorderRect from "./Border";
+import BorderRect from "./BorderRect";
 
 interface BordersProps {
   rects: CustomRect[];
@@ -12,8 +12,7 @@ function Borders({rects, thickness, depth }: BordersProps) {
    <group
      position={[-0.5, 0.5, 0]}
    >
-      {rects.map((rect, index) => <BorderRect key={index} rect={rect} thickness={thickness} depth={depth} />) }
-      
+      { rects.map((rect, index) => <BorderRect key={index} rect={rect} thickness={thickness} depth={depth} />) }
    </group>
   )
 }

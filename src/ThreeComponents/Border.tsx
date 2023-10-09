@@ -21,4 +21,4 @@ function BorderRect({ position, geometry, material, meshProps }: BorderProps) {
   )
 }
 
-export default Border;
+export default BorderRect;
