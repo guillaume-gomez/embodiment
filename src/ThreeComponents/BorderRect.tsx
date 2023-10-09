@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { useMemo } from 'react';
 import {  useThree } from '@react-three/fiber';
 import { CustomRect, heightRect, widthRect, centerRect } from "../utils";
+import Border from "./Border";
 
 interface BorderRectProps {
   rect: CustomRect;
@@ -22,7 +23,7 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
 
   return (
     <>
-    <mesh
+    <Border
       material={material}
       geometry={widthGeometry}
       position={[
@@ -34,7 +35,7 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
       {...meshProps}
     />
 
-    <mesh
+    <Border
       material={material}
       geometry={widthGeometry}
       position={[
@@ -46,7 +47,7 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
       {...meshProps}
     />
 
-    <mesh
+    <Border
       material={material}
       geometry={heightGeometry}
       position={[
@@ -59,7 +60,7 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
       {...meshProps}
     />
 
-    <mesh
+    <Border
       material={material}
       geometry={heightGeometry}
       position={[
