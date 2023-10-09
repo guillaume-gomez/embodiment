@@ -23,7 +23,8 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
 
   return (
     <>
-    <Border
+    {
+      (rect.y1 > 0) && <Border
       material={material}
       geometry={widthGeometry}
       position={[
@@ -34,8 +35,10 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
      }
       {...meshProps}
     />
+    }
 
-    <Border
+
+    {(rect.y2 < height) && <Border
       material={material}
       geometry={widthGeometry}
       position={[
@@ -46,21 +49,24 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
      }
       {...meshProps}
     />
+    }
 
-    <Border
+
+    {(rect.x1 > 0) && <Border
       material={material}
       geometry={heightGeometry}
       position={[
         (rect.x1 + thicknessWidth)/ width,
          -(rect.y1 + y)/height,
          depth/2
-        
+
       ]
      }
       {...meshProps}
     />
+    }
 
-    <Border
+    {(rect.x2 < width) && <Border
       material={material}
       geometry={heightGeometry}
       position={[
@@ -71,6 +77,7 @@ function BorderRect({rect, thickness, depth, meshProps}: BorderRectProps) {
      }
       {...meshProps}
     />
+    }
     </>
 
   )
