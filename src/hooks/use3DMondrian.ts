@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, randInt, filterWithRest } from "../utils";
+import { CustomRect, Line, randInt, filterWithRest } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -10,10 +10,6 @@ interface Mondrian {
   title: TitleType;
 }
 
-interface Line {
-  direction: "vertical"|"horizontal";
-  coord: number;
-}
 
 
 function use3DMondrian() {
@@ -167,6 +163,13 @@ function use3DMondrian() {
     const rectsAAASplit = chunkRectsVertical(rectsAA, xPad, yPad, lineCCC.coord);
     const rectsBBBSplit = chunkRectsVertical(rectsBB, xPad, yPad, canvasWidth - lineAAA.coord);
     const rectsCCCSplit = chunkRectsHorizontal(rectsCC, xPad, yPad, lineBBB.coord);
+
+    console.log(lineA)
+    console.log(lineC)
+    console.log(lineAA)
+    console.log(lineCC)
+    console.log(lineAAA)
+    console.log(lineCCC)
 
     setHistory([
       { title: "bottom", rects: rectsA },
