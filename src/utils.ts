@@ -30,9 +30,18 @@ export function heightRect({y1, y2} : CustomRect) : number {
     return length(y2, y1);
 }
 
+export function depthRect({z1, z2} : CustomRect3D) : number {
+    return length(z2, z1);
+}
+
 export function centerRect(rect : CustomRect) : [number, number] {
     return [ widthRect(rect)/ 2, heightRect(rect) / 2 ];
 }
+
+export function centerRect3d(rect3d : CustomRect3D) : [number, number, number] {
+    return [ widthRect(rect3d)/ 2, heightRect(rect3d) / 2, depthRect(rect3d) /2 ];
+}
+
 
 export function randInt(min: number, max: number) : number {
     return Math.floor(Math.random() * (max - min) + min)

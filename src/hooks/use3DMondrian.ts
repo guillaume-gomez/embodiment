@@ -13,9 +13,10 @@ interface Mondrian {
 
 
 function use3DMondrian() {
-  const [ mondrianXY, setMondrianXY] = useState<Mondrian>({title: "bottom", rects: []});
-  const [ mondrianYZ, setMondrianYZ] = useState<Mondrian>({title: "right", rects: []});
-  const [ mondrianZX, setMondrianZX] = useState<Mondrian>({title: "top", rects: []});
+  const [ mondrianXY, setMondrianXY ] = useState<Mondrian>({title: "bottom", rects: []});
+  const [ mondrianYZ, setMondrianYZ ] = useState<Mondrian>({title: "right", rects: []});
+  const [ mondrianZX, setMondrianZX ] = useState<Mondrian>({title: "top", rects: []});
+  const [ customRects3D, setCustomRects3D ] = useState<CustomRect3D[]>([]);
   const [history, setHistory] = useState<Mondrian[]>([]);
 
   function randomColor() : string {
@@ -196,7 +197,8 @@ function use3DMondrian() {
     setMondrianYZ({...mondrianYZ, rects: [...rectsBSplit] });
     setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });
 
-    console.log(fromRectsToVolumes(mondrianYZ.rects, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
+    //console.log(fromRectsToVolumes(mondrianYZ.rects, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
+    setCustomRects3D(fromRectsToVolumes(mondrianYZ.rects, [lineC], canvasWidth, canvasHeight));
 
 
     /*setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
@@ -204,7 +206,7 @@ function use3DMondrian() {
     setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });*/
   }
 
-  return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, historyByTitle };
+  return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, customRects3D, historyByTitle };
 
 }
 
