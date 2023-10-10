@@ -65,9 +65,9 @@ function MondrianThreeJs({
       Offset of 1 in z to make sure the shapes are visible
     */
     return [
-      (rect3d.x1 + x)/ width -0.5,
-      -(rect3d.y1 +y)/height + 0.5,
-      -(rect3d.z1 + z)/ width - 0.5
+      ((rect3d.x1 + x)/ width) -0.5,
+      (-(rect3d.y1 +y)/height) + 0.5,
+      ((rect3d.z1 + z)/ width) + 0.09
     ];
   }
 
@@ -84,7 +84,7 @@ function MondrianThreeJs({
     >
       <color attach="background" args={[0x797979]} />
       {
-        mondrianConfigs.map( ({rects, rotation, position}) =>
+        mondrianConfigs.map( ({rects, rotation, position}, mondrianIndex) =>
           <group position={position} rotation={rotation}>
           { hasBorder && <Borders rects={rects} thickness={thickness} depth={depthBorder} /> }
           {
@@ -101,7 +101,7 @@ function MondrianThreeJs({
             })
           }
           {
-            customRects3D.map((rect3d, index) => {
+            mondrianIndex === 1 &&customRects3D.map((rect3d, index) => {
               return (
                 <CustomRect3DRenderer
                   key={index}
