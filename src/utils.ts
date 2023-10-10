@@ -84,9 +84,9 @@ export function filterWithRest(rects: CustomRect[], predicate: Function) : [Cust
 
 function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : CustomRect3D {
     return {
+        ...rectOrigin,
         z1,
         z2,
-        ...rectOrigin
     }
 }
 
@@ -117,5 +117,6 @@ export function fromRectsToVolumes(rectsOrigin: CustomRect[], linesCutting: Line
     const customRect3DArray = rectsOrigin.map(rectOrigin => {
         return fromRectToVolumes(rectOrigin, linesCutting, max);
     });
+
     return flatten(customRect3DArray);
 }
