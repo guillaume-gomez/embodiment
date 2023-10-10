@@ -165,13 +165,13 @@ function use3DMondrian() {
     const rectsBBBSplit = chunkRectsVertical(rectsBB, xPad, yPad, canvasWidth - lineAAA.coord);
     const rectsCCCSplit = chunkRectsHorizontal(rectsCC, xPad, yPad, lineBBB.coord);
 
-    console.log(lineA)
+/*    console.log(lineA)
     console.log(lineC)
     console.log(lineAA)
     console.log(lineCC)
     console.log(lineAAA)
     console.log(lineCCC)
-
+*/
     setHistory([
       { title: "bottom", rects: rectsA },
       { title: "right", rects: rectsB },
@@ -197,13 +197,14 @@ function use3DMondrian() {
     setMondrianYZ({...mondrianYZ, rects: [...rectsBSplit] });
     setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });
 
-    //console.log(fromRectsToVolumes(mondrianYZ.rects, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
-    setCustomRects3D(fromRectsToVolumes(mondrianYZ.rects, [lineC], canvasWidth, canvasHeight));
+    setCustomRects3D(fromRectsToVolumes(rectsBSplit, [lineC], canvasWidth, canvasHeight));
 
 
-    /*setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
+/*    setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });*/
+    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });
+
+    setCustomRects3D(fromRectsToVolumes(rectsBBBSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));*/
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, customRects3D, historyByTitle };
