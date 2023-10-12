@@ -193,18 +193,18 @@ function use3DMondrian() {
       { title: "top", rects:rectsCCCSplit }
     ]);
 
-    setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
+    /*setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBSplit] });
     setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });
 
-    setCustomRects3D(fromRectsToVolumes(rectsBSplit, [lineC], canvasWidth, canvasHeight));
+    setCustomRects3D(fromRectsToVolumes(rectsBSplit, [lineC], canvasWidth, canvasHeight));*/
 
 
-/*    setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
+    setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBBSplit] });
     setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });
 
-    setCustomRects3D(fromRectsToVolumes(rectsBBBSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));*/
+    setCustomRects3D(fromRectsToVolumes(rectsBBBSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, customRects3D, historyByTitle };
