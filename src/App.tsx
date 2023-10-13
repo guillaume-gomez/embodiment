@@ -13,6 +13,7 @@ function App() {
   const { generate, mondrianXY, mondrianYZ, mondrianZX, historyByTitle } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
+  const [rendering3D, setRendering3D] = useState<boolean>(true);
   const [width] = useState<number>(500);
   const [height] = useState<number>(500);
   const thickness = 25;
@@ -22,8 +23,6 @@ function App() {
     toggleFullscreen,
   } = useFullscreen({ target: fullscreenContainerRef });
 
-  //console.log(mondrianXY.rects)
-
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
         <Navbar
@@ -31,54 +30,60 @@ function App() {
           githubRepositoryUrl={githubRepositoryUrl}
         />
       <div className="flex flex-col gap-3">
-        <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
-        <div className="flex flex-row gap-2">
-            <div>
-              <p className="text-xl">YZ</p>
-              <MondrianCanvas
-                ref={canvasActionsRef}
-                width={width}
-                height={height}
-                thickness={Math.floor(thickness/10)}
-                rects={mondrianYZ.rects}
-                toggleFullScreen={toggleFullscreen}
-              />
-            </div>
-            <div>
-              <p className="text-xl">XY</p>
-              <MondrianCanvas
-                ref={canvasActionsRef}
-                width={width}
-                height={height}
-                thickness={Math.floor(thickness/10)}
-                rects={mondrianXY.rects}
-                toggleFullScreen={toggleFullscreen}
-              />
-            </div>
-            <div>
-              <p className="text-xl">ZX</p>
-              <MondrianCanvas
-                ref={canvasActionsRef}
-                width={width}
-                height={height}
-                thickness={Math.floor(thickness/10)}
-                rects={mondrianZX.rects}
-                toggleFullScreen={toggleFullscreen}
-              />
-            </div>
-        </div>
-        <div className="flex flex-row">
-          <MondrianThreeJs
-            width={width}
-            height={height}
-            thickness={thickness}
-            rectsXY={mondrianXY.rects}
-            rectsYZ={mondrianYZ.rects}
-            rectsZX={mondrianZX.rects}
-            toggleFullScreen={() => {}}
-          />
-          <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
-        </div>
+        {
+            rendering3D ?
+              <div className="flex flex-row">
+                <MondrianThreeJs
+                  width={width}
+                  height={height}
+                  thickness={thickness}
+                  rectsXY={mondrianXY.rects}
+                  rectsYZ={mondrianYZ.rects}
+                  rectsZX={mondrianZX.rects}
+                  toggleFullScreen={() => {}}
+                />
+                <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
+              </div>
+            :
+              <div>
+                <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
+                <div className="flex flex-row gap-2">
+                    <div>
+                      <p className="text-xl">YZ</p>
+                      <MondrianCanvas
+                        ref={canvasActionsRef}
+                        width={width}
+                        height={height}
+                        thickness={Math.floor(thickness/10)}
+                        rects={mondrianYZ.rects}
+                        toggleFullScreen={toggleFullscreen}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xl">XY</p>
+                      <MondrianCanvas
+                        ref={canvasActionsRef}
+                        width={width}
+                        height={height}
+                        thickness={Math.floor(thickness/10)}
+                        rects={mondrianXY.rects}
+                        toggleFullScreen={toggleFullscreen}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xl">ZX</p>
+                      <MondrianCanvas
+                        ref={canvasActionsRef}
+                        width={width}
+                        height={height}
+                        thickness={Math.floor(thickness/10)}
+                        rects={mondrianZX.rects}
+                        toggleFullScreen={toggleFullscreen}
+                      />
+                    </div>
+                </div>
+              </div>
+        }
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
             <h2 className="card-title">History</h2>
