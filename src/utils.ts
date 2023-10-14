@@ -91,7 +91,7 @@ function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : Cust
 }
 
 
-function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
+export function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
     const direction = linesCutting[0].direction;
 
     const sortLines = sortBy(linesCutting, 'coord');
@@ -100,7 +100,8 @@ function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoor
     const sortLinesPlusExtremun : Line[] = [min, ...sortLines, max];
     
     let customRects3D : CustomRect3D[] = [];
-    for(let i=0; i < (sortLinesPlusExtremun.length/2); i++) {
+
+    for(let i=0; i < (sortLinesPlusExtremun.length - 1); i++) {
         customRects3D.push(
             fromRectToVolume(
                 rectOrigin,
