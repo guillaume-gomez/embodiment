@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import Borders from "./ThreeComponents/Borders";
 import ColoredBox from "./ThreeComponents/ColoredBox";
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3DRenderer";
@@ -118,6 +118,9 @@ function MondrianThreeJs({
       }
       <ambientLight args={[0xffffff]} intensity={0.5} position={[0, 0.5, 0.5]} />
       <directionalLight position={[0, 0, 5]} intensity={0.5} />
+      <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
+        <GizmoViewport labelColor="white" axisHeadScale={1} />
+      </GizmoHelper>
       <OrbitControls makeDefault />
     </Canvas>
   );
