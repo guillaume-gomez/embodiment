@@ -204,7 +204,9 @@ function use3DMondrian() {
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBBSplit] });
     setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });
 
-    setCustomRects3D(fromRectsToVolumes(rectsBBBSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
+    const newCustomRects3D = fromRectsToVolumes(rectsBBBSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
+    setCustomRects3D(newCustomRects3D);
+    console.table(newCustomRects3D)
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, customRects3D, historyByTitle };
