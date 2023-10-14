@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, randInt, filterWithRest } from "../utils";
+import { CustomRect, Line, randInt, filterWithRest, fromRectsToVolumes } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -10,10 +10,6 @@ interface Mondrian {
   title: TitleType;
 }
 
-interface Line {
-  direction: "vertical"|"horizontal";
-  coord: number;
-}
 
 
 function use3DMondrian() {
@@ -168,6 +164,13 @@ function use3DMondrian() {
     const rectsBBBSplit = chunkRectsVertical(rectsBB, xPad, yPad, canvasWidth - lineAAA.coord);
     const rectsCCCSplit = chunkRectsHorizontal(rectsCC, xPad, yPad, lineBBB.coord);
 
+    console.log(lineA)
+    console.log(lineC)
+    console.log(lineAA)
+    console.log(lineCC)
+    console.log(lineAAA)
+    console.log(lineCCC)
+
     setHistory([
       { title: "bottom", rects: rectsA },
       { title: "right", rects: rectsB },
@@ -189,14 +192,16 @@ function use3DMondrian() {
       { title: "top", rects:rectsCCCSplit }
     ]);
 
-    /*setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
+    setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });*/
+    setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });
+
+    console.log(fromRectsToVolumes(mondrianYZ.rects, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
 
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
+    /*setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });*/
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, historyByTitle };
