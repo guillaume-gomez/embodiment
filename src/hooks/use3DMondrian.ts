@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, Line, randInt, filterWithRest, fromRectsToVolumes } from "../utils";
+import { CustomRect, CustomRect3D, Line, randInt, filterWithRest, fromRectsToVolumes, fromRectToVolumes } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -16,7 +16,7 @@ function use3DMondrian() {
   const [ mondrianXY, setMondrianXY ] = useState<Mondrian>({title: "bottom", rects: []});
   const [ mondrianYZ, setMondrianYZ ] = useState<Mondrian>({title: "right", rects: []});
   const [ mondrianZX, setMondrianZX ] = useState<Mondrian>({title: "top", rects: []});
-  const [ customRects3D, setCustomRects3D ] = useState<CustomRect3D[]>([]);
+  const [ customRects3DData, setCustomRects3DData ] = useState<CustomRect3DData>({ rects: [], basedOnMondrian: "" });
   const [history, setHistory] = useState<Mondrian[]>([]);
 
   function randomColor() : string {
@@ -165,13 +165,6 @@ function use3DMondrian() {
     const rectYZTwoSplit = chunkRectsVertical(rectYZOne, xPad, yPad, canvasWidth - lineAAA.coord);
     const rectZXTwoSplit = chunkRectsHorizontal(rectZXOne, xPad, yPad, lineBBB.coord);
 
-/*    console.log(lineA)
-    console.log(lineC)
-    console.log(lineAA)
-    console.log(lineCC)
-    console.log(lineAAA)
-    console.log(lineCCC)
-*/
     setHistory([
       { title: "bottom", rects: rectXY },
       { title: "right", rects: rectYZ },
@@ -193,23 +186,31 @@ function use3DMondrian() {
       { title: "top", rects:rectZXTwoSplit }
     ]);
 
-    /*setMondrianXY({...mondrianXY, rects: [...rectXYSplit] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectYZSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectZXSplit] });
-
-    setCustomRects3D(fromRectsToVolumes(rectYZSplit, [lineC], canvasWidth, canvasHeight));*/
-
-
     setMondrianXY({...mondrianXY, rects: [...rectXYTwoSplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectYZTwoSplit] });
     setMondrianZX({...mondrianZX, rects: [...rectZXTwoSplit] });
 
-    const newCustomRects3D = fromRectsToVolumes(rectYZTwoSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
-    setCustomRects3D(newCustomRects3D);
-    console.table(newCustomRects3D)
+
+/*    const newCustomRects3D = fromRectToVolumes(rectYZTwoSplit[0], [
+      lineC,
+      lineCC,
+      lineCCC
+      ], canvasWidth);
+    const newCustomRects3D2 = fromRectToVolumes(rectZXTwoSplit[0], [
+      lineA,
+      lineAA,
+      lineAAA
+      ], canvasHeight);*/
+
+
+    //const newCustomRects3D = fromRectsToVolumes(rectYZTwoSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
+    //const newCustomRects3D2 = fromRectsToVolumes(rectZXTwoSplit, [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
+
+    const newCustomRects3D = fromRectsToVolumes(rectZXTwoSplit, [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
+    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
   }
 
-  return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, customRects3D, historyByTitle };
+  return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, customRects3DData, historyByTitle };
 
 }
 

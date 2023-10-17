@@ -13,6 +13,12 @@ export interface CustomRect3D extends CustomRect {
   z2: number;
 }
 
+export interface CustomRect3DData {
+  rects: CustomRect3D[];
+  rotation: [number, number, number];
+}
+
+
 export interface Line {
   direction: "vertical"|"horizontal";
   coord: number;
@@ -100,6 +106,7 @@ export function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], 
     const sortLinesPlusExtremun : Line[] = [min, ...sortLines, max];
     
     let customRects3D : CustomRect3D[] = [];
+    console.log(sortLinesPlusExtremun);
 
     for(let i=0; i < (sortLinesPlusExtremun.length - 1); i++) {
         customRects3D.push(

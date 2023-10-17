@@ -10,7 +10,7 @@ const githubRepositoryUrl = "www.github.io/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
-  const { generate, mondrianXY, mondrianYZ, mondrianZX, customRects3D, historyByTitle } = use3DMondrian();
+  const { generate, mondrianXY, mondrianYZ, mondrianZX, customRects3DData, historyByTitle } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
   const [rendering3D, setRendering3D] = useState<boolean>(false);
@@ -40,7 +40,7 @@ function App() {
                   rectsXY={mondrianXY.rects}
                   rectsYZ={mondrianYZ.rects}
                   rectsZX={mondrianZX.rects}
-                  customRects3D={customRects3D}
+                  customRects3DData={customRects3DData}
                   toggleFullScreen={() => {}}
                 />
                 <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
