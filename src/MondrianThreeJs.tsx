@@ -33,7 +33,7 @@ function MondrianThreeJs({
 } : MondrianThreeJsProps ): React.ReactElement {
   const [depthBorder, _setDepthBorder] = useState<number>(0.1);
   const [hasBorder, _setHasBorder] = useState<boolean>(true);
-  const [hasColor, _setHasColor] = useState<boolean>(false);
+  const [hasColor, _setHasColor] = useState<boolean>(true);
   const depth = 0.15;
 
   const mondrianConfigs : MondrianConfig[] = [

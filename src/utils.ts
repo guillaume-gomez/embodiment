@@ -1,5 +1,6 @@
 import { sortBy, flatten } from "lodash";
 
+
 export interface CustomRect{
   x1: number;
   y1: number;
@@ -16,6 +17,17 @@ export interface CustomRect3D extends CustomRect {
 export interface Line {
   direction: "vertical"|"horizontal";
   coord: number;
+}
+
+interface Point {
+    x: number;
+    y: number;
+}
+
+export interface Segment {
+    firstPoint: Point;
+    lastPoint: Point;
+    direction: "vertical" | "horizontal";
 }
 
 function length(axis1: number, axis2: number) : number {
