@@ -52,30 +52,38 @@ function useMondrian() {
     return [...stackRects,...rects];
   }
 
-
-
-  function splitRects(rect: CustomRect, xPad: number, yPad: number) : [CustomRect, CustomRect] | [] {
-     // Check the rectangle is enough large and tall
-     const width = widthRect(rect);
-     const height = heightRect(rect);
-      if (width < 2 * xPad || height < 2 * yPad) {
-          return [];
-      }
+  function splitRectsControlled(
+    rect: CustomRect,
+    xPad: number,
+    yPad: number,
+    direction: "vertical"| "horizontal") : [CustomRect, CustomRect] | [] {
       const { x1, x2, y1, y2 } = rect;
 
-      // If the rectangle is wider than it's height do a left/right split
-      if (width > height) {
+      if (direction === "vertical") {
           const x = randInt(rect.x1 + xPad, rect.x2 - xPad);
           const r1 = { x1, y1, x2: x, y2, color: randomColor() };
           const r2 = { x1: x, y1, x2, y2, color: randomColor() };
           return [r1, r2];
-      // Else do a top/bottom split
       } else {
           const y = randInt(rect.y1 + yPad, rect.y2 - yPad);
           const r1 = { x1, y1, x2, y2: y, color: randomColor() };
           const r2 = { x1, y1: y, x2, y2, color: randomColor() };
           return [r1, r2];
       }
+  }
+
+
+
+  function splitRects(rect: CustomRect, xPad: number, yPad: number) : [CustomRect, CustomRect] | [] {
+    // Check the rectangle is enough large and tall
+    const width = widthRect(rect);
+    const height = heightRect(rect);
+
+    if (width < 2 * xPad || height < 2 * yPad) {
+      return [];
+    }
+
+    return splitRectsControlled(rect, xPad, yPad, width > height ? "horizontal" : "vertical");
   }
 
 
@@ -118,7 +126,7 @@ function useMondrian() {
     setColors(newColors);
   }
 
-  return { generate, generateMondrian,  rects, setHasBlack };
+  return { generate, generateMondrian,  rects, setHasBlack, splitRectsControlled };
 
 }
 
