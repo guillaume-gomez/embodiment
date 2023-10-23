@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, Line, Segment, randInt, filterWithRest, fromRectsToVolumes } from "../utils";
+import { CustomRect, Segment, randInt, filterWithRest } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";

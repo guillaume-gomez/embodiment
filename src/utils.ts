@@ -14,11 +14,6 @@ export interface CustomRect3D extends CustomRect {
   z2: number;
 }
 
-export interface Line {
-  direction: "vertical"|"horizontal";
-  coord: number;
-}
-
 interface Point {
     x: number;
     y: number;
@@ -93,14 +88,14 @@ function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : Cust
     }
 }
 
+/*
+function fromRectToVolumes(rectOrigin: CustomRect, segments: Segment[], maxCoord: number) : CustomRect3D[] {
+    const direction = segments[0].direction;
 
-function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
-    const direction = linesCutting[0].direction;
-
-    const sortLines = sortBy(linesCutting, 'coord');
+    const sortLines = sortBy(segments, 'coord');
     const min = {direction, coord: 0};
     const max = {direction, coord: maxCoord };
-    const sortLinesPlusExtremun : Line[] = [min, ...sortLines, max];
+    const sortLinesPlusExtremun : Segment[] = [min, ...sortLines, max];
     
     let customRects3D : CustomRect3D[] = [];
     for(let i=0; i < (sortLinesPlusExtremun.length/2); i++) {
@@ -115,10 +110,12 @@ function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoor
     return customRects3D;
 }
 
-export function fromRectsToVolumes(rectsOrigin: CustomRect[], linesCutting: Line[], width: number, height: number) :CustomRect3D[] {
-    const max = linesCutting[0].direction === "vertical" ? width : height;
+
+export function fromRectsToVolumes(rectsOrigin: CustomRect[], segments: Segment[], width: number, height: number) :CustomRect3D[] {
+    const max = segments[0].direction === "vertical" ? width : height;
     const customRect3DArray = rectsOrigin.map(rectOrigin => {
-        return fromRectToVolumes(rectOrigin, linesCutting, max);
+        return fromRectToVolumes(rectOrigin, segments, max);
     });
     return flatten(customRect3DArray);
 }
+*/
