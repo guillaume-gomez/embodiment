@@ -13,7 +13,6 @@ function Borders({rects, thickness, depth }: BordersProps) {
      position={[-0.5, 0.5, 0]}
    >
       {rects.map((rect, index) => <Border key={index} rect={rect} thickness={thickness} depth={depth} />) }
-      
    </group>
   )
 }
