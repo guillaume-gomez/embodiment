@@ -1,9 +1,5 @@
 import { useState } from 'react'; 
-<<<<<<< HEAD
-import { CustomRect, CustomRect3D, Line, randInt, filterWithRest, fromRectsToVolumes, fromRectToVolumes } from "../utils";
-=======
 import { CustomRect, Segment, randInt, filterWithRest, fromRectToVolumes } from "../utils";
->>>>>>> fromLineToSegment
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -53,11 +49,7 @@ function use3DMondrian() {
 
   function chunkRectsVertical(rects: CustomRect[], xPad: number, yPad: number, coord: number ) {
       const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.x1 && coord <= rect.x2);
-<<<<<<< HEAD
       const rectZXhunked = rectsToBeChunk.map(rectToBeChunk =>
-          splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "vertical", coord })
-=======
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
           splitRectsControlled(
             rectToBeChunk,
             xPad,
@@ -68,18 +60,13 @@ function use3DMondrian() {
               lastPoint: { x: coord, y: rectToBeChunk.y2 }
             }
           )
->>>>>>> fromLineToSegment
       );
       return [...flatten(rectZXhunked), ...others];
   }
 
   function chunkRectsHorizontal(rects: CustomRect[], xPad: number, yPad: number, coord: number) {
     const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.y1 && coord <= rect.y2);
-<<<<<<< HEAD
       const rectZXhunked = rectsToBeChunk.map(rectToBeChunk =>
-          splitRectsControlled(rectToBeChunk, xPad, yPad, {direction: "horizontal", coord })
-=======
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
           splitRectsControlled(
             rectToBeChunk,
             xPad,
@@ -90,7 +77,7 @@ function use3DMondrian() {
               lastPoint: { x: rectToBeChunk.x2, y: coord }
             }
           )
->>>>>>> fromLineToSegment
+
       );
       return [...flatten(rectZXhunked), ...others];
   }
@@ -253,7 +240,7 @@ function use3DMondrian() {
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
     setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
 
-    const newCustomRects3D = fromRectsToVolumes(rectsCCC, [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
+    const newCustomRects3D = fromRectToVolumes(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth);
     setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
 
     
