@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, Segment, randInt, filterWithRest } from "../utils";
+import { CustomRect, Segment, randInt, filterWithRest, fromRectToVolumes } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -48,7 +48,7 @@ function use3DMondrian() {
 
   function chunkRectsVertical(rects: CustomRect[], xPad: number, yPad: number, coord: number ) {
       const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.x1 && coord <= rect.x2);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
+      const rectZXhunked = rectsToBeChunk.map(rectToBeChunk =>
           splitRectsControlled(
             rectToBeChunk,
             xPad,
@@ -60,12 +60,12 @@ function use3DMondrian() {
             }
           )
       );
-      return [...flatten(rectsChunked), ...others];
+      return [...flatten(rectZXhunked), ...others];
   }
 
   function chunkRectsHorizontal(rects: CustomRect[], xPad: number, yPad: number, coord: number) {
     const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.y1 && coord <= rect.y2);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
+      const rectZXhunked = rectsToBeChunk.map(rectToBeChunk =>
           splitRectsControlled(
             rectToBeChunk,
             xPad,
@@ -77,7 +77,7 @@ function use3DMondrian() {
             }
           )
       );
-      return [...flatten(rectsChunked), ...others];
+      return [...flatten(rectZXhunked), ...others];
   }
 
   function rectsWithoutCandidate(rects: CustomRect[], candidate: CustomRect) : CustomRect[] {
@@ -229,10 +229,19 @@ function use3DMondrian() {
 
     //console.log(fromRectsToVolumes(mondrianYZ.rects, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
 
+    console.table(lineB)
+    console.table(lineBB)
+    console.table(lineBBB)
 
-    setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsBBBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });
+    setMondrianXY({...mondrianXY, rects: [...rectsAAA] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
+    setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
+
+    const newCustomRects3D = fromRectToVolumes(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth);
+    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
+
+    
+
   }
 
   return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, historyByTitle };
