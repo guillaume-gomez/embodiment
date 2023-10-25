@@ -41,7 +41,7 @@ function App() {
                   rectsYZ={mondrianYZ.rects}
                   rectsZX={mondrianZX.rects}
                   customRects3DData={customRects3DData}
-                  toggleFullScreen={() => {}}
+                  toggleFullScreen={toggleFullscreen}
                 />
                 <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
               </div>
@@ -105,7 +105,7 @@ function App() {
                     ref={canvasActionsRef}
                     width={width}
                     height={height}
-                    thickness={2}
+                    thickness={Math.floor(thickness/10)}
                     rects={mondrian.rects}
                     toggleFullScreen={toggleFullscreen}
                   />
