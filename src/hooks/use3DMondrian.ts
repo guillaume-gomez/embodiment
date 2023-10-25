@@ -237,8 +237,8 @@ function use3DMondrian() {
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
     setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
 
-    const newCustomRects3D = fromRectToVolumes(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth);
-    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
+    //const newCustomRects3D = fromRectToVolumes(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth);
+    //setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
 
     
 

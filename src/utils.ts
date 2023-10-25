@@ -93,8 +93,8 @@ function fromRectToVolumes(rectOrigin: CustomRect, segments: Segment[], maxCoord
     const direction = segments[0].direction;
 
     const sortLines = sortBy(segments, 'coord');
-    const min = {direction, coord: 0};
-    const max = {direction, coord: maxCoord };
+    const min = {direction, firstPoint: {x: 0, y: 0}, lastPoint: { x: maxCoord, y: maxCoord } };
+    const max = {direction, firstPoint: {x: maxCoord, y: maxCoord}, lastPoint: { x: maxCoord, y: maxCoord } };
     const sortLinesPlusExtremun : Segment[] = [min, ...sortLines, max];
     
     let customRects3D : CustomRect3D[] = [];
@@ -108,9 +108,9 @@ function fromRectToVolumes(rectOrigin: CustomRect, segments: Segment[], maxCoord
         );
     }
     return customRects3D;
-}
+}*/
 
-
+/*
 export function fromRectsToVolumes(rectsOrigin: CustomRect[], segments: Segment[], width: number, height: number) :CustomRect3D[] {
     const max = segments[0].direction === "vertical" ? width : height;
     const customRect3DArray = rectsOrigin.map(rectOrigin => {
