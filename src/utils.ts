@@ -104,6 +104,9 @@ function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : Cust
 }
 
 
+function fromRectToVolumeHorizontal(rectOrigin: CustomRect, horizontalSegments: Segment[], maxWidth): CustomRect3D[] {
+
+}
 
 export function fromRectToVolumes(rectOrigin: CustomRect, segments: Segment[], maxCoord: number) : CustomRect3D[] {
     const direction = segments[0].direction;

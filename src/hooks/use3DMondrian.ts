@@ -10,8 +10,6 @@ interface Mondrian {
   title: TitleType;
 }
 
-
-
 function use3DMondrian() {
   const [ mondrianXY, setMondrianXY ] = useState<Mondrian>({title: "bottom", rects: []});
   const [ mondrianYZ, setMondrianYZ ] = useState<Mondrian>({title: "right", rects: []});
