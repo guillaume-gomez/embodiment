@@ -32,7 +32,7 @@ function ColoredBox({rect, thickness, depth, meshProps}: ColoredBoxProps) {
   return (
     <animated.mesh position={position as any} >
       <boxGeometry args={[widthGeometry, heightGeometry, depth]} />
-      <meshStandardMaterial color={rect.color} wireframe={false}/>
+      <meshStandardMaterial color={rect.color} wireframe={false} opacity={0.4} transparent={true} />
     </animated.mesh>
   )
 }

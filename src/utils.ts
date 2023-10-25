@@ -13,6 +13,12 @@ export interface CustomRect3D extends CustomRect {
   z2: number;
 }
 
+export interface CustomRect3DData {
+  rects: CustomRect3D[];
+  rotation: [number, number, number];
+}
+
+
 export interface Line {
   direction: "vertical"|"horizontal";
   coord: number;
@@ -30,9 +36,18 @@ export function heightRect({y1, y2} : CustomRect) : number {
     return length(y2, y1);
 }
 
+export function depthRect({z1, z2} : CustomRect3D) : number {
+    return length(z2, z1);
+}
+
 export function centerRect(rect : CustomRect) : [number, number] {
     return [ widthRect(rect)/ 2, heightRect(rect) / 2 ];
 }
+
+export function centerRect3d(rect3d : CustomRect3D) : [number, number, number] {
+    return [ widthRect(rect3d)/ 2, heightRect(rect3d) / 2, depthRect(rect3d) /2 ];
+}
+
 
 export function randInt(min: number, max: number) : number {
     return Math.floor(Math.random() * (max - min) + min)
@@ -75,14 +90,14 @@ export function filterWithRest(rects: CustomRect[], predicate: Function) : [Cust
 
 function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : CustomRect3D {
     return {
+        ...rectOrigin,
         z1,
         z2,
-        ...rectOrigin
     }
 }
 
 
-function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
+export function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
     const direction = linesCutting[0].direction;
 
     const sortLines = sortBy(linesCutting, 'coord');
@@ -91,7 +106,9 @@ function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoor
     const sortLinesPlusExtremun : Line[] = [min, ...sortLines, max];
     
     let customRects3D : CustomRect3D[] = [];
-    for(let i=0; i < (sortLinesPlusExtremun.length/2); i++) {
+    console.log(sortLinesPlusExtremun);
+
+    for(let i=0; i < (sortLinesPlusExtremun.length - 1); i++) {
         customRects3D.push(
             fromRectToVolume(
                 rectOrigin,
@@ -108,5 +125,6 @@ export function fromRectsToVolumes(rectsOrigin: CustomRect[], linesCutting: Line
     const customRect3DArray = rectsOrigin.map(rectOrigin => {
         return fromRectToVolumes(rectOrigin, linesCutting, max);
     });
+
     return flatten(customRect3DArray);
 }

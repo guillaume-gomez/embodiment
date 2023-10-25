@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, Line, randInt, filterWithRest, fromRectsToVolumes } from "../utils";
+import { CustomRect, CustomRect3D, Line, randInt, filterWithRest, fromRectsToVolumes, fromRectToVolumes } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -13,9 +13,10 @@ interface Mondrian {
 
 
 function use3DMondrian() {
-  const [ mondrianXY, setMondrianXY] = useState<Mondrian>({title: "bottom", rects: []});
-  const [ mondrianYZ, setMondrianYZ] = useState<Mondrian>({title: "right", rects: []});
-  const [ mondrianZX, setMondrianZX] = useState<Mondrian>({title: "top", rects: []});
+  const [ mondrianXY, setMondrianXY ] = useState<Mondrian>({title: "bottom", rects: []});
+  const [ mondrianYZ, setMondrianYZ ] = useState<Mondrian>({title: "right", rects: []});
+  const [ mondrianZX, setMondrianZX ] = useState<Mondrian>({title: "top", rects: []});
+  const [ customRects3DData, setCustomRects3DData ] = useState<CustomRect3DData>({ rects: [], basedOnMondrian: "" });
   const [history, setHistory] = useState<Mondrian[]>([]);
 
   function randomColor() : string {
@@ -48,18 +49,18 @@ function use3DMondrian() {
 
   function chunkRectsVertical(rects: CustomRect[], xPad: number, yPad: number, coord: number ) {
       const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.x1 && coord <= rect.x2);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
+      const rectZXhunked = rectsToBeChunk.map(rectToBeChunk =>
           splitRectsControlled(rectToBeChunk,xPad, yPad, {direction: "vertical", coord })
       );
-      return [...flatten(rectsChunked), ...others];
+      return [...flatten(rectZXhunked), ...others];
   }
 
   function chunkRectsHorizontal(rects: CustomRect[], xPad: number, yPad: number, coord: number) {
     const [rectsToBeChunk, others] = filterWithRest(rects, (rect: CustomRect) => coord >= rect.y1 && coord <= rect.y2);
-      const rectsChunked = rectsToBeChunk.map(rectToBeChunk =>
+      const rectZXhunked = rectsToBeChunk.map(rectToBeChunk =>
           splitRectsControlled(rectToBeChunk, xPad, yPad, {direction: "horizontal", coord })
       );
-      return [...flatten(rectsChunked), ...others];
+      return [...flatten(rectZXhunked), ...others];
   }
 
   function rectsWithoutCandidate(rects: CustomRect[], candidate: CustomRect) : CustomRect[] {
@@ -140,71 +141,76 @@ function use3DMondrian() {
 
     const initRect = [{x1: 0, y1: 0, x2: canvasWidth, y2: canvasHeight, color: "#000000"}]
 
-    const [rectsA, lineA] = ruleA(xPad, yPad, initRect);
-    const [rectsB, lineB] = ruleB(xPad, yPad, initRect);
-    const [rectsC, lineC] = ruleC(xPad, yPad, initRect);
+    const [rectXY, lineA] = ruleA(xPad, yPad, initRect);
+    const [rectYZ, lineB] = ruleB(xPad, yPad, initRect);
+    const [rectZX, lineC] = ruleC(xPad, yPad, initRect);
 
-    const rectsASplit = chunkRectsVertical(rectsA, xPad, yPad, lineC.coord);
-    const rectsBSplit = chunkRectsVertical(rectsB, xPad, yPad, canvasWidth - lineA.coord);
-    const rectsCSplit = chunkRectsHorizontal(rectsC, xPad, yPad, lineB.coord);
+    const rectXYSplit = chunkRectsVertical(rectXY, xPad, yPad, lineC.coord);
+    const rectYZSplit = chunkRectsVertical(rectYZ, xPad, yPad, canvasWidth - lineA.coord);
+    const rectZXSplit = chunkRectsHorizontal(rectZX, xPad, yPad, lineB.coord);
 
-    const [rectsAA, lineAA] = ruleA(xPad, yPad, rectsASplit);
-    const [rectsBB, lineBB] = ruleB(xPad, yPad, rectsBSplit);
-    const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsCSplit);
+    const [rectXYOne, lineAA] = ruleA(xPad, yPad, rectXYSplit);
+    const [rectYZOne, lineBB] = ruleB(xPad, yPad, rectYZSplit);
+    const [rectZXOne, lineCC] = ruleC(xPad, yPad, rectZXSplit);
 
-    const rectsAASplit = chunkRectsVertical(rectsAA, xPad, yPad, lineCC.coord);
-    const rectsBBSplit = chunkRectsVertical(rectsBB, xPad, yPad, canvasWidth - lineAA.coord);
-    const rectsCCSplit = chunkRectsHorizontal(rectsCC, xPad, yPad, lineBB.coord);
+    const rectXYOneSplit = chunkRectsVertical(rectXYOne, xPad, yPad, lineCC.coord);
+    const rectYZOneSplit = chunkRectsVertical(rectYZOne, xPad, yPad, canvasWidth - lineAA.coord);
+    const rectZXOneSplit = chunkRectsHorizontal(rectZXOne, xPad, yPad, lineBB.coord);
 
-    const [rectsAAA, lineAAA] = ruleD(xPad, yPad, rectsAASplit);
-    const [rectsBBB, lineBBB] = ruleE(xPad, yPad, rectsBBSplit);
-    const [rectsCCC, lineCCC] = ruleF(xPad, yPad, rectsCCSplit);
+    const [rectXYTwo, lineAAA] = ruleD(xPad, yPad, rectXYOneSplit);
+    const [rectYZTwo, lineBBB] = ruleE(xPad, yPad, rectYZOneSplit);
+    const [rectZXTwo, lineCCC] = ruleF(xPad, yPad, rectZXOneSplit);
 
-    const rectsAAASplit = chunkRectsVertical(rectsAA, xPad, yPad, lineCCC.coord);
-    const rectsBBBSplit = chunkRectsVertical(rectsBB, xPad, yPad, canvasWidth - lineAAA.coord);
-    const rectsCCCSplit = chunkRectsHorizontal(rectsCC, xPad, yPad, lineBBB.coord);
-
-    console.log(lineA)
-    console.log(lineC)
-    console.log(lineAA)
-    console.log(lineCC)
-    console.log(lineAAA)
-    console.log(lineCCC)
+    const rectXYTwoSplit = chunkRectsVertical(rectXYOne, xPad, yPad, lineCCC.coord);
+    const rectYZTwoSplit = chunkRectsVertical(rectYZOne, xPad, yPad, canvasWidth - lineAAA.coord);
+    const rectZXTwoSplit = chunkRectsHorizontal(rectZXOne, xPad, yPad, lineBBB.coord);
 
     setHistory([
-      { title: "bottom", rects: rectsA },
-      { title: "right", rects: rectsB },
-      { title: "top", rects: rectsC },
-      { title: "bottom", rects: rectsASplit },
-      { title: "right", rects: rectsBSplit },
-      { title: "top", rects: rectsCSplit },
-      { title: "bottom", rects: rectsAA },
-      { title: "right", rects: rectsBB },
-      { title: "top", rects: rectsCC },
-      { title: "bottom", rects: rectsAASplit },
-      { title: "right", rects: rectsBBSplit },
-      { title: "top", rects: rectsCCSplit },
-      { title: "bottom", rects:rectsAAA },
-      { title: "right", rects:rectsBBB },
-      { title: "top", rects:rectsCCC },
-      { title: "bottom", rects:rectsAAASplit },
-      { title: "right", rects:rectsBBBSplit },
-      { title: "top", rects:rectsCCCSplit }
+      { title: "bottom", rects: rectXY },
+      { title: "right", rects: rectYZ },
+      { title: "top", rects: rectZX },
+      { title: "bottom", rects: rectXYSplit },
+      { title: "right", rects: rectYZSplit },
+      { title: "top", rects: rectZXSplit },
+      { title: "bottom", rects: rectXYOne },
+      { title: "right", rects: rectYZOne },
+      { title: "top", rects: rectZXOne },
+      { title: "bottom", rects: rectXYOneSplit },
+      { title: "right", rects: rectYZOneSplit },
+      { title: "top", rects: rectZXOneSplit },
+      { title: "bottom", rects:rectXYTwo },
+      { title: "right", rects:rectYZTwo },
+      { title: "top", rects:rectZXTwo },
+      { title: "bottom", rects:rectXYTwoSplit },
+      { title: "right", rects:rectYZTwoSplit },
+      { title: "top", rects:rectZXTwoSplit }
     ]);
 
-    setMondrianXY({...mondrianXY, rects: [...rectsASplit] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCSplit] });
-
-    console.log(fromRectsToVolumes(mondrianYZ.rects, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight));
+    setMondrianXY({...mondrianXY, rects: [...rectXYTwoSplit] });
+    setMondrianYZ({...mondrianYZ, rects: [...rectYZTwoSplit] });
+    setMondrianZX({...mondrianZX, rects: [...rectZXTwoSplit] });
 
 
-    /*setMondrianXY({...mondrianXY, rects: [...rectsAAASplit] });
-    setMondrianYZ({...mondrianYZ, rects: [...rectsBBBSplit] });
-    setMondrianZX({...mondrianZX, rects: [...rectsCCCSplit] });*/
+/*    const newCustomRects3D = fromRectToVolumes(rectYZTwoSplit[0], [
+      lineC,
+      lineCC,
+      lineCCC
+      ], canvasWidth);
+    const newCustomRects3D2 = fromRectToVolumes(rectZXTwoSplit[0], [
+      lineA,
+      lineAA,
+      lineAAA
+      ], canvasHeight);*/
+
+
+    //const newCustomRects3D = fromRectsToVolumes(rectYZTwoSplit, [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
+    //const newCustomRects3D2 = fromRectsToVolumes(rectZXTwoSplit, [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
+
+    const newCustomRects3D = fromRectsToVolumes(rectZXTwoSplit, [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
+    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
   }
 
-  return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, historyByTitle };
+  return { generate: generate3D, mondrianXY, mondrianYZ, mondrianZX, customRects3DData, historyByTitle };
 
 }
 
