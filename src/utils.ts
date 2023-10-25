@@ -88,27 +88,32 @@ function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : Cust
     }
 }
 
-/*
-function fromRectToVolumes(rectOrigin: CustomRect, segments: Segment[], maxCoord: number) : CustomRect3D[] {
-    const direction = segments[0].direction;
 
-    const sortLines = sortBy(segments, 'coord');
-    const min = {direction, firstPoint: {x: 0, y: 0}, lastPoint: { x: maxCoord, y: maxCoord } };
-    const max = {direction, firstPoint: {x: maxCoord, y: maxCoord}, lastPoint: { x: maxCoord, y: maxCoord } };
+export function fromRectToVolumes(rectOrigin: CustomRect, segments: Segment[], maxCoord: number) : CustomRect3D[] {
+    const direction = segments[0].direction;
+    const sortByKey = direction === "horizontal" ? 'firstPoint.y' : 'firstPoint.x'
+
+    const sortLines = sortBy(segments, sortByKey);
+    const min = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: maxCoord, y: maxCoord }};
+    const max = {direction, firstPoint: { x: maxCoord, y: maxCoord }, lastPoint: { x: maxCoord, y: maxCoord } };
+
     const sortLinesPlusExtremun : Segment[] = [min, ...sortLines, max];
     
     let customRects3D : CustomRect3D[] = [];
     for(let i=0; i < (sortLinesPlusExtremun.length/2); i++) {
+        const coordMin = direction === "horizontal" ? sortLinesPlusExtremun[i].firstPoint.y : sortLinesPlusExtremun[i].firstPoint.x;
+        const coordMax = direction === "horizontal" ? sortLinesPlusExtremun[i+1].firstPoint.y : sortLinesPlusExtremun[i+1].firstPoint.x
         customRects3D.push(
             fromRectToVolume(
                 rectOrigin,
-                sortLinesPlusExtremun[i].coord,
-                sortLinesPlusExtremun[i + 1].coord
+                coordMin,
+                coordMax
             )
         );
     }
     return customRects3D;
-}*/
+}
+
 
 /*
 export function fromRectsToVolumes(rectsOrigin: CustomRect[], segments: Segment[], width: number, height: number) :CustomRect3D[] {
