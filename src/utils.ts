@@ -104,8 +104,26 @@ function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : Cust
 }
 
 
-function fromRectToVolumeHorizontal(rectOrigin: CustomRect, horizontalSegments: Segment[], maxWidth): CustomRect3D[] {
+function fromRectToVolumeHorizontal(rectOrigin: CustomRect, horizontalSegments: Segment[], maxHeight: number, maxWidth: number): CustomRect3D[] {
+    const sortSegments = sortBy(horizontalSegments, 'firstPoint.y');
 
+    const min = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: 0, y: maxHeight }};
+    const max = {direction, firstPoint: { x: maxWidth, y: 0 }, lastPoint: { x: maxWidth, y: maxHeight } };
+    const sortLinesPlusExtremun : Segment[] = [min, ...sortLines, max];
+
+    let customRects3D : CustomRect3D[] = [];
+    for(let i=0; i < (sortLinesPlusExtremun.length - 1); i++) {
+        const coordMin = sortLinesPlusExtremun[i].firstPoint.y;
+        const coordMax = sortLinesPlusExtremun[i+1].firstPoint.y;
+        customRects3D.push(
+            fromRectToVolume(
+                rectOrigin,
+                coordMin,
+                coordMax
+            )
+        );
+    }
+    return customRects3D;
 }
 
 export function fromRectToVolumes(rectOrigin: CustomRect, segments: Segment[], maxCoord: number) : CustomRect3D[] {
