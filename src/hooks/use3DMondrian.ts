@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { CustomRect, Segment, randInt, filterWithRest, fromRectToVolumes } from "../utils";
+import { CustomRect, Segment, randInt, filterWithRest, fromRectToVolumeHorizontal, fromRectToVolumeVertical } from "../utils";
 import { sample, flatten } from "lodash";
 
 type TitleType = "bottom" | "right" | "top";
@@ -238,7 +238,8 @@ function use3DMondrian() {
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
     setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
 
-    const newCustomRects3D = fromRectToVolumes(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth);
+    const newCustomRects3D = fromRectToVolumeHorizontal(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
+    //const newCustomRects3D = fromRectToVolumeVertical(rectsBBB[0], [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
     setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
 
     
