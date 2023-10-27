@@ -1,5 +1,6 @@
 import { sortBy, flatten } from "lodash";
 
+
 export interface CustomRect{
   x1: number;
   y1: number;
@@ -19,9 +20,15 @@ export interface CustomRect3DData {
 }
 
 
-export interface Line {
-  direction: "vertical"|"horizontal";
-  coord: number;
+interface Point {
+    x: number;
+    y: number;
+}
+
+export interface Segment {
+    firstPoint: Point;
+    lastPoint: Point;
+    direction: "vertical" | "horizontal";
 }
 
 function length(axis1: number, axis2: number) : number {
@@ -96,35 +103,59 @@ function fromRectToVolume(rectOrigin: CustomRect, z1: number, z2: number) : Cust
     }
 }
 
+export function fromRectToVolumeVertical(rectOrigin: CustomRect, verticalSegments: Segment[], maxHeight: number, maxWidth: number): CustomRect3D[] {
+    const direction = "vertical";
+    const sortSegments = sortBy(verticalSegments, 'firstPoint.x');
 
-export function fromRectToVolumes(rectOrigin: CustomRect, linesCutting: Line[], maxCoord: number) : CustomRect3D[] {
-    const direction = linesCutting[0].direction;
+    const min: Segment = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: -1, y: -1 }};
+    const max: Segment = {direction, firstPoint: { x: maxWidth, y: maxHeight }, lastPoint: { x: -1, y: -1 } };
+    const sortSegmentPlusExtremums : Segment[] = [min, ...sortSegments, max];
 
-    const sortLines = sortBy(linesCutting, 'coord');
-    const min = {direction, coord: 0};
-    const max = {direction, coord: maxCoord };
-    const sortLinesPlusExtremun : Line[] = [min, ...sortLines, max];
-    
     let customRects3D : CustomRect3D[] = [];
-    console.log(sortLinesPlusExtremun);
-
-    for(let i=0; i < (sortLinesPlusExtremun.length - 1); i++) {
+    for(let i=0; i < (sortSegmentPlusExtremums.length - 1); i++) {
+        const coordMin = sortSegmentPlusExtremums[i].firstPoint.x;
+        const coordMax = sortSegmentPlusExtremums[i+1].firstPoint.x;
         customRects3D.push(
             fromRectToVolume(
                 rectOrigin,
-                sortLinesPlusExtremun[i].coord,
-                sortLinesPlusExtremun[i + 1].coord
+                coordMin,
+                coordMax
             )
         );
     }
     return customRects3D;
 }
 
-export function fromRectsToVolumes(rectsOrigin: CustomRect[], linesCutting: Line[], width: number, height: number) :CustomRect3D[] {
-    const max = linesCutting[0].direction === "vertical" ? width : height;
+export function fromRectToVolumeHorizontal(rectOrigin: CustomRect, horizontalSegments: Segment[], maxHeight: number, maxWidth: number): CustomRect3D[] {
+    const direction = "horizontal";
+    const sortSegments = sortBy(horizontalSegments, 'firstPoint.y');
+
+    const min: Segment = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: -1, y: -1 }};
+    const max: Segment = {direction, firstPoint: { x: maxWidth, y: maxHeight }, lastPoint: { x: -1, y: -1 } };
+    const sortSegmentPlusExtremums : Segment[] = [min, ...sortSegments, max];
+
+    let customRects3D : CustomRect3D[] = [];
+    for(let i=0; i < (sortSegmentPlusExtremums.length - 1); i++) {
+        const coordMin = sortSegmentPlusExtremums[i].firstPoint.y;
+        const coordMax = sortSegmentPlusExtremums[i+1].firstPoint.y;
+        customRects3D.push(
+            fromRectToVolume(
+                rectOrigin,
+                coordMin,
+                coordMax
+            )
+        );
+    }
+    return customRects3D;
+}
+
+/*
+export function fromRectsToVolumes(rectsOrigin: CustomRect[], segments: Segment[], width: number, height: number) :CustomRect3D[] {
+    const max = segments[0].direction === "vertical" ? width : height;
     const customRect3DArray = rectsOrigin.map(rectOrigin => {
-        return fromRectToVolumes(rectOrigin, linesCutting, max);
+        return fromRectToVolumes(rectOrigin, segments, max);
     });
 
     return flatten(customRect3DArray);
 }
+*/
