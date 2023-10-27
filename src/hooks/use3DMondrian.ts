@@ -230,17 +230,15 @@ function use3DMondrian() {
     const [rectsCC, lineCC] = ruleC(xPad, yPad, rectsC);
     const [rectsCCC, lineCCC] = ruleC(xPad, yPad, rectsCC);
 
-    console.table(lineB)
-    console.table(lineBB)
-    console.table(lineBBB)
-
     setMondrianXY({...mondrianXY, rects: [...rectsAAA] });
     setMondrianYZ({...mondrianYZ, rects: [...rectsBBB] });
     setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
 
-    const newCustomRects3D = fromRectToVolumeHorizontal(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
-    //const newCustomRects3D = fromRectToVolumeVertical(rectsBBB[0], [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
-    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
+    //const newCustomRects3D = fromRectToVolumeHorizontal(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
+    //setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
+
+    const newCustomRects3D = fromRectToVolumeVertical(rectsBBB[0], [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
+    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "right" });
 
     
   }

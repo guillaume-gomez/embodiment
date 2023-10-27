@@ -107,14 +107,14 @@ export function fromRectToVolumeVertical(rectOrigin: CustomRect, verticalSegment
     const direction = "vertical";
     const sortSegments = sortBy(verticalSegments, 'firstPoint.x');
 
-    const min = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: -1, y: -1 }};
-    const max = {direction, firstPoint: { x: maxWidth, y: maxHeight }, lastPoint: { x: -1, y: -1 } };
-    const sortLinesPlusExtremun : Segment[] = [min, ...sortSegments, max];
+    const min: Segment = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: -1, y: -1 }};
+    const max: Segment = {direction, firstPoint: { x: maxWidth, y: maxHeight }, lastPoint: { x: -1, y: -1 } };
+    const sortSegmentPlusExtremums : Segment[] = [min, ...sortSegments, max];
 
     let customRects3D : CustomRect3D[] = [];
-    for(let i=0; i < (sortLinesPlusExtremun.length - 1); i++) {
-        const coordMin = sortLinesPlusExtremun[i].firstPoint.x;
-        const coordMax = sortLinesPlusExtremun[i+1].firstPoint.x;
+    for(let i=0; i < (sortSegmentPlusExtremums.length - 1); i++) {
+        const coordMin = sortSegmentPlusExtremums[i].firstPoint.x;
+        const coordMax = sortSegmentPlusExtremums[i+1].firstPoint.x;
         customRects3D.push(
             fromRectToVolume(
                 rectOrigin,
@@ -130,14 +130,14 @@ export function fromRectToVolumeHorizontal(rectOrigin: CustomRect, horizontalSeg
     const direction = "horizontal";
     const sortSegments = sortBy(horizontalSegments, 'firstPoint.y');
 
-    const min = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: -1, y: -1 }};
-    const max = {direction, firstPoint: { x: maxWidth, y: maxHeight }, lastPoint: { x: -1, y: -1 } };
-    const sortLinesPlusExtremun : Segment[] = [min, ...sortSegments, max];
+    const min: Segment = {direction, firstPoint: { x: 0, y: 0}, lastPoint: { x: -1, y: -1 }};
+    const max: Segment = {direction, firstPoint: { x: maxWidth, y: maxHeight }, lastPoint: { x: -1, y: -1 } };
+    const sortSegmentPlusExtremums : Segment[] = [min, ...sortSegments, max];
 
     let customRects3D : CustomRect3D[] = [];
-    for(let i=0; i < (sortLinesPlusExtremun.length - 1); i++) {
-        const coordMin = sortLinesPlusExtremun[i].firstPoint.y;
-        const coordMax = sortLinesPlusExtremun[i+1].firstPoint.y;
+    for(let i=0; i < (sortSegmentPlusExtremums.length - 1); i++) {
+        const coordMin = sortSegmentPlusExtremums[i].firstPoint.y;
+        const coordMax = sortSegmentPlusExtremums[i+1].firstPoint.y;
         customRects3D.push(
             fromRectToVolume(
                 rectOrigin,
