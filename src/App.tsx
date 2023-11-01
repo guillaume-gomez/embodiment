@@ -6,7 +6,7 @@ import { useFullscreen } from "rooks";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
 
-const githubRepositoryUrl = "https://guillaume-gomez.github.io/embodiment/";
+const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
