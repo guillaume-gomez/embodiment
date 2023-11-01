@@ -10,10 +10,10 @@ const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
-  const { generate, mondrianXY, mondrianYZ, mondrianZX, historyByTitle } = use3DMondrian();
+  const { generate, mondrianXY, mondrianYZ, mondrianZX, customRects3DData, historyByTitle } = use3DMondrian();
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
-  const [rendering3D, setRendering3D] = useState<boolean>(true);
+  const [rendering3D, setRendering3D] = useState<boolean>(false);
   const [width] = useState<number>(500);
   const [height] = useState<number>(500);
   const thickness = 25;
@@ -30,8 +30,8 @@ function App() {
           githubRepositoryUrl={githubRepositoryUrl}
         />
       <div className="flex flex-col gap-3">
-        {
-            rendering3D ?
+
+
               <div className="flex flex-row">
                 <MondrianThreeJs
                   width={width}
@@ -40,11 +40,12 @@ function App() {
                   rectsXY={mondrianXY.rects}
                   rectsYZ={mondrianYZ.rects}
                   rectsZX={mondrianZX.rects}
+                  customRects3DData={customRects3DData}
                   toggleFullScreen={toggleFullscreen}
                 />
                 <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
               </div>
-            :
+
               <div>
                 <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
                 <div className="flex flex-row gap-2">
@@ -83,7 +84,7 @@ function App() {
                     </div>
                 </div>
               </div>
-        }
+
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
             <h2 className="card-title">History</h2>

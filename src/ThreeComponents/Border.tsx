@@ -10,7 +10,7 @@ interface BorderProps {
   meshProps?: JSX.IntrinsicElements['mesh'];
 }
 
-const material = new THREE.MeshStandardMaterial( { color: 0x000000, opacity: 0.1, transparent:true } );
+const material = new THREE.MeshStandardMaterial( { color: 0x000000, opacity: 0.1, transparent:false } );
 
 function Border({rect, thickness, depth, meshProps}: BorderProps) {
   const { size: { width, height } } = useThree();
