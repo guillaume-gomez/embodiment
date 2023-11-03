@@ -14,6 +14,7 @@ function App() {
   const canvasActionsRef = useRef<ExternalActionInterface| null>(null);
   const fullscreenContainerRef = useRef<Element>(null);
   const [rendering3D, setRendering3D] = useState<boolean>(false);
+  const [random, setRandom] = useState<number>(0.8);
   const [width] = useState<number>(500);
   const [height] = useState<number>(500);
   const thickness = 25;
