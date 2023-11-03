@@ -6,7 +6,7 @@ import { useFullscreen } from "rooks";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
 
-const githubRepositoryUrl = "www.github.io/guillaume-gomez/embodiment";
+const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
@@ -31,8 +31,9 @@ function App() {
           githubRepositoryUrl={githubRepositoryUrl}
         />
       <div className="flex flex-col gap-3">
-
-
+        <div className="card bg-primary text-primary-content">
+          <div className="card-body">
+              <h2 className="card-title">Render</h2>
               <div className="flex flex-row">
                 <MondrianThreeJs
                   width={width}
@@ -48,7 +49,6 @@ function App() {
               </div>
 
               <div>
-                <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
                 <div className="flex flex-row gap-2">
                     <div>
                       <p className="text-xl">YZ</p>
@@ -84,7 +84,10 @@ function App() {
                       />
                     </div>
                 </div>
+                <button className="btn btn-accent" onClick={() => generate(width, height)}>Generate</button>
               </div>
+            </div>
+          </div>
 
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
