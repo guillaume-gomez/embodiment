@@ -31,6 +31,17 @@ function App() {
           githubRepositoryUrl={githubRepositoryUrl}
         />
       <div className="flex flex-col gap-3">
+        <div className="form-control">
+          <span className="label-text">Random</span>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            value={random}
+            step={0.01}
+            className="range"
+            onChange={(event) => setRandom(event.target.value)} />
+        </div>
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
               <h2 className="card-title">Render</h2>
