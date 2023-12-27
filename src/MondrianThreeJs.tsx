@@ -40,9 +40,9 @@ function MondrianThreeJs({
   const depth = 0.15;
 
   const mondrianConfigs : MondrianConfig[] = [
-    { rects: rectsXY, rotation: [-Math.PI/2,0,0], position: [0,-0.5 - depth/2 ,0] },
+    { rects: rectsXY, rotation: [0,0,0], position: [0,0,-0.5 - depth/2 ] },
     { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-0.5 - depth/2,0,0] },
-    { rects: rectsZX, rotation: [0,0,-2*Math.PI], position: [0,0,-0.5 - depth/2] }
+    { rects: rectsZX, rotation: [-Math.PI/2,0,0], position: [0,-0.5 - depth/2,0] }
   ]
 
   function fromMondrianToConfig(mondrianType: string) {
