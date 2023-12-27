@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CustomRect, Segment, randInt, filterWithRest, fromRectToVolumeHorizontal, fromRectToVolumeVertical } from "../utils";
 import { sample, flatten } from "lodash";
 
-type TitleType = "bottom" | "right" | "top";
+type TitleType = "back" | "left" | "down";
 export type HistoryType = TitleType | "all";
 
 interface Mondrian {
@@ -11,9 +11,9 @@ interface Mondrian {
 }
 
 function use3DMondrian() {
-  const [ mondrianXY, setMondrianXY ] = useState<Mondrian>({title: "bottom", rects: []});
-  const [ mondrianYZ, setMondrianYZ ] = useState<Mondrian>({title: "right", rects: []});
-  const [ mondrianZX, setMondrianZX ] = useState<Mondrian>({title: "top", rects: []});
+  const [ mondrianXY, setMondrianXY ] = useState<Mondrian>({title: "back", rects: []});
+  const [ mondrianYZ, setMondrianYZ ] = useState<Mondrian>({title: "left", rects: []});
+  const [ mondrianZX, setMondrianZX ] = useState<Mondrian>({title: "down", rects: []});
   const [ customRects3DData, setCustomRects3DData ] = useState<CustomRect3DData>({ rects: [], basedOnMondrian: "" });
   const [history, setHistory] = useState<Mondrian[]>([]);
 
@@ -194,24 +194,24 @@ function use3DMondrian() {
 
 
     setHistory([
-      { title: "bottom", rects: rectXY },
-      { title: "right", rects: rectYZ },
-      { title: "top", rects: rectZX },
-      { title: "bottom", rects: rectXYSplit },
-      { title: "right", rects: rectYZSplit },
-      { title: "top", rects: rectZXSplit },
-      { title: "bottom", rects: rectXYOne },
-      { title: "right", rects: rectYZOne },
-      { title: "top", rects: rectZXOne },
-      { title: "bottom", rects: rectXYOneSplit },
-      { title: "right", rects: rectYZOneSplit },
-      { title: "top", rects: rectZXOneSplit },
-      { title: "bottom", rects:rectXYTwo },
-      { title: "right", rects:rectYZTwo },
-      { title: "top", rects:rectZXTwo },
-      { title: "bottom", rects:rectXYTwoSplit },
-      { title: "right", rects:rectYZTwoSplit },
-      { title: "top", rects:rectZXTwoSplit }
+      { title: "back", rects: rectXY },
+      { title: "left", rects: rectYZ },
+      { title: "down", rects: rectZX },
+      { title: "back", rects: rectXYSplit },
+      { title: "left", rects: rectYZSplit },
+      { title: "down", rects: rectZXSplit },
+      { title: "back", rects: rectXYOne },
+      { title: "left", rects: rectYZOne },
+      { title: "down", rects: rectZXOne },
+      { title: "back", rects: rectXYOneSplit },
+      { title: "left", rects: rectYZOneSplit },
+      { title: "down", rects: rectZXOneSplit },
+      { title: "back", rects:rectXYTwo },
+      { title: "left", rects:rectYZTwo },
+      { title: "down", rects:rectZXTwo },
+      { title: "back", rects:rectXYTwoSplit },
+      { title: "left", rects:rectYZTwoSplit },
+      { title: "down", rects:rectZXTwoSplit }
     ]);
     setMondrianXY({...mondrianXY, rects: [...rectXYTwoSplit] });
     setMondrianYZ({...mondrianYZ, rects: [...rectYZTwoSplit] });
@@ -235,10 +235,10 @@ function use3DMondrian() {
     setMondrianZX({...mondrianZX, rects: [...rectsCCC] });
 
     //const newCustomRects3D = fromRectToVolumeHorizontal(rectsCCC[0], [lineA, lineAA, lineAAA], canvasWidth, canvasHeight);
-    //setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "top" });
+    //setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "down" });
 
     const newCustomRects3D = fromRectToVolumeVertical(rectsBBB[0], [lineC, lineCC, lineCCC], canvasWidth, canvasHeight);
-    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "right" });
+    setCustomRects3DData({ rects: newCustomRects3D, basedOnMondrian: "left" });
 
     
   }

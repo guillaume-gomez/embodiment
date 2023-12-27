@@ -109,7 +109,7 @@ function App() {
             >
               <option value="all">all</option>
               {
-                ["bottom", "right", "top" ].map(title =>
+                ["back", "left", "down" ].map(title =>
                   <option value={title}>{title}</option>
                 )
               }
