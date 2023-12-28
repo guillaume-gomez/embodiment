@@ -37,7 +37,7 @@ function MondrianThreeJs({
   return (
     <Canvas
       ref={canvasActionsRef}
-      camera={{ position: [0,0, 1.5], fov: 75, far: 5 }}
+      camera={{ position: [0,0, 1.5], fov: 75, far: 1000 }}
       dpr={window.devicePixelRatio}
       style={{width, height }}
       onDoubleClick={(event: any) => {
@@ -48,7 +48,7 @@ function MondrianThreeJs({
     >
       <color attach="background" args={[0x797979]} />
       <group
-        position={[0,0,0]}
+        position={[-0.5,-0.5, -0.5]}
       >
         {
         customRects3D.map((customRect3D, index) => {

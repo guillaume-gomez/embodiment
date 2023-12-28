@@ -12,6 +12,15 @@ export interface CustomRect3D{
   color: string;
 }
 
+function randomColor() : string {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
 type AxisType = "X" | "Y" | "Z";
 
 function use3DMondrian() {
@@ -23,12 +32,20 @@ function use3DMondrian() {
 
   const [ customRects3D, setCustomRects3D ] = useState<CustomRect3D[]>([]);
 
-  function cutIn(axis: AxisType, coord: number) {
+  function cutIn(customRects3D: CustomRect3D, axis: AxisType, coord: number) {
+    switch(axis) {
+      case "X":
+      default:
+          return cutInYZ(customRects3D, coord);
+      case "Y":
+          return cutInXY(customRects3D, coord);
+      case "Z":
+          return cutInXZ(customRects3D, coord);
+    }
   }
 
   function cutInXY(customRects3D: CustomRect3D, coord: number) {
     const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.z1 && coord <= customRect3D.z2);
-
 
     const result = selectedCustomsRects3D.map(customRect3D => {
       const a : CustomRect3D = {
@@ -38,7 +55,7 @@ function use3DMondrian() {
         y2: customRect3D.y2,
         z1: customRect3D.z1,
         z2: coord,
-        color: "purple"
+        color: randomColor()
       };
       const b : CustomRect3D = {
         x1: customRect3D.x1,
@@ -47,20 +64,73 @@ function use3DMondrian() {
         y2: customRect3D.y2,
         z1: coord,
         z2: customRect3D.z2,
-        color: "yellow"
+        color: randomColor()
       };
 
       return [a,b]
     });
 
-    return flatten(result);
+    return [...flatten(result), ...others];
   }
 
-  function split() {
+  function cutInYZ(customRects3D: CustomRect3D, coord: number) {
+    const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.x1 && coord <= customRect3D.x2);
 
+    const result = selectedCustomsRects3D.map(customRect3D => {
+      const a : CustomRect3D = {
+        x1: customRect3D.x1,
+        x2: coord,
+        y1: customRect3D.y1,
+        y2: customRect3D.y2,
+        z1: customRect3D.z1,
+        z2: customRect3D.z2,
+        color: randomColor()
+      };
+      const b : CustomRect3D = {
+        x1: coord,
+        x2: customRect3D.x2,
+        y1: customRect3D.y1,
+        y2: customRect3D.y2,
+        z1: customRect3D.z1,
+        z2: customRect3D.z2,
+        color: randomColor()
+      };
+
+      return [a,b]
+    });
+
+    return [...flatten(result), ...others];
   }
 
 
+  function cutInXZ(customRects3D: CustomRect3D, coord: number) {
+    const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.y1 && coord <= customRect3D.y2);
+
+    const result = selectedCustomsRects3D.map(customRect3D => {
+      const a : CustomRect3D = {
+        x1: customRect3D.x1,
+        x2: customRect3D.x2,
+        y1: coord,
+        y2: customRect3D.y2,
+        z1: customRect3D.z1,
+        z2: customRect3D.z2,
+        color: randomColor()
+      };
+      const b : CustomRect3D = {
+        x1: customRect3D.x1,
+        x2: customRect3D.x2,
+        y1: customRect3D.y1,
+        y2: coord,
+        z1: customRect3D.z1,
+        z2: customRect3D.z2,
+        color: randomColor()
+      };
+
+      return [a,b]
+    });
+
+    return [...flatten(result), ...others];
+  }
 
   function generate() {
     const customRect3D : CustomRect3D = {
@@ -70,8 +140,9 @@ function use3DMondrian() {
       color: "red"
     };
     const z = Math.floor(Math.random() * depth)
-    const cut = cutInXY([customRect3D], z);
-    setCustomRects3D(cut);
+    const cut = cutInXZ([customRect3D], z);
+    const cut2 = cutInXZ(cut, 100);
+    setCustomRects3D(cut2);
   }
 
   return { generate, customRects3D, setWidth, setHeight, width, height };
