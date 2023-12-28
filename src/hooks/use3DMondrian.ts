@@ -32,31 +32,58 @@ function use3DMondrian() {
 
   const [ customRects3D, setCustomRects3D ] = useState<CustomRect3D[]>([]);
 
+  function selectedCustomsRects3D(customRects3D: CustomRect3D, axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
+    switch(axis) {
+      case "X":
+      default:
+          return partition(customRects3D, (customRect3D) => coord >= customRect3D.x1 && coord <= customRect3D.x2);
+      case "Y":
+          return partition(customRects3D, (customRect3D) => coord >= customRect3D.y1 && coord <= customRect3D.y2);
+      case "Z":
+          return partition(customRects3D, (customRect3D) => coord >= customRect3D.z1 && coord <= customRect3D.z2);
+    }
+  }
+
   function cutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
     switch(axis) {
       case "X":
       default:
-          return cutInYZ(customRects3D, coord);
-      case "Y":
           return cutInXY(customRects3D, coord);
+      case "Y":
+          return cutInYZ(customRects3D, coord);
       case "Z":
           return cutInXZ(customRects3D, coord);
     }
   }
 
   function subCutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
-    const choose = sample(customRects3D);
-    const others = rectsWithoutCandidate(customRects3D, choose);
+    // convert the axis make sur the cut is the right direction
+    let axisTarget = "Y";
+    if (axis === "X") {
+      axisTarget = "Z";
+    } else if(axis === "Y") {
+      axisTarget = "X"
+    } else {
+      axisTarget = "Y";
+    }
 
+    const [candidates, _others] = selectedCustomsRects3D(customRects3D, axisTarget, coord);
+    if(candidates.length === 0) {
+      console.info("does not work");
+      return;
+    }
+
+    const choose = sample(candidates);
+    const others = rectsWithoutCandidate(customRects3D, choose);
     const partition = cutIn([choose], axis, coord);
 
     return [...partition, ...others];
   }
 
   function cutInXY(customRects3D: CustomRect3D[], coord: number) {
-    const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.z1 && coord <= customRect3D.z2);
+    const [candidates, others] = selectedCustomsRects3D(customRects3D, "Z", coord);
 
-    const result = selectedCustomsRects3D.map(customRect3D => {
+    const result = candidates.map(customRect3D => {
       const a : CustomRect3D = {
         ...customRect3D,
         z2: coord,
@@ -75,9 +102,9 @@ function use3DMondrian() {
   }
 
   function cutInYZ(customRects3D: CustomRect3D[], coord: number) {
-    const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.x1 && coord <= customRect3D.x2);
+    const [candidates, others] = selectedCustomsRects3D(customRects3D, "X", coord);
 
-    const result = selectedCustomsRects3D.map(customRect3D => {
+    const result = candidates.map(customRect3D => {
       const a : CustomRect3D = {
         ...customRect3D,
         x2: coord,
@@ -97,9 +124,9 @@ function use3DMondrian() {
 
 
   function cutInXZ(customRects3D: CustomRect3D[], coord: number) {
-    const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.y1 && coord <= customRect3D.y2);
+    const [candidates, others] =  selectedCustomsRects3D(customRects3D, "Y", coord);
 
-    const result = selectedCustomsRects3D.map(customRect3D => {
+    const result = candidates.map(customRect3D => {
       const a : CustomRect3D = {
         ...customRect3D,
         y1: coord,
@@ -136,16 +163,18 @@ function use3DMondrian() {
       z1: 0, z2: depth,
       color: "red"
     };
+    const functions = [cutIn, subCutIn];
 
     let customRects : CustomRect3D[] = [init];
 
-    for(let i =0; i < 4; i++) {
-      const randomCoord = Math.floor(Math.random() * width);
-      const randomAxis = sample(["X", "Y", "Z"]);
-      customRects = cutIn(customRects, randomAxis, randomCoord);
-    }
-    customRects = subCutIn(customRects, "Z", 250);
-    setCustomRects3D(customRects);
+    for(let i =0; i < 10; i++) {
+        const randomCoord = Math.floor(Math.random() * width);
+        const randomAxis = sample(["X", "Y", "Z"]);
+        const selectedFunction = Math.floor(Math.random()*functions.length);
+        customRects = functions[selectedFunction](customRects, randomAxis, randomCoord);
+      }
+      setCustomRects3D(customRects);
+
   }
 
   return { generate, customRects3D, setWidth, setHeight, width, height };

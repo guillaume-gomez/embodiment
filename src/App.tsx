@@ -8,7 +8,7 @@ const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
-  const { generate, customRects3D, setWidth, setHeight, width, height } = use3DMondrian();
+  const { generate, customRects3D, width, height } = use3DMondrian();
   const [random, setRandom] = useState<number>(0.8);
   const thickness = 25;
 
@@ -28,7 +28,7 @@ function App() {
             value={random}
             step={0.01}
             className="range"
-            onChange={(event) => setRandom(event.target.value)} />
+            onChange={(event) => setRandom(parseFloat(event.target.value))} />
         </div>
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
