@@ -31,6 +31,7 @@ interface CustomRect3DProps {
   wireframe?: boolean;
 }
 
+// hooks contains a lots of variables between the hooks
 function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect3DProps) {
   const { size: { width, height } } = useThree();
   const depth = width;
