@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import Borders from "./ThreeComponents/Borders";
@@ -16,79 +17,27 @@ interface MondrianThreeJsProps {
   width: number;
   height: number;
   thickness: number;
-  rectsXY: CustomRect[];
-  rectsYZ: CustomRect[];
-  rectsZX: CustomRect[];
-  customRects3DData: CustomRect3DData;
-  toggleFullScreen: (target: EventTarget) => void;
+  customRects3D: CustomRect3D;
 }
-
 
 function MondrianThreeJs({
   width,
   height,
   thickness,
-  rectsXY,
-  rectsYZ,
-  rectsZX,
-  customRects3DData,
-  toggleFullScreen
+  customRects3D,
 } : MondrianThreeJsProps ): React.ReactElement {
+  const canvasActionsRef = useRef<HTMLCanvasElement>();
   const [depthBorder, _setDepthBorder] = useState<number>(0.1);
   const [hasBorder, _setHasBorder] = useState<boolean>(true);
   const [hasColor, _setHasColor] = useState<boolean>(true);
-  const depth = 0.15;
-
-  const mondrianConfigs : MondrianConfig[] = [
-    { rects: rectsXY, rotation: [0,0,0], position: [0,0,-0.5 - depth/2 ] },
-    { rects: rectsYZ, rotation: [0,Math.PI/2,0], position: [-0.5 - depth/2,0,0] },
-    { rects: rectsZX, rotation: [-Math.PI/2,0,0], position: [0,-0.5 - depth/2,0] }
-  ]
-
-  function fromMondrianToConfig(mondrianType: string) {
-    switch(mondrianType) {
-      case "bottom":
-        return mondrianConfigs[0];
-      break;
-      case "right":
-        return mondrianConfigs[1];
-      break;
-      case "top":
-      default:
-        return mondrianConfigs[2];
-      break;
-    }
-  }
-
-  function computePosition(rect: CustomRect) : [number, number, number] {
-    const [x, y] = centerRect(rect);
-    /*
-      -0.5 and 0.5 in position are here to center the shape
-      Offset of 1 in z to make sure the shapes are visible
-    */
-    return [
-      (rect.x1 + x)/ width -0.5,
-      -(rect.y1 +y)/height + 0.5,
-      0
-    ];
-  }
-
-  function computeVolumePosition(rect3d : CustomRect3D) : [number, number, number] {
-    const [x, y, z] = centerRect3d(rect3d);
-    /*
-      -0.5 and 0.5 in position are here to center the shape
-      Offset of 1 in z to make sure the shapes are visible
-    */
-    return [
-      ((rect3d.x1 + x)/ width) -0.5,
-      (-(rect3d.y1 +y)/height) + 0.5,
-      ((rect3d.z1 + z)/ width) + 0.09
-    ];
-  }
+  const {
+    toggleFullscreen,
+  } = useFullscreen({ target: canvasActionsRef });
 
   return (
     <Canvas
-      camera={{ position: [-0.15, 0.15, 1.5], fov: 75, far: 5 }}
+      ref={canvasActionsRef}
+      camera={{ position: [0,0, 1.5], fov: 75, far: 5 }}
       dpr={window.devicePixelRatio}
       style={{width, height }}
       onDoubleClick={(event: any) => {
@@ -98,38 +47,17 @@ function MondrianThreeJs({
       }}
     >
       <color attach="background" args={[0x797979]} />
-      {
-        mondrianConfigs.map( ({rects, rotation, position}) =>
-          <group position={position} rotation={rotation}>
-          { hasBorder && <Borders rects={rects} thickness={thickness} depth={depthBorder} /> }
-          {
-            hasColor && rects.map((rect, index) => {
-              return (
-                <ColoredBox
-                  key={index}
-                  rect={rect}
-                  thickness={thickness}
-                  depth={depth}
-                  meshProps={{position: computePosition(rect)}}
-                />
-              );
-            })
-          }
-         </group>
-        )
-      }
-      <group 
-        rotation={fromMondrianToConfig(customRects3DData.basedOnMondrian).rotation}
-        position={fromMondrianToConfig(customRects3DData.basedOnMondrian).position}
+      <group
+        position={[0,0,0]}
       >
         {
-        customRects3DData.rects.map((rect3d, index) => {
+        customRects3D.map((customRect3D, index) => {
+          console.log(customRect3D)
           return (
             <CustomRect3DRenderer
               key={index}
-              customRect3D={rect3d}
+              customRect3D={customRect3D}
               thickness={thickness}
-              meshProps={{position: computeVolumePosition(rect3d)}}
             />
           );
         })
