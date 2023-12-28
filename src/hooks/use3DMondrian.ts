@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { partition, flatten } from "lodash"
+import { partition, flatten, sample } from "lodash"
 
 
 export interface CustomRect3D{
@@ -32,7 +32,7 @@ function use3DMondrian() {
 
   const [ customRects3D, setCustomRects3D ] = useState<CustomRect3D[]>([]);
 
-  function cutIn(customRects3D: CustomRect3D, axis: AxisType, coord: number) {
+  function cutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
     switch(axis) {
       case "X":
       default:
@@ -44,26 +44,18 @@ function use3DMondrian() {
     }
   }
 
-  function cutInXY(customRects3D: CustomRect3D, coord: number) {
+  function cutInXY(customRects3D: CustomRect3D[], coord: number) {
     const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.z1 && coord <= customRect3D.z2);
 
     const result = selectedCustomsRects3D.map(customRect3D => {
       const a : CustomRect3D = {
-        x1: customRect3D.x1,
-        x2: customRect3D.x2,
-        y1: customRect3D.y1,
-        y2: customRect3D.y2,
-        z1: customRect3D.z1,
+        ...customRect3D,
         z2: coord,
         color: randomColor()
       };
       const b : CustomRect3D = {
-        x1: customRect3D.x1,
-        x2: customRect3D.x2,
-        y1: customRect3D.y1,
-        y2: customRect3D.y2,
+        ...customRect3D,
         z1: coord,
-        z2: customRect3D.z2,
         color: randomColor()
       };
 
@@ -73,26 +65,18 @@ function use3DMondrian() {
     return [...flatten(result), ...others];
   }
 
-  function cutInYZ(customRects3D: CustomRect3D, coord: number) {
+  function cutInYZ(customRects3D: CustomRect3D[], coord: number) {
     const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.x1 && coord <= customRect3D.x2);
 
     const result = selectedCustomsRects3D.map(customRect3D => {
       const a : CustomRect3D = {
-        x1: customRect3D.x1,
+        ...customRect3D,
         x2: coord,
-        y1: customRect3D.y1,
-        y2: customRect3D.y2,
-        z1: customRect3D.z1,
-        z2: customRect3D.z2,
         color: randomColor()
       };
       const b : CustomRect3D = {
+        ...customRect3D,
         x1: coord,
-        x2: customRect3D.x2,
-        y1: customRect3D.y1,
-        y2: customRect3D.y2,
-        z1: customRect3D.z1,
-        z2: customRect3D.z2,
         color: randomColor()
       };
 
@@ -103,26 +87,18 @@ function use3DMondrian() {
   }
 
 
-  function cutInXZ(customRects3D: CustomRect3D, coord: number) {
+  function cutInXZ(customRects3D: CustomRect3D[], coord: number) {
     const [selectedCustomsRects3D, others] = partition(customRects3D, (customRect3D) => coord >= customRect3D.y1 && coord <= customRect3D.y2);
 
     const result = selectedCustomsRects3D.map(customRect3D => {
       const a : CustomRect3D = {
-        x1: customRect3D.x1,
-        x2: customRect3D.x2,
+        ...customRect3D,
         y1: coord,
-        y2: customRect3D.y2,
-        z1: customRect3D.z1,
-        z2: customRect3D.z2,
         color: randomColor()
       };
       const b : CustomRect3D = {
-        x1: customRect3D.x1,
-        x2: customRect3D.x2,
-        y1: customRect3D.y1,
+        ...customRect3D,
         y2: coord,
-        z1: customRect3D.z1,
-        z2: customRect3D.z2,
         color: randomColor()
       };
 
@@ -139,10 +115,16 @@ function use3DMondrian() {
       z1: 0, z2: depth,
       color: "red"
     };
-    const z = Math.floor(Math.random() * depth)
-    const cut = cutInXZ([customRect3D], z);
-    const cut2 = cutInXZ(cut, 100);
-    setCustomRects3D(cut2);
+
+    //for(let i =0; i < 3; i++) {
+      const randomCoord = Math.floor(Math.random() * depth);
+      const randomAxis = sample(["X", "Y", "Z"]);
+      const cut = cutInXY([customRect3D], 400);
+      const cut2 = cutInXZ(cut, 100);
+      const cut3 = cutInYZ(cut2, 150);
+      const cut4 = cutInXY(cut3, 250);
+    //}
+    setCustomRects3D(cut4);
   }
 
   return { generate, customRects3D, setWidth, setHeight, width, height };

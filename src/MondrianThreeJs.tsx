@@ -37,7 +37,7 @@ function MondrianThreeJs({
   return (
     <Canvas
       ref={canvasActionsRef}
-      camera={{ position: [0,0, 1.5], fov: 75, far: 1000 }}
+      camera={{ position: [0,0, 1.5], fov: 75, far: 5 }}
       dpr={window.devicePixelRatio}
       style={{width, height }}
       onDoubleClick={(event: any) => {
