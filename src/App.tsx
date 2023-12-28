@@ -60,7 +60,7 @@ function App() {
               </div>
 
               <div>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-col gap-2">
                     <div>
                       <p className="text-xl">YZ</p>
                       <MondrianCanvas
@@ -109,7 +109,7 @@ function App() {
             >
               <option value="all">all</option>
               {
-                ["back", "left", "down" ].map(title =>
+                ["left", "back", "down" ].map(title =>
                   <option value={title}>{title}</option>
                 )
               }

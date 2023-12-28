@@ -20,10 +20,10 @@ function CustomRect3DRenderer({customRect3D, thickness, depth, meshProps}: Custo
 
 
   return (
-    <animated.mesh position={position as any} >
+    <mesh position={position as any} >
       <boxGeometry args={[widthGeometry, heightGeometry, depthGeometry]} />
       <meshStandardMaterial color={customRect3D.color} wireframe={true}/>
-    </animated.mesh>
+    </mesh>
   )
 }
 
