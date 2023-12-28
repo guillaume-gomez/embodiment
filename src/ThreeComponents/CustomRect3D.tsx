@@ -25,12 +25,13 @@ export function centerRect(rect : CustomRect3D) : [number, number, number] {
 }
 
 
-interface CustomRect3DRendererProps {
+interface CustomRect3DProps {
   customRect3D: CustomRect3D;
   thickness: number;
+  wireframe?: boolean;
 }
 
-function CustomRect3DRenderer({ customRect3D, thickness }: CustomRect3DRendererProps) {
+function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect3DProps) {
   const { size: { width, height } } = useThree();
   const previousValueColor = usePreviousDifferent(customRect3D.color);
   const spring = useSpring({
@@ -59,10 +60,17 @@ function CustomRect3DRenderer({ customRect3D, thickness }: CustomRect3DRendererP
       ]}
     >
       <boxGeometry args={[widthGeometry,heightGeometry, depthGeometry]} />
-      <animated.meshStandardMaterial color={spring.color} wireframe={true}/>
+      <animated.meshStandardMaterial
+        color={spring.color}
+        emisive={"#212121"}
+        roughness={0.478}
+        metalness={0.122}
+        wireframe={wireframe}
+        castShadow={true}
+      />
 
     </mesh>
   )
 }
 
-export default CustomRect3DRenderer;
+export default CustomRect3D;
