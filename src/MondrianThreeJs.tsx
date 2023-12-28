@@ -52,7 +52,6 @@ function MondrianThreeJs({
       >
         {
         customRects3D.map((customRect3D, index) => {
-          console.log(customRect3D)
           return (
             <CustomRect3DRenderer
               key={index}

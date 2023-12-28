@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { usePreviousDifferent } from "rooks";
 import { useThree } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
 import { CustomRect3D } from "../utils";
@@ -31,12 +33,23 @@ export function centerRect(rect : CustomRect3D) : [number, number, number] {
 
 function CustomRect3DRenderer({customRect3D, thickness, meshProps}: CustomRect3DRendererProps) {
   const { size: { width, height } } = useThree();
+  const previousValueColor = usePreviousDifferent(customRect3D.color);
+  const spring = useSpring({
+    from: { color: previousValueColor },
+    to  : { color: customRect3D.color },
+    config: {
+      duration: 500,
+    },
+    reset: true,
+  });
+
   const depth = width;
   const widthGeometry = (widthRect(customRect3D) - thickness)/width;
   const heightGeometry = (heightRect(customRect3D) - thickness)/height;
   const depthGeometry = (depthRect(customRect3D) - thickness)/depth;
 
   const [xMiddle, yMiddle, zMiddle] = centerRect(customRect3D);
+
 
   return (
     <mesh
@@ -47,7 +60,8 @@ function CustomRect3DRenderer({customRect3D, thickness, meshProps}: CustomRect3D
       ]}
     >
       <boxGeometry args={[widthGeometry,heightGeometry, depthGeometry]} />
-      <meshStandardMaterial color={customRect3D.color} wireframe={true}/>
+      <animated.meshStandardMaterial color={spring.color} wireframe={true}/>
+
     </mesh>
   )
 }
