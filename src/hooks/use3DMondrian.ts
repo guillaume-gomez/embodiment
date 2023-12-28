@@ -32,7 +32,7 @@ function use3DMondrian() {
 
   const [ customRects3D, setCustomRects3D ] = useState<CustomRect3D[]>([]);
 
-  function selectedCustomsRects3D(customRects3D: CustomRect3D, axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
+  function selectedCustomsRects3D(customRects3D: CustomRect3D[], axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
     switch(axis) {
       case "X":
       default:
@@ -144,7 +144,7 @@ function use3DMondrian() {
     return [...flatten(result), ...others];
   }
 
-  function rectsWithoutCandidate(customRects: CustomRect3D[], candidate: CustomRect3D) : CustomRect[] {
+  function rectsWithoutCandidate(customRects: CustomRect3D[], candidate: CustomRect3D) : CustomRect3D[] {
 
     return customRects.filter(customRect =>
       customRect.x1 !== candidate.x1 ||
@@ -169,7 +169,7 @@ function use3DMondrian() {
 
     for(let i =0; i < 10; i++) {
         const randomCoord = Math.floor(Math.random() * width);
-        const randomAxis = sample(["X", "Y", "Z"]);
+        const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[]);
         const selectedFunction = Math.floor(Math.random()*functions.length);
         customRects = functions[selectedFunction](customRects, randomAxis, randomCoord);
       }

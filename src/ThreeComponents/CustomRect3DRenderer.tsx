@@ -1,14 +1,8 @@
-import { useEffect } from "react";
 import { usePreviousDifferent } from "rooks";
 import { useThree } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
-import { CustomRect3D } from "../utils";
+import { CustomRect3D } from "../hooks/use3DMondrian";
 
-
-interface CustomRect3DRendererProps {
-  customRect3D: CustomRect3D;
-  thickness: number;
-}
 
 function length(axis1: number, axis2: number) : number {
     return Math.abs(axis2 - axis1);
@@ -31,7 +25,12 @@ export function centerRect(rect : CustomRect3D) : [number, number, number] {
 }
 
 
-function CustomRect3DRenderer({customRect3D, thickness, meshProps}: CustomRect3DRendererProps) {
+interface CustomRect3DRendererProps {
+  customRect3D: CustomRect3D;
+  thickness: number;
+}
+
+function CustomRect3DRenderer({ customRect3D, thickness }: CustomRect3DRendererProps) {
   const { size: { width, height } } = useThree();
   const previousValueColor = usePreviousDifferent(customRect3D.color);
   const spring = useSpring({

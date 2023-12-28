@@ -1,23 +1,15 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei';
-import Borders from "./ThreeComponents/Borders";
-import ColoredBox from "./ThreeComponents/ColoredBox";
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3DRenderer";
-import { CustomRect, centerRect, CustomRect3D, CustomRect3DData, centerRect3d } from "./utils";
-
-interface MondrianConfig {
- rects: CustomRect[];
- rotation: [number, number, number];
- position: [number, number, number];
-}
+import { CustomRect3D } from "./hooks/use3DMondrian";
 
 interface MondrianThreeJsProps {
   width: number;
   height: number;
   thickness: number;
-  customRects3D: CustomRect3D;
+  customRects3D: CustomRect3D[];
 }
 
 function MondrianThreeJs({
@@ -26,10 +18,7 @@ function MondrianThreeJs({
   thickness,
   customRects3D,
 } : MondrianThreeJsProps ): React.ReactElement {
-  const canvasActionsRef = useRef<HTMLCanvasElement>();
-  const [depthBorder, _setDepthBorder] = useState<number>(0.1);
-  const [hasBorder, _setHasBorder] = useState<boolean>(true);
-  const [hasColor, _setHasColor] = useState<boolean>(true);
+  const canvasActionsRef = useRef<HTMLCanvasElement>(null);
   const {
     toggleFullscreen,
   } = useFullscreen({ target: canvasActionsRef });
@@ -43,7 +32,7 @@ function MondrianThreeJs({
       onDoubleClick={(event: any) => {
         // trick to override canvas background color
         event.target.style.background="#313131";
-        toggleFullScreen(event.target)
+        toggleFullscreen()
       }}
     >
       <color attach="background" args={[0x797979]} />
