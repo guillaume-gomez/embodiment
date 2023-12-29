@@ -176,7 +176,7 @@ function use3DMondrian() {
     for(let i=0; i < numberIteration; i++) {
       const randomCoord = getRandomInt(xPad, width - xPad);
       const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[])!;
-      const selectedFunction = Math.floor(Math.random()*functions.length);
+      const selectedFunction = getRandomInt(0,1);
       customRects = functions[selectedFunction](customRects, randomAxis, randomCoord)!;
     }
     setCustomRects3D(customRects);
