@@ -3,6 +3,7 @@ import MondrianThreeJs from "./MondrianThreeJs";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
+import Range from "./components/Range";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
@@ -31,6 +32,14 @@ function App() {
             className="range"
             onChange={(event) => setRandom(parseFloat(event.target.value))} />
         </div>
+        <Range
+          label="Number of Iterations"
+          value={numberOfIteration}
+          min={1}
+          max={20}
+          step={1}
+          onChange={(value) => setNumberOfIteration(value)}
+        />
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
             <h2 className="card-title">Render</h2>
