@@ -10,6 +10,7 @@ const projectName ="Embodiment";
 function App() {
   const { generate, customRects3D, width, height } = use3DMondrian();
   const [random, setRandom] = useState<number>(0.8);
+  const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
   const thickness = 25;
 
   return (
@@ -40,7 +41,7 @@ function App() {
                 thickness={thickness}
                 customRects3D={customRects3D}
               />
-              <button className="btn btn-accent" onClick={() => generate()}>Generate</button>
+              <button className="btn btn-accent" onClick={() => generate(numberOfIteration)}>Generate</button>
             </div>
           </div>
         </div>

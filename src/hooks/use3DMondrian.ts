@@ -21,7 +21,7 @@ function randomColor() : string {
   return color;
 }
 
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number) : number {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
@@ -162,28 +162,36 @@ function use3DMondrian() {
     );
   }
 
-  function generate() {
+  function generate(numberIteration: number) {
     const init : CustomRect3D = {
       x1: 0, x2: width,
       y1: 0, y2: height,
       z1: 0, z2: depth,
-      color: "red"
+      color: "black"
     };
     const functions = [cutIn, subCutIn];
 
     let customRects : CustomRect3D[] = [init];
 
-    for(let i=0; i < 10; i++) {
-        const randomCoord = getRandomInt(xPad, width - xPad);
-        const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[]);
-        const selectedFunction = Math.floor(Math.random()*functions.length);
-        customRects = functions[selectedFunction](customRects, randomAxis, randomCoord);
-      }
-      setCustomRects3D(customRects);
+    for(let i=0; i < numberIteration; i++) {
+      const randomCoord = getRandomInt(xPad, width - xPad);
+      const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[]);
+      const selectedFunction = Math.floor(Math.random()*functions.length);
+      customRects = functions[selectedFunction](customRects, randomAxis, randomCoord);
+    }
+    setCustomRects3D(customRects);
 
   }
 
-  return { generate, customRects3D, setWidth, setHeight, width, height };
+
+  return {
+    generate,
+    customRects3D,
+    setWidth,
+    setHeight,
+    width,
+    height
+  };
 
 }
 
