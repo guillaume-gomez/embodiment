@@ -1,5 +1,6 @@
 import { usePreviousDifferent } from "rooks";
 import { useThree } from '@react-three/fiber';
+import { config } from '@react-spring/web';
 import { useSpring, animated } from '@react-spring/three';
 import { CustomRect3D } from "../hooks/use3DMondrian";
 
@@ -24,6 +25,7 @@ export function centerRect(rect : CustomRect3D) : [number, number, number] {
     return [ widthRect(rect)/ 2, heightRect(rect) / 2, depthRect(rect) / 2 ];
 }
 
+console.log(config.slow)
 
 interface CustomRect3DProps {
   customRect3D: CustomRect3D;
@@ -46,31 +48,29 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
   ]
   const previousValuePosition = usePreviousDifferent(position);
 
-  const widthGeometry = (widthRect(customRect3D) - thickness)/width;
-  const heightGeometry = (heightRect(customRect3D) - thickness)/height;
-  const depthGeometry = (depthRect(customRect3D) - thickness)/depth;
-  const geometry = [widthGeometry, heightGeometry, depthGeometry];
-
-  const previousValueGeometry = usePreviousDifferent(geometry);
-
-
   const spring = useSpring({
-    from: { color: previousValueColor, position: previousValuePosition, geometry: previousValueGeometry },
-    to  : { color: customRect3D.color, position, geometry },
+    from: { color: previousValueColor, position: previousValuePosition },
+    to  : { color: customRect3D.color, position },
     config: {
+      ...config.gentle,
       duration: 500,
+      precision: 0.0001
     },
     reset: true,
   });
 
 
+  const widthGeometry = (widthRect(customRect3D) - thickness)/width;
+  const heightGeometry = (heightRect(customRect3D) - thickness)/height;
+  const depthGeometry = (depthRect(customRect3D) - thickness)/depth;
+  const geometry = [widthGeometry, heightGeometry, depthGeometry];
 
 
   return (
     <animated.mesh
       position={spring.position}
     >
-      <animated.boxGeometry args={geometry} />
+      <boxGeometry args={geometry} />
       <animated.meshStandardMaterial
         color={spring.color}
         emisive={"#212121"}
@@ -78,8 +78,8 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
         metalness={0.122}
         wireframe={wireframe}
         castShadow={true}
+        receiveShadow={true}
       />
-
     </animated.mesh>
   )
 }

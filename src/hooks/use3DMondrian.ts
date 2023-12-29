@@ -21,6 +21,12 @@ function randomColor() : string {
   return color;
 }
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+
 type AxisType = "X" | "Y" | "Z";
 
 function use3DMondrian() {
@@ -167,8 +173,8 @@ function use3DMondrian() {
 
     let customRects : CustomRect3D[] = [init];
 
-    for(let i =0; i < 10; i++) {
-        const randomCoord = Math.floor(Math.random() * width);
+    for(let i=0; i < 10; i++) {
+        const randomCoord = getRandomInt(xPad, width - xPad);
         const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[]);
         const selectedFunction = Math.floor(Math.random()*functions.length);
         customRects = functions[selectedFunction](customRects, randomAxis, randomCoord);

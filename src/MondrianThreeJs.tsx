@@ -4,6 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport, Stage } from '@react-three/drei';
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
+import Bloom from "./ThreeComponents/Bloom";
 
 interface MondrianThreeJsProps {
   width: number;
@@ -29,14 +30,15 @@ function MondrianThreeJs({
       ref={canvasActionsRef}
       camera={{ position: [0,0, 1.75], fov: 75, far: 5 }}
       dpr={window.devicePixelRatio}
+      shadows
       style={{width, height }}
       onDoubleClick={(event: any) => {
         // trick to override canvas background color
-        event.target.style.background="#313131";
+        event.target.style.background="#06092c";
         toggleFullscreen()
       }}
     >
-      <color attach="background" args={[0x797979]} />
+        <color attach="background" args={['#06092c']} />
       <Stage>
         <group
           position={[-0.5, -0.5 + 0.2, -0.5]}
@@ -55,7 +57,7 @@ function MondrianThreeJs({
        </group>
       </Stage>
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
-        <GizmoViewport labelColor="white" axisHeadScale={1} />
+        <GizmoViewport labelColor="black" axisHeadScale={1} />
       </GizmoHelper>
       <OrbitControls makeDefault />
     </Canvas>
