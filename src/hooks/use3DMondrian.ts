@@ -64,7 +64,7 @@ function use3DMondrian() {
 
   function subCutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
     // convert the axis make sur the cut is the right direction
-    let axisTarget = "Y";
+    let axisTarget : AxisType = "Y";
     if (axis === "X") {
       axisTarget = "Z";
     } else if(axis === "Y") {
@@ -79,7 +79,7 @@ function use3DMondrian() {
       return;
     }
 
-    const choose = sample(candidates);
+    const choose = sample(candidates)!; // candidates cannot be empty
     const others = rectsWithoutCandidate(customRects3D, choose);
     const partition = cutIn([choose], axis, coord);
 
@@ -175,9 +175,9 @@ function use3DMondrian() {
 
     for(let i=0; i < numberIteration; i++) {
       const randomCoord = getRandomInt(xPad, width - xPad);
-      const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[]);
+      const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[])!;
       const selectedFunction = Math.floor(Math.random()*functions.length);
-      customRects = functions[selectedFunction](customRects, randomAxis, randomCoord);
+      customRects = functions[selectedFunction](customRects, randomAxis, randomCoord)!;
     }
     setCustomRects3D(customRects);
 
