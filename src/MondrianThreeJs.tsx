@@ -4,8 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport, Stage } from '@react-three/drei';
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
-import Bloom from "./ThreeComponents/Bloom";
-import DotScreen from "./ThreeComponents/DotScreen";
+import Scanline from "./ThreeComponents/Scanline";
 
 interface MondrianThreeJsProps {
   width: number;
@@ -57,7 +56,7 @@ function MondrianThreeJs({
             })
            }
          </group>
-      <DotScreen />
+      <Scanline />
         </Stage>
       </Suspense>
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
