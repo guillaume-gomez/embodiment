@@ -3,6 +3,7 @@ import MondrianThreeJs from "./MondrianThreeJs";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
+import Range from "./components/Range";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
@@ -10,7 +11,7 @@ const projectName ="Embodiment";
 function App() {
   const { generate, customRects3D, width, height } = use3DMondrian();
   const [random, setRandom] = useState<number>(0.8);
-  const thickness = 25;
+  const [thickness, setThickness] = useState<number>(25);
 
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
@@ -19,16 +20,29 @@ function App() {
           githubRepositoryUrl={githubRepositoryUrl}
         />
       <div className="flex flex-col gap-3">
-        <div className="form-control">
-          <span className="label-text">Random</span>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            value={random}
-            step={0.01}
-            className="range"
-            onChange={(event) => setRandom(parseFloat(event.target.value))} />
+        <div className="card bg-primary text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">Options</h2>
+            <div className="flex flex-col gap-3">
+              <Range
+                label="Random"
+                float
+                min={0}
+                max={1}
+                value={random}
+                step={0.01}
+                onChange={(value) => setRandom(value)}
+              />
+              <Range
+                label="Thickness"
+                min={0}
+                max={100}
+                value={thickness}
+                step={1}
+                onChange={(value) => setThickness(value)}
+              />
+            </div>
+          </div>
         </div>
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
