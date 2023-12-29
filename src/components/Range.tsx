@@ -9,7 +9,7 @@ interface RangeProps {
   float?: boolean;
 }
 
-function Range({label, min, max, value, step = 1, onChange, float= false }) {
+function Range({label, min, max, value, step = 1, onChange, float= false } : RangeProps ) {
   return (
     <div className="form-control">
       <span className="label-text">
@@ -33,4 +33,4 @@ function Range({label, min, max, value, step = 1, onChange, float= false }) {
   )
 }
 
-export default Range
+export default Range;
