@@ -4,6 +4,7 @@ import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Range from "./components/Range";
+import CutInActionForm from "./components/CutInActionForm";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
@@ -21,6 +22,7 @@ function App() {
           githubRepositoryUrl={githubRepositoryUrl}
         />
       <div className="flex flex-col gap-3">
+        <CutInActionForm onChange={() => {}} maxCoord={500} />
         <div className="form-control">
           <span className="label-text">Random</span>
           <input

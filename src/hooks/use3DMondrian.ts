@@ -180,12 +180,16 @@ function use3DMondrian() {
       customRects = functions[selectedFunction](customRects, randomAxis, randomCoord)!;
     }
     setCustomRects3D(customRects);
-
   }
 
+  function cutInAction(axis: AxisType, coord: number) {
+    const newCustomRects3D = cutIn(customRects3D, axis, coord);
+    setCustomRects3D(newCustomRects3D);
+  }
 
   return {
     generate,
+    cutInAction,
     customRects3D,
     setWidth,
     setHeight,
