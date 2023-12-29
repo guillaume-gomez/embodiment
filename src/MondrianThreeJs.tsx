@@ -1,10 +1,11 @@
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport, Stage } from '@react-three/drei';
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
 import Bloom from "./ThreeComponents/Bloom";
+import DotScreen from "./ThreeComponents/DotScreen";
 
 interface MondrianThreeJsProps {
   width: number;
@@ -38,24 +39,27 @@ function MondrianThreeJs({
         toggleFullscreen()
       }}
     >
-        <color attach="background" args={['#06092c']} />
-      <Stage>
-        <group
-          position={[-0.5, -0.5 + 0.2, -0.5]}
-        >
-          {
-          customRects3D.map((customRect3D, index) => {
-            return (
-              <CustomRect3DRenderer
-                key={index}
-                customRect3D={customRect3D}
-                thickness={thickness}
-              />
-            );
-          })
-         }
-       </group>
-      </Stage>
+      <color attach="background" args={['#06092c']} />
+      <Suspense fallback={null}>
+        <Stage>
+          <group
+            position={[-0.5, -0.5 + 0.2, -0.5]}
+          >
+            {
+            customRects3D.map((customRect3D, index) => {
+              return (
+                <CustomRect3DRenderer
+                  key={index}
+                  customRect3D={customRect3D}
+                  thickness={thickness}
+                />
+              );
+            })
+           }
+         </group>
+      <DotScreen />
+        </Stage>
+      </Suspense>
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
         <GizmoViewport labelColor="black" axisHeadScale={1} />
       </GizmoHelper>
