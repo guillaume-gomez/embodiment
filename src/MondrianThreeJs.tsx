@@ -44,7 +44,7 @@ function MondrianThreeJs({
           environment={null}
         >
           <group
-            position={[-0.5, -0.5 + 0.2, -0.5]}
+            position={[-0.5, -0.5, -0.5]}
           >
             {
             customRects3D.map((customRect3D, index) => {
@@ -59,7 +59,7 @@ function MondrianThreeJs({
            }
          </group>
         </Stage>
-      <Scanline />
+        <Scanline />
       </Suspense>
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
         <GizmoViewport labelColor="black" axisHeadScale={1} />

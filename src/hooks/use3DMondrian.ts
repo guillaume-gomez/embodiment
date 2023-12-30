@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { partition, flatten, sample } from "lodash"
 
 
@@ -10,6 +10,12 @@ export interface CustomRect3D{
   z1: number;
   z2: number;
   color: string;
+}
+
+interface CustomRects3DStackItem {
+  action: string;
+  position: number;
+  customRects3D: CustomRect3D[];
 }
 
 function randomColor() : string {
@@ -35,8 +41,17 @@ function use3DMondrian() {
   const [width, setWidth] = useState<number>(500);
   const [height, setHeight] = useState<number>(500);
   const [depth, setDepth] = useState<number>(500);
+  const [random, setRandom] = useState<number>(0.8);
 
-  const [ customRects3D, setCustomRects3D ] = useState<CustomRect3D[]>([]);
+  const [ customRects3DStack, setCustomRects3DStack ] = useState<CustomRects3DStackItem[]>([]);
+
+  const customRects3D = useMemo(() => {
+    if(customRects3DStack.length === 0) {
+      return [];
+    } else {
+      return customRects3DStack[customRects3DStack.length - 1].customRects3D;
+    }
+  }, [customRects3DStack]);
 
   function selectedCustomsRects3D(customRects3D: CustomRect3D[], axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
     switch(axis) {
@@ -171,7 +186,8 @@ function use3DMondrian() {
     };
     const functions = [cutIn, subCutIn];
 
-    let customRects : CustomRect3D[] = [init];
+    let currentCustomRects : CustomRect3D[] = [init];
+    let newCustomRects3DStack : customRects3DStackItem[] = [];
 
     for(let i=0; i < numberIteration; i++) {
       const randomCoord = getRandomInt(xPad, width - xPad);
@@ -191,6 +207,7 @@ function use3DMondrian() {
     generate,
     cutInAction,
     customRects3D,
+    customRects3DStack,
     setWidth,
     setHeight,
     width,
