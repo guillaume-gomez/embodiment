@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import MondrianThreeJs from "./MondrianThreeJs";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
+import Range from "./components/Range";
+import Select from "./components/Select";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
-  const { generate, customRects3D, width, height } = use3DMondrian();
-  const [random, setRandom] = useState<number>(0.8);
-  const thickness = 25;
+  const { generate, customRects3D, customRects3DStack, width, height, random, setRandom } = use3DMondrian();
+  const [thickness, setThickness] = useState<number>(25);
+  const [customRects3DStackIndex, setCustomRects3DStackIndex] = useState<number>(-1);
+  const selectedCustomRects3D = useMemo(() => {
+      if(customRects3DStackIndex < 0) {
+        return customRects3D;
+      } else {
+        return customRects3DStack[customRects3DStackIndex].customRects3D;
+      }
+    },
+    [customRects3D, customRects3DStack, customRects3DStackIndex]
+  );
 
   return (
     <div className="flex flex-col gap-2 items-center h-screen">
@@ -19,16 +30,39 @@ function App() {
           githubRepositoryUrl={githubRepositoryUrl}
         />
       <div className="flex flex-col gap-3">
-        <div className="form-control">
-          <span className="label-text">Random</span>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            value={random}
-            step={0.01}
-            className="range"
-            onChange={(event) => setRandom(parseFloat(event.target.value))} />
+        <div className="card bg-primary text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">Options</h2>
+            <div className="flex flex-col gap-3">
+              <Range
+                label="Random"
+                float
+                min={0}
+                max={1}
+                value={random}
+                step={0.01}
+                onChange={(value) => setRandom(value)}
+              />
+              <Range
+                label="Thickness"
+                min={0}
+                max={100}
+                value={thickness}
+                step={1}
+                onChange={(value) => setThickness(value)}
+              />
+              <Select
+                label="History"
+                value={selectedCustomRects3D}
+                onChange={(value) => setCustomRects3DStackIndex(value)}
+                options={
+                  customRects3DStack.map(
+                    customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
+                  )
+                }
+              />
+            </div>
+          </div>
         </div>
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
@@ -38,7 +72,7 @@ function App() {
                 width={width}
                 height={height}
                 thickness={thickness}
-                customRects3D={customRects3D}
+                customRects3D={selectedCustomRects3D}
               />
               <button className="btn btn-accent" onClick={() => generate()}>Generate</button>
             </div>
