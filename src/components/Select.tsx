@@ -15,7 +15,11 @@ function Select({label, value, options, onChange } : SelectProps) {
   return (
     <div className="form-control">
       <span className="label-text">{label}</span>
-      <select onChange={(e) =>onChange(e.target.value) }>
+      <select
+        className="select select-secondary select-bordered w-full max-w-xs"
+        value={value}
+        onChange={(e) =>onChange(e.target.value) }
+      >
         {
           options.map(({label, value}) =>
             <option key={label} value={value}>{label}</option>

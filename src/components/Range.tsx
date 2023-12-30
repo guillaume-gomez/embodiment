@@ -16,12 +16,12 @@ function Range({label, min, max, value, step = 1, onChange, float= false } : Ran
           {label} - <span className="font-bold">({value})</span>
       </span>
       <input
+        className="range range-secondary"
         type="range"
         min={min}
         max={max}
         value={value}
         step={step}
-        className="range"
         onChange={(event) =>  {
           if(float) {
             onChange(parseFloat(event.target.value));
