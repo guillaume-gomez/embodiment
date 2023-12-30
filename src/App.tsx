@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { reverse } from "lodash";
 import MondrianThreeJs from "./MondrianThreeJs";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
@@ -59,7 +60,7 @@ function App() {
                 value={selectedCustomRects3D}
                 onChange={(value) => setCustomRects3DStackIndex(value)}
                 options={
-                  customRects3DStack.map(
+                  reverse(customRects3DStack).map(
                     customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
                   )
                 }

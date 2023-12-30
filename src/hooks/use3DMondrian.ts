@@ -193,9 +193,14 @@ function use3DMondrian() {
       const randomCoord = getRandomInt(xPad, width - xPad);
       const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[])!;
       const selectedFunction = getRandomInt(0,1);
-      customRects = functions[selectedFunction](customRects, randomAxis, randomCoord)!;
+      currentCustomRects = functions[selectedFunction](currentCustomRects, randomAxis, randomCoord)!;
+      newCustomRects3DStack.push({
+          position: i,
+          action: `rotation-${randomAxis}`,
+          customRects3D: currentCustomRects
+        });
     }
-    setCustomRects3D(customRects);
+    setCustomRects3DStack(newCustomRects3DStack);
   }
 
   function cutInAction(axis: AxisType, coord: number) {

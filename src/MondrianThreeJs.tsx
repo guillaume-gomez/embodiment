@@ -59,7 +59,7 @@ function MondrianThreeJs({
            }
          </group>
         </Stage>
-        <Scanline />
+      <Scanline />
       </Suspense>
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
         <GizmoViewport labelColor="black" axisHeadScale={1} />
