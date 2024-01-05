@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-import { useMemo } from 'react';
 import { BlendFunction } from "postprocessing";
 import { EffectComposer, DotScreen, } from "@react-three/postprocessing";
 
