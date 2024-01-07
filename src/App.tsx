@@ -20,7 +20,10 @@ function App() {
   const selectedCustomRects3D = useMemo(() => {
       if(customRects3DStackIndex < 0) {
         return customRects3D;
-      } else {
+      } else if (customRects3DStackIndex > customRects3DStack.length) {
+        return customRects3D;
+      }
+      else {
         return customRects3DStack[customRects3DStackIndex].customRects3D;
       }
     },
