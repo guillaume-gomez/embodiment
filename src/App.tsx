@@ -70,10 +70,10 @@ function App() {
               />
               <Select
                 label="History"
-                value={selectedCustomRects3D.position}
+                value={customRects3DStackIndex}
                 onChange={(value) => setCustomRects3DStackIndex(value)}
                 options={
-                  reverse(customRects3DStack).map(
+                  customRects3DStack.map(
                     customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
                   )
                 }
