@@ -215,8 +215,10 @@ function use3DMondrian() {
     customRects3DStack,
     setWidth,
     setHeight,
+    setRandom,
     width,
-    height
+    height,
+    random,
   };
 
 }

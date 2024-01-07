@@ -21,7 +21,7 @@ function Range({label, min, max, value, step = 1, onChange, float= false } : Ran
         max={max}
         value={value}
         step={step}
-        className="range"
+        className="range range-accent"
         onChange={(event) =>  {
           if(float) {
             onChange(parseFloat(event.target.value));
