@@ -14,6 +14,7 @@ const projectName ="Embodiment";
 function App() {
   const { generate, customRects3D, customRects3DStack, width, height, random, setRandom } = use3DMondrian();
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
+  const [chooseRandomMove, setChooseRandomMove] = useState<boolean>(true);
   const [thickness, setThickness] = useState<number>(25);
   const [customRects3DStackIndex, setCustomRects3DStackIndex] = useState<number>(-1);
   const selectedCustomRects3D = useMemo(() => {
@@ -37,15 +38,19 @@ function App() {
           <div className="card-body">
             <h2 className="card-title font-regular">Options</h2>
             <div className="flex flex-col gap-3">
-              <CutInActionForm onChange={() => {}} maxCoord={500} />
-              <Range
-                label="Number of Iterations"
-                value={numberOfIteration}
-                min={1}
-                max={20}
-                step={1}
-                onChange={(value) => setNumberOfIteration(value)}
-              />
+              {
+                chooseRandomMove ?
+                  <Range
+                    label="Number of Iterations"
+                    value={numberOfIteration}
+                    min={1}
+                    max={20}
+                    step={1}
+                    onChange={(value) => setNumberOfIteration(value)}
+                  />
+                  :
+                  <CutInActionForm onChange={() => {}} maxCoord={500} />
+              }
               <Range
                 label="Random"
                 float
