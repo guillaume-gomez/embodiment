@@ -58,7 +58,7 @@ function MondrianThreeJs({
             })
            }
          </group>
-      <Scanline />
+        <Scanline />
         </Stage>
       </Suspense>
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
