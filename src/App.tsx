@@ -24,12 +24,12 @@ function App() {
   );
 
   return (
-    <div className="flex flex-col gap-2 items-center h-screen">
+    <div className="flex flex-col gap-2 h-screen items-center bg-gradient-to-tl from-fuchsia-900 to-indigo-900">
         <Navbar
           projectTitle={projectName}
           githubRepositoryUrl={githubRepositoryUrl}
         />
-      <div className="flex flex-col gap-3">
+      <div className="flex md:flex-row flex-col gap-3 flex-grow">
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
             <h2 className="card-title font-regular">Options</h2>
