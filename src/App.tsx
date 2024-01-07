@@ -70,7 +70,7 @@ function App() {
               />
               <Select
                 label="History"
-                value={selectedCustomRects3D}
+                value={selectedCustomRects3D.position}
                 onChange={(value) => setCustomRects3DStackIndex(value)}
                 options={
                   reverse(customRects3DStack).map(
