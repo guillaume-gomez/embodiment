@@ -24,15 +24,15 @@ function App() {
   );
 
   return (
-    <div className="flex flex-col gap-2 items-center h-screen">
+    <div className="flex flex-col gap-2 h-screen items-center bg-gradient-to-tl from-fuchsia-900 to-indigo-900">
         <Navbar
           projectTitle={projectName}
           githubRepositoryUrl={githubRepositoryUrl}
         />
-      <div className="flex flex-col gap-3">
+      <div className="flex md:flex-row flex-col gap-3 flex-grow">
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
-            <h2 className="card-title">Options</h2>
+            <h2 className="card-title font-regular">Options</h2>
             <div className="flex flex-col gap-3">
               <Range
                 label="Random"
@@ -66,7 +66,7 @@ function App() {
         </div>
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
-            <h2 className="card-title">Render</h2>
+            <h2 className="card-title font-regular">Render</h2>
             <div className="flex flex-row">
               <MondrianThreeJs
                 width={width}
@@ -74,7 +74,7 @@ function App() {
                 thickness={thickness}
                 customRects3D={selectedCustomRects3D}
               />
-              <button className="btn btn-accent" onClick={() => generate()}>Generate</button>
+              <button className="btn btn-secondary" onClick={() => generate()}>Generate</button>
             </div>
           </div>
         </div>

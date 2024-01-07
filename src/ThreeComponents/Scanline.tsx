@@ -1,6 +1,3 @@
-import * as THREE from 'three';
-import { useMemo } from 'react';
-import { BlendFunction } from "postprocessing";
 import { EffectComposer, Scanline } from "@react-three/postprocessing";
 
 function ScanlineEffect() {
