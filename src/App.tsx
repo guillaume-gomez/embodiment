@@ -69,8 +69,7 @@ function App() {
             <h2 className="card-title font-regular">Render</h2>
             <div className="flex flex-row">
               <MondrianThreeJs
-                width={width}
-                height={height}
+                shapeSizes={[width, height, 1]}
                 thickness={thickness}
                 customRects3D={selectedCustomRects3D}
               />
