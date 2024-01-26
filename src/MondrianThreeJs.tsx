@@ -1,4 +1,4 @@
-import { useRef, Suspense } from 'react';
+import { useRef, useState, Suspense } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport, Stage } from '@react-three/drei';
@@ -7,36 +7,41 @@ import { CustomRect3D } from "./hooks/use3DMondrian";
 import Scanline from "./ThreeComponents/Scanline";
 
 interface MondrianThreeJsProps {
-  width: number;
-  height: number;
+  shapeSizes: [number, number, number];
   thickness: number;
   customRects3D: CustomRect3D[];
 }
 
 function MondrianThreeJs({
-  width,
-  height,
   thickness,
   customRects3D,
 } : MondrianThreeJsProps ): React.ReactElement {
   const canvasActionsRef = useRef<HTMLCanvasElement>(null);
+  const [width, setWidth] = useState<number>(500);
+  const [height, setHeight] = useState<number>(500);
   const {
     toggleFullscreen,
+    isFullscreenEnabled
   } = useFullscreen({ target: canvasActionsRef });
 
 
   return (
     <Canvas
       ref={canvasActionsRef}
-      camera={{ position: [0,0, 1.75], fov: 75, far: 5 }}
+      camera={{ position: [0,0, 1.75], fov: 75, far: 5, aspect: window.innerWidth / window.innerHeight }}
       dpr={window.devicePixelRatio}
       shadows
-      style={{width, height }}
       onDoubleClick={(event: any) => {
-        // trick to override canvas background color
-        event.target.style.background="#06092c";
+        if(isFullscreenEnabled) {
+          setWidth(500);
+          setHeight(500);
+        } else {
+          setWidth(window.innerWidth);
+          setHeight(window.innerHeight);
+        }
         toggleFullscreen()
       }}
+      style={{ width, height }}
     >
       <color attach="background" args={['#06092c']} />
       <Suspense fallback={null}>
@@ -58,8 +63,8 @@ function MondrianThreeJs({
             })
            }
          </group>
-        <Scanline />
         </Stage>
+        <Scanline />
       </Suspense>
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
         <GizmoViewport labelColor="black" axisHeadScale={1} />
