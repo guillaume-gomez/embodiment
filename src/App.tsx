@@ -103,10 +103,11 @@ function App() {
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
             <h2 className="card-title font-regular">Render</h2>
-            <div className="flex flex-row">
+            <div className="flex flex-col gap-3">
               <MondrianThreeJs
                 width={500}
                 height={500}
+                shapeSizes={[width, height, 1]}
                 thickness={thickness}
                 customRects3D={selectedCustomRects3D}
               />
