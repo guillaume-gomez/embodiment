@@ -1,7 +1,7 @@
 import { useRef, useState, Suspense } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, GizmoHelper, GizmoViewport, Stage } from '@react-three/drei';
+import { OrbitControls, GizmoHelper, GizmoViewport, Stage, Box } from '@react-three/drei';
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
 import Scanline from "./ThreeComponents/Scanline";
@@ -15,6 +15,7 @@ interface MondrianThreeJsProps {
 function MondrianThreeJs({
   thickness,
   customRects3D,
+  shapeSizes
 } : MondrianThreeJsProps ): React.ReactElement {
   const canvasActionsRef = useRef<HTMLCanvasElement>(null);
   const [width, setWidth] = useState<number>(500);
@@ -23,7 +24,6 @@ function MondrianThreeJs({
     toggleFullscreen,
     isFullscreenEnabled
   } = useFullscreen({ target: canvasActionsRef });
-
 
   return (
     <Canvas
@@ -48,14 +48,17 @@ function MondrianThreeJs({
         <Stage
           environment={null}
         >
+        <Box>
+        <meshPhongMaterial color="hotpink" wireframe />
           <group
-            position={[-0.5, -0.5, -0.5]}
+            position={[-0.5 , -0.5, -0.5]}
           >
             {
             customRects3D.map((customRect3D, index) => {
               return (
                 <CustomRect3DRenderer
                   key={index}
+                  shapeSizes={shapeSizes}
                   customRect3D={customRect3D}
                   thickness={thickness}
                 />
@@ -63,6 +66,7 @@ function MondrianThreeJs({
             })
            }
          </group>
+         </Box>
         </Stage>
         <Scanline />
       </Suspense>

@@ -107,7 +107,7 @@ function App() {
               <MondrianThreeJs
                 width={500}
                 height={500}
-                shapeSizes={[width, height, 1]}
+                shapeSizes={[width, height, depth]}
                 thickness={thickness}
                 customRects3D={selectedCustomRects3D}
               />
