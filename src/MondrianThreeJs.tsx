@@ -1,4 +1,4 @@
-import { useRef, useState, Suspense } from 'react';
+import { useRef, useState, Suspense, useEffect } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport, Stage } from '@react-three/drei';
@@ -24,6 +24,16 @@ function MondrianThreeJs({
     isFullscreenEnabled
   } = useFullscreen({ target: canvasActionsRef });
 
+  useEffect(() => {
+    if(!isFullscreenEnabled) {
+          setWidth(500);
+          setHeight(500);
+        } else {
+          setWidth(window.innerWidth);
+          setHeight(window.innerHeight);
+        }
+  }, [isFullscreenEnabled])
+
 
   return (
     <Canvas
@@ -31,16 +41,7 @@ function MondrianThreeJs({
       camera={{ position: [0,0, 1.75], fov: 75, far: 5, aspect: window.innerWidth / window.innerHeight }}
       dpr={window.devicePixelRatio}
       shadows
-      onDoubleClick={(event: any) => {
-        if(isFullscreenEnabled) {
-          setWidth(500);
-          setHeight(500);
-        } else {
-          setWidth(window.innerWidth);
-          setHeight(window.innerHeight);
-        }
-        toggleFullscreen()
-      }}
+      onDoubleClick={toggleFullscreen}
       style={{ width, height }}
     >
       <color attach="background" args={['#06092c']} />
