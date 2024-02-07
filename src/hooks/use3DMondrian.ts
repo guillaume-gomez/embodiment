@@ -189,7 +189,7 @@ function use3DMondrian() {
     let currentCustomRects : CustomRect3D[] = [init];
     let newCustomRects3DStack : customRects3DStackItem[] = [];
 
-    for(let i=0; i < 10; i++) {
+    for(let i=0; i < 2; i++) {
         const randomCoord = getRandomInt(xPad, width - xPad);
         const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[]);
         const selectedFunction = Math.floor(Math.random()*functions.length);
@@ -205,15 +205,19 @@ function use3DMondrian() {
     setCustomRects3DStack(newCustomRects3DStack);
   }
 
+  console.log("depth ", depth);
+
   return {
     generate,
     customRects3D,
     customRects3DStack,
     setWidth,
     setHeight,
+    setDepth,
     setRandom,
     width,
     height,
+    depth,
     random,
   };
 
