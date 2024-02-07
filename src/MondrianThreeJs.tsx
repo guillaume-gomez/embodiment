@@ -40,9 +40,7 @@ function MondrianThreeJs({
     >
       <color attach="background" args={['#06092c']} />
       <Suspense fallback={null}>
-        <Stage
-          environment={null}
-        >
+        <Stage preset="rembrandt" intensity={1} environment="studio">
           <group
             position={[-0.5, -0.5, -0.5]}
           >
