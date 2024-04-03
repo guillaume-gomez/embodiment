@@ -37,10 +37,10 @@ function App() {
               <Range
                 label="Random"
                 float
-                min={0}
+                min={0.1}
                 max={1}
                 value={random}
-                step={0.01}
+                step={0.1}
                 onChange={(value) => setRandom(value)}
               />
               <Range
