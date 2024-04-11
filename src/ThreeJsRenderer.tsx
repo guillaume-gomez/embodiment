@@ -13,6 +13,7 @@ interface MondrianThreeJsProps {
 }
 
 function ThreejsRenderer({
+  shapeSizes,
   thickness,
   customRects3D,
 } : MondrianThreeJsProps ): React.ReactElement {
@@ -41,6 +42,7 @@ function ThreejsRenderer({
                 return (
                   <CustomRect3DRenderer
                     key={index}
+                    shapeSizes={shapeSizes}
                     customRect3D={customRect3D}
                     thickness={thickness}
                   />
@@ -49,8 +51,8 @@ function ThreejsRenderer({
              }
            </group>
           </Stage>
-          <Grid args={[10, 10]} cellColor='white' />
-          {/*<Scanline />*/}
+          <Scanline />
+          <Grid args={[10, 10]} position={[0,-0.5,0]} cellColor='white' />
         </Suspense>
         <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
           <GizmoViewport labelColor="white" axisHeadScale={1} />
