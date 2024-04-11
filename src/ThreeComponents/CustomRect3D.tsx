@@ -1,4 +1,3 @@
-import { usePreviousDifferent } from "rooks";
 import { useThree } from '@react-three/fiber';
 import { config } from '@react-spring/web';
 import { useSpring, animated } from '@react-spring/three';
@@ -38,19 +37,9 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
   const { size: { width, height } } = useThree();
   const depth = width;
 
-  const previousValueColor = usePreviousDifferent(customRect3D.color);
-
-  const [xMiddle, yMiddle, zMiddle] = centerRect(customRect3D);
-  const position = [
-    (customRect3D.x1 + xMiddle)/width,
-    (customRect3D.y1 + yMiddle)/height,
-    (customRect3D.z1 + zMiddle)/depth
-  ]
-  const previousValuePosition = usePreviousDifferent(position);
-
   const spring = useSpring({
-    from: { color: previousValueColor, position: previousValuePosition },
-    to  : { color: customRect3D.color, position },
+    from: { scale: 0,  },
+    to  : { scale: 1 },
     config: {
       ...config.gentle,
       duration: 500,
@@ -59,6 +48,12 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
     reset: true,
   });
 
+  const [xMiddle, yMiddle, zMiddle] = centerRect(customRect3D);
+  const position = [
+    (customRect3D.x1 + xMiddle)/width,
+    (customRect3D.y1 + yMiddle)/height,
+    (customRect3D.z1 + zMiddle)/depth
+  ]
 
   const widthGeometry = (widthRect(customRect3D) - thickness)/width;
   const heightGeometry = (heightRect(customRect3D) - thickness)/height;
@@ -66,13 +61,15 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
   const geometry = [widthGeometry, heightGeometry, depthGeometry];
 
 
+
   return (
     <animated.mesh
-      position={spring.position}
+      position={position}
+      scale={spring.scale}
     >
-      <boxGeometry args={geometry} />
+      <boxGeometry args={geometry}  />
       <animated.meshStandardMaterial
-        color={spring.color}
+        color={customRect3D.color}
         emisive={"#212121"}
         roughness={0.478}
         metalness={0.122}
