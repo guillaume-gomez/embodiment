@@ -64,7 +64,7 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="card bg-primary text-primary-content">
+        <div className="card bg-primary text-primary-content max-w-screen-md">
           <div className="card-body">
             <h2 className="card-title font-regular">Render</h2>
             <div className="flex flex-col gap-3">
