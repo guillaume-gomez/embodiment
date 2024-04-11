@@ -24,7 +24,6 @@ export function centerRect(rect : CustomRect3D) : [number, number, number] {
     return [ widthRect(rect)/ 2, heightRect(rect) / 2, depthRect(rect) / 2 ];
 }
 
-console.log(config.slow)
 
 interface CustomRect3DProps {
   customRect3D: CustomRect3D;
@@ -41,7 +40,7 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
     from: { scale: 0,  },
     to  : { scale: 1 },
     config: {
-      ...config.gentle,
+      ...config.stiff,
       duration: 500,
       precision: 0.0001
     },
