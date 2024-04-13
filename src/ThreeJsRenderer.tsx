@@ -1,4 +1,4 @@
-import { useRef, useState, Suspense } from 'react';
+import { useRef, Suspense } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport, Stage } from '@react-three/drei';

@@ -72,13 +72,11 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
     >
       <boxGeometry args={geometry} />
       <animated.meshStandardMaterial
-        color={spring.color}
-        emisive={"#212121"}
+        color={spring.color as unknown as string}
+        emissive={"#212121"}
         roughness={0.478}
         metalness={0.122}
         wireframe={wireframe}
-        castShadow={true}
-        receiveShadow={true}
       />
     </animated.mesh>
   )

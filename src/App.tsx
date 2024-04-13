@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { reverse } from "lodash";
 import ThreeJsRenderer from "./ThreeJsRenderer";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
