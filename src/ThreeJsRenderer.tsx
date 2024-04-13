@@ -9,11 +9,13 @@ import Scanline from "./ThreeComponents/Scanline";
 interface MondrianThreeJsProps {
   shapeSizes: [number, number, number];
   thickness: number;
+  wireframe: boolean;
   customRects3D: CustomRect3D[];
 }
 
 function ThreejsRenderer({
   thickness,
+  wireframe,
   customRects3D,
 } : MondrianThreeJsProps ): React.ReactElement {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -43,6 +45,7 @@ function ThreejsRenderer({
                     key={index}
                     customRect3D={customRect3D}
                     thickness={thickness}
+                    wireframe={wireframe}
                   />
                 );
               })
