@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { reverse } from "lodash";
-import MondrianThreeJs from "./MondrianThreeJs";
+import ThreeJsRenderer from "./ThreeJsRenderer";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -57,10 +57,10 @@ function App() {
               <Range
                 label="Random"
                 float
-                min={0}
+                min={0.1}
                 max={1}
                 value={random}
-                step={0.01}
+                step={0.1}
                 onChange={(value) => setRandom(value)}
               />
               <Range
@@ -87,10 +87,9 @@ function App() {
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
             <h2 className="card-title font-regular">Render</h2>
-            <div className="flex flex-row">
-              <MondrianThreeJs
-                width={width}
-                height={height}
+            <div className="flex flex-col gap-3">
+              <ThreeJsRenderer
+                shapeSizes={[width, height, 1]}
                 thickness={thickness}
                 customRects3D={selectedCustomRects3D}
               />

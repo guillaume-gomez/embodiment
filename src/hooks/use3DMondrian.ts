@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { partition, flatten, sample } from "lodash"
+import { useState, useMemo, useEffect } from 'react';
+import { partition, flatten, sample, shuffle, sampleSize } from "lodash";
 
 
 export interface CustomRect3D{
@@ -41,9 +41,11 @@ function use3DMondrian() {
   const [width, setWidth] = useState<number>(500);
   const [height, setHeight] = useState<number>(500);
   const [depth, setDepth] = useState<number>(500);
-  const [random, setRandom] = useState<number>(0.8);
+  const [random, setRandom] = useState<number>(1.0);
 
-  const [ customRects3DStack, setCustomRects3DStack ] = useState<CustomRects3DStackItem[]>([]);
+  const [customRects3DStack, setCustomRects3DStack] = useState<CustomRects3DStackItem[]>([]);
+  // use for randomness
+  const [initialCustomRects3DStack, setInitialCustomRects3DStack] = useState<CustomRects3DStackItem[]>([]);
 
   const customRects3D = useMemo(() => {
     if(customRects3DStack.length === 0) {
@@ -52,6 +54,16 @@ function use3DMondrian() {
       return customRects3DStack[customRects3DStack.length - 1].customRects3D;
     }
   }, [customRects3DStack]);
+
+  useEffect(() => {
+    const randomCustomRects3DStack = initialCustomRects3DStack.map(customRects3DItem =>
+      ({
+        ...customRects3DItem,
+        customRects3D: sampleSize(shuffle(customRects3DItem.customRects3D), Math.ceil(customRects3DItem.customRects3D.length * random))
+      })
+    )
+    setCustomRects3DStack(randomCustomRects3DStack);
+  }, [random]);
 
   function selectedCustomsRects3D(customRects3D: CustomRect3D[], axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
     switch(axis) {
@@ -200,7 +212,11 @@ function use3DMondrian() {
           customRects3D: currentCustomRects
         });
     }
+
     setCustomRects3DStack(newCustomRects3DStack);
+    // save for randomness
+    setInitialCustomRects3DStack(newCustomRects3DStack);
+    setRandom(1.0);
   }
 
   function cutInAction(axis: AxisType, coord: number) {
