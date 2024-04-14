@@ -25,18 +25,16 @@ export function centerRect(rect : CustomRect3D) : [number, number, number] {
     return [ widthRect(rect)/ 2, heightRect(rect) / 2, depthRect(rect) / 2 ];
 }
 
-console.log(config.slow)
-
 interface CustomRect3DProps {
   customRect3D: CustomRect3D;
   thickness: number;
   wireframe?: boolean;
+  shapeSizes: [number, number, number];
 }
 
 // hooks contains a lots of variables between the hooks
-function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect3DProps) {
-  const { size: { width, height } } = useThree();
-  const depth = width;
+function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }: CustomRect3DProps) {
+  const [width, height, depth] = shapeSizes;
 
   const previousValueColor = usePreviousDifferent(customRect3D.color);
 

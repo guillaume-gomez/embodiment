@@ -83,12 +83,12 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="card bg-primary text-primary-content">
+        <div className="card bg-primary text-primary-content max-w-screen-md">
           <div className="card-body">
             <h2 className="card-title font-regular">Render</h2>
             <div className="flex flex-col gap-3">
               <ThreeJsRenderer
-                shapeSizes={[width, height, 1]}
+                shapeSizes={[width, height, width]}
                 thickness={thickness}
                 customRects3D={selectedCustomRects3D}
               />
