@@ -10,21 +10,30 @@ interface MondrianThreeJsProps {
   shapeSizes: [number, number, number];
   thickness: number;
   customRects3D: CustomRect3D[];
+  handleGenerate: () => void;
 }
+
 
 function ThreejsRenderer({
   shapeSizes,
   thickness,
   customRects3D,
+  handleGenerate
 } : MondrianThreeJsProps ): React.ReactElement {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const {
     toggleFullscreen,
+    isFullscreenEnabled
   } = useFullscreen({ target: canvasContainerRef });
 
 
   return (
     <div ref={canvasContainerRef} className="w-full h-full">
+      <div className={`self-start relative ${isFullscreenEnabled ? "" : "hidden"}`}>
+        <button onClick={handleGenerate} className="btn btn-outline absolute z-10 top-6 left-1">
+          Generate
+        </button>
+      </div>
       <Canvas
         camera={{ position: [0,0, 1.75], fov: 75, far: 5 }}
         dpr={window.devicePixelRatio}
