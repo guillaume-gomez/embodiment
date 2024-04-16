@@ -6,12 +6,14 @@ import Footer from "./components/Footer";
 import Range from "./components/Range";
 import CutInActionForm from "./components/CutInActionForm";
 import Select from "./components/Select";
+import Toggle from "./components/Toggle";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
   const { generate, customRects3D, customRects3DStack, width, height, random, setRandom } = use3DMondrian();
+  const [wireframe, setWireframe] = useState<boolean>(false);
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
   const [chooseRandomMove, setChooseRandomMove] = useState<boolean>(true);
   const [thickness, setThickness] = useState<number>(25);
@@ -70,6 +72,11 @@ function App() {
                 step={1}
                 onChange={(value) => setThickness(value)}
               />
+              <Toggle
+                label="Wireframe"
+                value={wireframe}
+                toggle={() => setWireframe(!wireframe)}
+              />
               <Select
                 label="History"
                 value={customRects3DStackIndex}
@@ -90,6 +97,7 @@ function App() {
               <ThreeJsRenderer
                 shapeSizes={[width, height, width]}
                 thickness={thickness}
+                wireframe={wireframe}
                 customRects3D={selectedCustomRects3D}
                 handleGenerate={() => generate(numberOfIteration)}
               />
