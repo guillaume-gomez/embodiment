@@ -5,7 +5,7 @@ import { OrbitControls, GizmoHelper, GizmoViewport, Stage, Grid, Bounds, useBoun
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
 import Scanline from "./ThreeComponents/Scanline";
-import ShapeBounds from "./ThreeComponents/ShapeBounds";
+import ShapeBounds, { ExternalActionInterface } from "./ThreeComponents/ShapeBounds";
 
 interface MondrianThreeJsProps {
   shapeSizes: [number, number, number];
@@ -13,18 +13,6 @@ interface MondrianThreeJsProps {
   customRects3D: CustomRect3D[];
   handleGenerate: () => void;
 }
-
-function SelectToZoom({ children }) {
-  const api = useBounds()
-  return (
-    <group
-      onClick={(e) => api.refresh().fit()}
-     >
-      {children}
-    </group>
-  )
-}
-
 
 function ThreejsRenderer({
   shapeSizes,
@@ -37,13 +25,16 @@ function ThreejsRenderer({
     toggleFullscreen,
     isFullscreenEnabled
   } = useFullscreen({ target: canvasContainerRef });
-  const api = useBounds();
+  const groupRef = useRef<ExternalActionInterface| null>(null);
 
 
   return (
     <div ref={canvasContainerRef} className="w-full h-full">
       <div className={`self-start relative ${isFullscreenEnabled ? "" : "hidden"}`}>
-        <button onClick={handleGenerate} className="btn btn-outline absolute z-10 top-6 left-1">
+        <button onClick={() => {
+          groupRef.current.recenter();
+          handleGenerate();
+        }} className="btn btn-outline absolute z-10 top-6 left-1">
           Generate
         </button>
       </div>
@@ -52,15 +43,15 @@ function ThreejsRenderer({
         dpr={window.devicePixelRatio}
         shadows
         onDoubleClick={() => {
-          api.refresh().fit();
           toggleFullscreen();
+          groupRef.current.recenter();
         }}
       >
         <color attach="background" args={['#06092c']} />
         <Suspense fallback={null}>
           <Stage preset="rembrandt" intensity={1} environment="studio">
             <Bounds fit clip observe margin={2}>
-              <ShapeBounds>
+              <ShapeBounds ref={groupRef}>
               <group
                 position={[-0.5, -0.5, -0.5]}
               >

@@ -1,5 +1,4 @@
 import { usePreviousDifferent } from "rooks";
-import { useThree } from '@react-three/fiber';
 import { config } from '@react-spring/web';
 import { useSpring, animated } from '@react-spring/three';
 import { CustomRect3D } from "../hooks/use3DMondrian";
