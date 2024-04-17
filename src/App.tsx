@@ -91,6 +91,7 @@ function App() {
                 shapeSizes={[width, height, width]}
                 thickness={thickness}
                 customRects3D={selectedCustomRects3D}
+                handleGenerate={() => generate(numberOfIteration)}
               />
               <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
             </div>
