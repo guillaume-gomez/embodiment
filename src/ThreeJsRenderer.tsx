@@ -1,4 +1,4 @@
-import { useRef, Suspense } from 'react';
+import { useRef, Suspense, useEffect } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, GizmoHelper, GizmoViewport, Stage, Grid, Bounds, useBounds } from '@react-three/drei';
@@ -27,14 +27,18 @@ function ThreejsRenderer({
   } = useFullscreen({ target: canvasContainerRef });
   const groupRef = useRef<ExternalActionInterface| null>(null);
 
+  useEffect(() => {
+    if(!groupRef.current) {
+      return;
+    }
+    groupRef.current.recenter();
+  }, [customRects3D]);
+
 
   return (
     <div ref={canvasContainerRef} className="w-full h-full">
       <div className={`self-start relative ${isFullscreenEnabled ? "" : "hidden"}`}>
-        <button onClick={() => {
-          groupRef.current.recenter();
-          handleGenerate();
-        }} className="btn btn-outline absolute z-10 top-6 left-1">
+        <button onClick={handleGenerate} className="btn btn-outline absolute z-10 top-6 left-1">
           Generate
         </button>
       </div>
