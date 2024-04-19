@@ -38,7 +38,7 @@ function App() {
       <div className="flex md:flex-row flex-col gap-3 flex-grow">
         <div className="card bg-primary text-primary-content">
           <div className="card-body">
-            <h2 className="card-title font-regular">Options</h2>
+            <h2 className="card-title font-regular text-3xl">Options</h2>
             <div className="flex flex-col gap-3">
               {
                 chooseRandomMove ?
@@ -80,12 +80,13 @@ function App() {
                   )
                 }
               />
+              <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
             </div>
           </div>
         </div>
         <div className="card bg-primary text-primary-content max-w-screen-md">
           <div className="card-body">
-            <h2 className="card-title font-regular">Render</h2>
+            <h2 className="card-title font-regular text-3xl">Render</h2>
             <div className="flex flex-col gap-3">
               <ThreeJsRenderer
                 shapeSizes={[width, height, width]}
