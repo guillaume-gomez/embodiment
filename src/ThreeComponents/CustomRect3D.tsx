@@ -1,5 +1,4 @@
 import { usePreviousDifferent } from "rooks";
-import { useThree } from '@react-three/fiber';
 import { config } from '@react-spring/web';
 import { useSpring, animated } from '@react-spring/three';
 import { CustomRect3D } from "../hooks/use3DMondrian";
@@ -33,9 +32,8 @@ interface CustomRect3DProps {
 }
 
 // hooks contains a lots of variables between the hooks
-function CustomRect3D({ customRect3D, shapeSizes, thickness, wireframe = false }: CustomRect3DProps) {
-  const { size: { width, height } } = useThree();
-  const depth = width;
+function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }: CustomRect3DProps) {
+  const [width, height, depth] = shapeSizes;
 
   const previousValueColor = usePreviousDifferent(customRect3D.color);
 
@@ -71,13 +69,11 @@ function CustomRect3D({ customRect3D, shapeSizes, thickness, wireframe = false }
     >
       <boxGeometry args={geometry} />
       <animated.meshStandardMaterial
-        color={spring.color}
-        emisive={"#212121"}
+        color={spring.color as unknown as string}
+        emissive={"#212121"}
         roughness={0.478}
         metalness={0.122}
         wireframe={wireframe}
-        castShadow={true}
-        receiveShadow={true}
       />
     </animated.mesh>
   )

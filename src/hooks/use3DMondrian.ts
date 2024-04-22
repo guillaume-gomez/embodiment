@@ -1,5 +1,9 @@
-import { useState, useMemo } from 'react';
-import { partition, flatten, sample } from "lodash"
+import { useState, useMemo, useEffect } from 'react';
+import partition from "lodash/partition";
+import flatten from "lodash/flatten";
+import sample from "lodash/sample";
+import shuffle from "lodash/shuffle";
+import sampleSize from "lodash/sampleSize";
 
 
 export interface CustomRect3D{
@@ -41,9 +45,11 @@ function use3DMondrian() {
   const [width, setWidth] = useState<number>(500);
   const [height, setHeight] = useState<number>(500);
   const [depth, setDepth] = useState<number>(500);
-  const [random, setRandom] = useState<number>(0.8);
+  const [random, setRandom] = useState<number>(1.0);
 
-  const [ customRects3DStack, setCustomRects3DStack ] = useState<CustomRects3DStackItem[]>([]);
+  const [customRects3DStack, setCustomRects3DStack] = useState<CustomRects3DStackItem[]>([]);
+  // use for randomness
+  const [initialCustomRects3DStack, setInitialCustomRects3DStack] = useState<CustomRects3DStackItem[]>([]);
 
   const customRects3D = useMemo(() => {
     if(customRects3DStack.length === 0) {
@@ -52,6 +58,16 @@ function use3DMondrian() {
       return customRects3DStack[customRects3DStack.length - 1].customRects3D;
     }
   }, [customRects3DStack]);
+
+  useEffect(() => {
+    const randomCustomRects3DStack = initialCustomRects3DStack.map(customRects3DItem =>
+      ({
+        ...customRects3DItem,
+        customRects3D: sampleSize(shuffle(customRects3DItem.customRects3D), Math.ceil(customRects3DItem.customRects3D.length * random))
+      })
+    )
+    setCustomRects3DStack(randomCustomRects3DStack);
+  }, [random]);
 
   function selectedCustomsRects3D(customRects3D: CustomRect3D[], axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
     switch(axis) {
@@ -65,7 +81,7 @@ function use3DMondrian() {
     }
   }
 
-  function cutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
+  function cutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) : CustomRect3D[] {
     switch(axis) {
       case "X":
       default:
@@ -77,9 +93,9 @@ function use3DMondrian() {
     }
   }
 
-  function subCutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
+  function subCutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) : CustomRect3D[] {
     // convert the axis make sur the cut is the right direction
-    let axisTarget = "Y";
+    let axisTarget : AxisType = "Y";
     if (axis === "X") {
       axisTarget = "Z";
     } else if(axis === "Y") {
@@ -91,17 +107,17 @@ function use3DMondrian() {
     const [candidates, _others] = selectedCustomsRects3D(customRects3D, axisTarget, coord);
     if(candidates.length === 0) {
       console.info("does not work");
-      return;
+      return customRects3D;
     }
 
-    const choose = sample(candidates);
+    const choose = sample(candidates)!; // candidates cannot be empty
     const others = rectsWithoutCandidate(customRects3D, choose);
     const partition = cutIn([choose], axis, coord);
 
     return [...partition, ...others];
   }
 
-  function cutInXY(customRects3D: CustomRect3D[], coord: number) {
+  function cutInXY(customRects3D: CustomRect3D[], coord: number) : CustomRect3D[] {
     const [candidates, others] = selectedCustomsRects3D(customRects3D, "Z", coord);
 
     const result = candidates.map(customRect3D => {
@@ -122,7 +138,7 @@ function use3DMondrian() {
     return [...flatten(result), ...others];
   }
 
-  function cutInYZ(customRects3D: CustomRect3D[], coord: number) {
+  function cutInYZ(customRects3D: CustomRect3D[], coord: number) : CustomRect3D[] {
     const [candidates, others] = selectedCustomsRects3D(customRects3D, "X", coord);
 
     const result = candidates.map(customRect3D => {
@@ -144,7 +160,7 @@ function use3DMondrian() {
   }
 
 
-  function cutInXZ(customRects3D: CustomRect3D[], coord: number) {
+  function cutInXZ(customRects3D: CustomRect3D[], coord: number) : CustomRect3D[] {
     const [candidates, others] =  selectedCustomsRects3D(customRects3D, "Y", coord);
 
     const result = candidates.map(customRect3D => {
@@ -177,31 +193,44 @@ function use3DMondrian() {
     );
   }
 
-  function generate() {
+  function generate(numberIteration: number) : void {
     const init : CustomRect3D = {
       x1: 0, x2: width,
       y1: 0, y2: height,
       z1: 0, z2: depth,
-      color: "red"
+      color: "black"
     };
     const functions = [cutIn, subCutIn];
 
     let currentCustomRects : CustomRect3D[] = [init];
-    let newCustomRects3DStack : customRects3DStackItem[] = [];
+    let newCustomRects3DStack : CustomRects3DStackItem[] = [];
 
-    for(let i=0; i < 2; i++) {
-        const randomCoord = getRandomInt(xPad, width - xPad);
-        const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[]);
-        const selectedFunction = Math.floor(Math.random()*functions.length);
-        currentCustomRects = functions[selectedFunction](currentCustomRects, randomAxis, randomCoord);
-
-        newCustomRects3DStack.push({
+    for(let i=0; i < numberIteration; i++) {
+      const randomCoord = getRandomInt(xPad, width - xPad);
+      const randomAxis : AxisType = sample(["X", "Y", "Z"] as AxisType[])!;
+      const selectedFunction = getRandomInt(0,1);
+      currentCustomRects = functions[selectedFunction](currentCustomRects, randomAxis, randomCoord)!;
+      newCustomRects3DStack.push({
           position: i,
           action: `rotation-${randomAxis}`,
           customRects3D: currentCustomRects
         });
-      }
+    }
 
+    setCustomRects3DStack(newCustomRects3DStack);
+    // save for randomness
+    setInitialCustomRects3DStack(newCustomRects3DStack);
+    setRandom(1.0);
+  }
+
+  function cutInAction(axis: AxisType, coord: number): void {
+    const newCustomRects3D = cutIn(customRects3D, axis, coord);
+
+    const newCustomRects3DStack = [...customRects3DStack, {
+      position: customRects3DStack.length,
+      action: `rotation-${axis}`,
+      customRects3D: newCustomRects3D
+    }];
     setCustomRects3DStack(newCustomRects3DStack);
   }
 
@@ -209,6 +238,7 @@ function use3DMondrian() {
 
   return {
     generate,
+    cutInAction,
     customRects3D,
     customRects3DStack,
     setWidth,

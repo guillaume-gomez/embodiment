@@ -4,7 +4,16 @@ import { Effects as EffectsComposer } from '@react-three/drei';
 import { extend, useThree } from '@react-three/fiber';
 import { UnrealBloomPass } from 'three-stdlib';
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      unrealBloomPass: any // ???
+    }
+  }
+}
+
 extend({ UnrealBloomPass });
+
 
 function Bloom() {
   const { size, scene, camera } = useThree();
@@ -19,8 +28,8 @@ function Bloom() {
       disableGamma
       disableRenderPass
     >
-      <renderPass attachArray="passes" scene={scene} camera={camera} />
-      <unrealBloomPass attachArray="passes" args={[aspect, 0.4, 1, 0]} />
+      <renderPass scene={scene} camera={camera} />
+      <unrealBloomPass args={[aspect, 0.4, 1, 0]} />
     </EffectsComposer>
   );
 }

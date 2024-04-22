@@ -9,6 +9,7 @@ function Footer({ githubRepositoryUrl }: FooterProps) {
     <footer className="footer items-center p-4">
       <div className="items-center grid-flow-col">
         <p>Made by Guillaume Gomez - 2023</p>
+        <GithubButton githubRepositoryUrl={githubRepositoryUrl} />
       </div> 
     </footer>
   )
