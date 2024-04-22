@@ -28,11 +28,15 @@ function ThreejsRenderer({
   const groupRef = useRef<ExternalActionInterface| null>(null);
 
   useEffect(() => {
+    recenter()
+  }, [customRects3D]);
+
+  function recenter() {
     if(!groupRef.current) {
       return;
     }
     groupRef.current.recenter();
-  }, [customRects3D]);
+  }
 
 
   return (
@@ -48,7 +52,7 @@ function ThreejsRenderer({
         shadows
         onDoubleClick={() => {
           toggleFullscreen();
-          groupRef.current.recenter();
+          recenter();
         }}
       >
         <color attach="background" args={['#06092c']} />
