@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import Range from "./components/Range";
 import CutInActionForm from "./components/CutInActionForm";
 import Select from "./components/Select";
+import CollapsibleCard from "./components/CollapsibleCard";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
@@ -48,78 +49,75 @@ function App() {
         githubRepositoryUrl={githubRepositoryUrl}
       />
       <div className="flex md:flex-row flex-col gap-3 flex-grow">
-        <div className="card bg-primary text-primary-content">
-          <div className="card-body">
-            <h2 className="card-title font-regular text-3xl">Options</h2>
-            <div className="flex flex-col gap-3">
-              {
-                chooseRandomMove ?
-                  <Range
-                    label="Number of Iterations"
-                    value={numberOfIteration}
-                    min={1}
-                    max={20}
-                    step={1}
-                    onChange={(value) => setNumberOfIteration(value)}
-                  />
-                  :
-                  <CutInActionForm onChange={() => {}} maxCoord={500} />
+        <CollapsibleCard label={"Options"}>
+          <div className="flex flex-col gap-3">
+            {
+              chooseRandomMove ?
+                <Range
+                  label="Number of Iterations"
+                  value={numberOfIteration}
+                  min={1}
+                  max={20}
+                  step={1}
+                  onChange={(value) => setNumberOfIteration(value)}
+                />
+                :
+                <CutInActionForm onChange={() => {}} maxCoord={500} />
+            }
+            <Range
+              label="Random"
+              float
+              min={0.1}
+              max={1}
+              value={random}
+              step={0.1}
+              onChange={(value) => setRandom(value)}
+            />
+            <Range
+              label="Thickness"
+              min={0}
+              max={100}
+              value={thickness}
+              step={1}
+              onChange={(value) => setThickness(value)}
+            />
+            <Range
+              label="Width"
+              min={100}
+              max={1000}
+              value={width}
+              step={10}
+              onChange={(value) => setWidth(value)}
+            />
+            <Range
+              label="Height"
+              min={100}
+              max={1000}
+              value={height}
+              step={10}
+              onChange={(value) => setHeight(value)}
+            />
+            <Range
+              label="Depth"
+              min={100}
+              max={1000}
+              value={depth}
+              step={10}
+              onChange={(value) => setDepth(value)}
+            />
+            <Select
+              label="History"
+              value={customRects3DStackIndex}
+              onChange={(value) => setCustomRects3DStackIndex(value)}
+              options={
+                customRects3DStack.map(
+                  customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
+                )
               }
-              <Range
-                label="Random"
-                float
-                min={0.1}
-                max={1}
-                value={random}
-                step={0.1}
-                onChange={(value) => setRandom(value)}
-              />
-              <Range
-                label="Thickness"
-                min={0}
-                max={100}
-                value={thickness}
-                step={1}
-                onChange={(value) => setThickness(value)}
-              />
-              <Range
-                label="Width"
-                min={100}
-                max={1000}
-                value={width}
-                step={10}
-                onChange={(value) => setWidth(value)}
-              />
-              <Range
-                label="Height"
-                min={100}
-                max={1000}
-                value={height}
-                step={10}
-                onChange={(value) => setHeight(value)}
-              />
-              <Range
-                label="Depth"
-                min={100}
-                max={1000}
-                value={depth}
-                step={10}
-                onChange={(value) => setDepth(value)}
-              />
-              <Select
-                label="History"
-                value={customRects3DStackIndex}
-                onChange={(value) => setCustomRects3DStackIndex(value)}
-                options={
-                  customRects3DStack.map(
-                    customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
-                  )
-                }
-              />
-              <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
-            </div>
+            />
+            <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
           </div>
-        </div>
+        </CollapsibleCard>
         <div className="card bg-primary text-primary-content max-w-screen-md">
           <div className="card-body">
             <h2 className="card-title font-regular text-3xl">Render</h2>
