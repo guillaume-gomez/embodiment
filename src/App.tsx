@@ -11,7 +11,19 @@ const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
-  const { generate, customRects3D, customRects3DStack, width, height, random, setRandom } = use3DMondrian();
+  const {
+    generate,
+    customRects3D,
+    customRects3DStack,
+    width,
+    height,
+    depth,
+    random,
+    setWidth,
+    setHeight,
+    setDepth,
+    setRandom
+  } = use3DMondrian();
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
   const [chooseRandomMove, setChooseRandomMove] = useState<boolean>(true);
   const [thickness, setThickness] = useState<number>(25);
@@ -69,6 +81,30 @@ function App() {
                 value={thickness}
                 step={1}
                 onChange={(value) => setThickness(value)}
+              />
+              <Range
+                label="Width"
+                min={100}
+                max={1000}
+                value={width}
+                step={10}
+                onChange={(value) => setWidth(value)}
+              />
+              <Range
+                label="Height"
+                min={100}
+                max={1000}
+                value={height}
+                step={10}
+                onChange={(value) => setHeight(value)}
+              />
+              <Range
+                label="Depth"
+                min={100}
+                max={1000}
+                value={depth}
+                step={10}
+                onChange={(value) => setDepth(value)}
               />
               <Select
                 label="History"
