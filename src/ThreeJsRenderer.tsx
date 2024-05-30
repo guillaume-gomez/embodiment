@@ -6,6 +6,8 @@ import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
 import Scanline from "./ThreeComponents/Scanline";
 import ShapeBounds, { ExternalActionInterface } from "./ThreeComponents/ShapeBounds";
+import { useDoubleTap } from 'use-double-tap';
+
 
 interface MondrianThreeJsProps {
   shapeSizes: [number, number, number];
@@ -25,6 +27,10 @@ function ThreejsRenderer({
     toggleFullscreen,
     isFullscreenEnabled
   } = useFullscreen({ target: canvasContainerRef });
+  const doubleTapEvent = useDoubleTap(() => {
+      toggleFullscreen();
+      recenter();
+  });
   const groupRef = useRef<ExternalActionInterface| null>(null);
 
   useEffect(() => {
@@ -40,7 +46,11 @@ function ThreejsRenderer({
 
 
   return (
-    <div ref={canvasContainerRef} className="w-full h-full">
+    <div
+      ref={canvasContainerRef}
+      className="w-full h-full"
+      {...doubleTapEvent}
+    >
       <div className={`self-start relative ${isFullscreenEnabled ? "" : "hidden"}`}>
         <button onClick={handleGenerate} className="btn btn-outline absolute z-10 top-6 left-1">
           Generate
@@ -50,10 +60,6 @@ function ThreejsRenderer({
         camera={{ position: [0,0, 1.75], fov: 75, far: 5 }}
         dpr={window.devicePixelRatio}
         shadows
-        onDoubleClick={() => {
-          toggleFullscreen();
-          recenter();
-        }}
       >
         <color attach="background" args={['#06092c']} />
         <Suspense fallback={null}>
