@@ -57,9 +57,9 @@ function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }
   });
 
 
-  const widthGeometry = (widthRect(customRect3D) - thickness)/width;
-  const heightGeometry = (heightRect(customRect3D) - thickness)/height;
-  const depthGeometry = (depthRect(customRect3D) - thickness)/depth;
+  const widthGeometry = (widthRect(customRect3D) - thickness)/shapeSizes[0];
+  const heightGeometry = (heightRect(customRect3D) - thickness)/shapeSizes[1];
+  const depthGeometry = (depthRect(customRect3D) - thickness)/shapeSizes[2];
   const geometry = [widthGeometry, heightGeometry, depthGeometry];
 
 

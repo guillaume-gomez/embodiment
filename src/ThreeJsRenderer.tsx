@@ -1,7 +1,7 @@
 import { useRef, Suspense, useEffect } from 'react';
 import { useFullscreen } from "rooks";
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, GizmoHelper, GizmoViewport, Stage, Grid, Bounds, useBounds } from '@react-three/drei';
+import { OrbitControls, GizmoHelper, GizmoViewport, Stage, Grid, Bounds } from '@react-three/drei';
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
 import Scanline from "./ThreeComponents/Scanline";
@@ -28,11 +28,15 @@ function ThreejsRenderer({
   const groupRef = useRef<ExternalActionInterface| null>(null);
 
   useEffect(() => {
+    recenter()
+  }, [customRects3D]);
+
+  function recenter() {
     if(!groupRef.current) {
       return;
     }
     groupRef.current.recenter();
-  }, [customRects3D]);
+  }
 
 
   return (
@@ -48,7 +52,7 @@ function ThreejsRenderer({
         shadows
         onDoubleClick={() => {
           toggleFullscreen();
-          groupRef.current.recenter();
+          recenter();
         }}
       >
         <color attach="background" args={['#06092c']} />
