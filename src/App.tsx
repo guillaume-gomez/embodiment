@@ -36,7 +36,7 @@ function App() {
         githubRepositoryUrl={githubRepositoryUrl}
       />
       <div className="flex md:flex-row flex-col gap-3 flex-grow">
-        <div className="card bg-primary text-primary-content">
+        <div className="card bg-primary text-primary-content w-full md:w-3/12">
           <div className="card-body">
             <h2 className="card-title font-regular text-3xl">Options</h2>
             <div className="flex flex-col gap-3">
@@ -84,10 +84,10 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="card bg-primary text-primary-content max-w-screen-md">
+        <div className="card bg-primary text-primary-content w-full md:w-9/12">
           <div className="card-body">
             <h2 className="card-title font-regular text-3xl">Render</h2>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 h-full">
               <ThreeJsRenderer
                 shapeSizes={[width, height, width]}
                 thickness={thickness}
