@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import Range from "./components/Range";
 import CutInActionForm from "./components/CutInActionForm";
 import Select from "./components/Select";
+import CollapseCard from "./components/CollapseCard";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
@@ -65,47 +66,6 @@ function App() {
                   :
                   <CutInActionForm onChange={() => {}} maxCoord={500} />
               }
-              <Range
-                label="Random"
-                float
-                min={0.1}
-                max={1}
-                value={random}
-                step={0.1}
-                onChange={(value) => setRandom(value)}
-              />
-              <Range
-                label="Thickness"
-                min={0}
-                max={100}
-                value={thickness}
-                step={1}
-                onChange={(value) => setThickness(value)}
-              />
-              <Range
-                label="Width"
-                min={100}
-                max={1000}
-                value={width}
-                step={10}
-                onChange={(value) => setWidth(value)}
-              />
-              <Range
-                label="Height"
-                min={100}
-                max={1000}
-                value={height}
-                step={10}
-                onChange={(value) => setHeight(value)}
-              />
-              <Range
-                label="Depth"
-                min={100}
-                max={1000}
-                value={depth}
-                step={10}
-                onChange={(value) => setDepth(value)}
-              />
               <Select
                 label="History"
                 value={customRects3DStackIndex}
@@ -116,6 +76,49 @@ function App() {
                   )
                 }
               />
+              <CollapseCard>
+                <Range
+                  label="Random"
+                  float
+                  min={0.1}
+                  max={1}
+                  value={random}
+                  step={0.1}
+                  onChange={(value) => setRandom(value)}
+                />
+                <Range
+                  label="Thickness"
+                  min={0}
+                  max={100}
+                  value={thickness}
+                  step={1}
+                  onChange={(value) => setThickness(value)}
+                />
+                <Range
+                  label="Width"
+                  min={100}
+                  max={1000}
+                  value={width}
+                  step={10}
+                  onChange={(value) => setWidth(value)}
+                />
+                <Range
+                  label="Height"
+                  min={100}
+                  max={1000}
+                  value={height}
+                  step={10}
+                  onChange={(value) => setHeight(value)}
+                />
+                <Range
+                  label="Depth"
+                  min={100}
+                  max={1000}
+                  value={depth}
+                  step={10}
+                  onChange={(value) => setDepth(value)}
+                />
+              </CollapseCard>
               <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
             </div>
           </div>
