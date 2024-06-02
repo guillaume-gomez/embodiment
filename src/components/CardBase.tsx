@@ -7,7 +7,7 @@ interface CardBaseProps {
   titleClass?: string
 }
 
-function CardBase({ title, children, bgColor = "bg-base-200", titleClass="card-title" } : CardBaseProps) {
+function CardBase({ title, children, bgColor = "bg-base-300", titleClass="card-title font-regular text-3xl" } : CardBaseProps) {
   return (
     <div className={`card ${bgColor} shadow-xl h-full`}>
       <div className="card-body p-4">
