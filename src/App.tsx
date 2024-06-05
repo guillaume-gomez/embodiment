@@ -50,34 +50,10 @@ function App() {
         githubRepositoryUrl={githubRepositoryUrl}
       />
       <div className="flex md:flex-row flex-col gap-3 flex-grow">
-        <div className="card bg-primary text-primary-content w-full md:w-3/12">
+        <div className="md:w-3/12">
           <CardBase title="Options">
             <div className="flex flex-col gap-3">
-            {
-              chooseRandomMove ?
-                <Range
-                  label="Number of Iterations"
-                  value={numberOfIteration}
-                  min={1}
-                  max={20}
-                  step={1}
-                  onChange={(value) => setNumberOfIteration(value)}
-                />
-                :
-                <CutInActionForm onChange={() => {}} maxCoord={500} />
-            }
-            <Select
-              label="History"
-              value={customRects3DStackIndex}
-              onChange={(value) => setCustomRects3DStackIndex(value)}
-              options={
-                customRects3DStack.map(
-                  customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
-                )
-              }
-            />
-            <CollapseCard>
-              <Range
+            <Range
                 label="Random"
                 float
                 min={0.1}
@@ -85,6 +61,30 @@ function App() {
                 value={random}
                 step={0.1}
                 onChange={(value) => setRandom(value)}
+              />
+            <CollapseCard>
+              {
+                chooseRandomMove ?
+                  <Range
+                    label="Number of Iterations"
+                    value={numberOfIteration}
+                    min={1}
+                    max={20}
+                    step={1}
+                    onChange={(value) => setNumberOfIteration(value)}
+                  />
+                  :
+                  <CutInActionForm onChange={() => {}} maxCoord={500} />
+              }
+              <Select
+                label="History"
+                value={customRects3DStackIndex}
+                onChange={(value) => setCustomRects3DStackIndex(value)}
+                options={
+                  customRects3DStack.map(
+                    customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
+                  )
+                }
               />
               <Range
                 label="Thickness"
@@ -123,7 +123,7 @@ function App() {
             </div>
           </CardBase>
         </div>
-        <div className="card bg-primary text-primary-content w-full md:w-9/12">
+        <div className="md:w-9/12 h-full">
           <CardBase title="Render">
               <ThreeJsRenderer
                 shapeSizes={[width, height, width]}

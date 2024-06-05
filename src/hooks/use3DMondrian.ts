@@ -60,6 +60,10 @@ function use3DMondrian() {
   }, [customRects3DStack]);
 
   useEffect(() => {
+    randomize();
+  }, [random]);
+
+  function randomize() {
     const randomCustomRects3DStack = initialCustomRects3DStack.map(customRects3DItem =>
       ({
         ...customRects3DItem,
@@ -67,7 +71,7 @@ function use3DMondrian() {
       })
     )
     setCustomRects3DStack(randomCustomRects3DStack);
-  }, [random]);
+  }
 
   function selectedCustomsRects3D(customRects3D: CustomRect3D[], axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
     switch(axis) {
@@ -220,7 +224,9 @@ function use3DMondrian() {
     setCustomRects3DStack(newCustomRects3DStack);
     // save for randomness
     setInitialCustomRects3DStack(newCustomRects3DStack);
-    setRandom(1.0);
+    if(random !== 1.0) {
+      randomize();
+    }
   }
 
   function cutInAction(axis: AxisType, coord: number): void {
