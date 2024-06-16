@@ -40,7 +40,7 @@ function ThreejsRenderer({
 
 
   return (
-    <div ref={canvasContainerRef} className="w-full h-full">
+    <div ref={canvasContainerRef} className="w-full h-full max-h-[92%]">
       <div className={`self-start relative ${isFullscreenEnabled ? "" : "hidden"}`}>
         <button onClick={handleGenerate} className="btn btn-outline absolute z-10 top-6 left-1">
           Generate
