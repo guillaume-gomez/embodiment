@@ -40,8 +40,8 @@ function getRandomInt(min: number, max: number) : number {
 type AxisType = "X" | "Y" | "Z";
 
 function use3DMondrian() {
-  const [xPad, setXPad] = useState<number>(50);
-  const [yPad, setYPad] = useState<number>(50);
+  const [xPad, _setXPad] = useState<number>(50);
+  const [_yPad, _setYPad] = useState<number>(50);
   const [width, setWidth] = useState<number>(500);
   const [height, setHeight] = useState<number>(500);
   const [depth, setDepth] = useState<number>(500);

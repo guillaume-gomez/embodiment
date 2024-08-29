@@ -27,7 +27,7 @@ function App() {
     setRandom
   } = use3DMondrian();
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
-  const [chooseRandomMove, setChooseRandomMove] = useState<boolean>(true);
+  const [chooseRandomMove, _setChooseRandomMove] = useState<boolean>(true);
   const [thickness, setThickness] = useState<number>(25);
   const [customRects3DStackIndex, setCustomRects3DStackIndex] = useState<number>(-1);
   const selectedCustomRects3D = useMemo(() => {
