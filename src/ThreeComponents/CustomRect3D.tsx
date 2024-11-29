@@ -38,7 +38,7 @@ function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }
   const previousValueColor = usePreviousDifferent(customRect3D.color);
 
   const [xMiddle, yMiddle, zMiddle] = centerRect(customRect3D);
-  const position = [
+  const position : [number, number, number] = [
     (customRect3D.x1 + xMiddle)/width,
     (customRect3D.y1 + yMiddle)/height,
     (customRect3D.z1 + zMiddle)/depth
@@ -60,12 +60,12 @@ function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }
   const widthGeometry = (widthRect(customRect3D) - thickness)/shapeSizes[0];
   const heightGeometry = (heightRect(customRect3D) - thickness)/shapeSizes[1];
   const depthGeometry = (depthRect(customRect3D) - thickness)/shapeSizes[2];
-  const geometry = [widthGeometry, heightGeometry, depthGeometry];
+  const geometry : [number, number, number] = [widthGeometry, heightGeometry, depthGeometry];
 
 
   return (
     <animated.mesh
-      position={spring.position}
+      position={spring.position as any}
     >
       <boxGeometry args={geometry} />
       <animated.meshStandardMaterial

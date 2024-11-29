@@ -20,7 +20,7 @@ const ShapeBounds = forwardRef<ExternalActionInterface, ShapeBoundsProps>(({ chi
   }));
 
   return (
-    <group ref={ref}>
+    <group ref={ref as any}>
       {children}
     </group>
   )
