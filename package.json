@@ -22,7 +22,7 @@
     "@types/three": "^0.159.0",
     "autoprefixer": "^10.4.14",
     "daisyui": "^4.5.0",
-    "gh-pages": "^6.1.1",
+    "gh-pages": "^6.2.0",
     "lodash": "^4.17.21",
     "postcss": "^8.4.25",
     "postprocessing": "^6.34.1",
