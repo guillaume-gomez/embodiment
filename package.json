@@ -1,5 +1,6 @@
 {
   "name": "embodiment",
+  "homepage": "https://guillaume-gomez.github.io/embodiment/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,18 +8,21 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@react-spring/three": "^9.7.3",
     "@react-spring/web": "^9.7.3",
-    "@react-three/drei": "^9.90.0",
+    "@react-three/drei": "^9.119.0",
     "@react-three/fiber": "^8.15.12",
     "@react-three/postprocessing": "^2.15.11",
     "@types/lodash": "^4.14.197",
     "@types/three": "^0.159.0",
     "autoprefixer": "^10.4.14",
     "daisyui": "^4.5.0",
+    "gh-pages": "^6.2.0",
     "lodash": "^4.17.21",
     "postcss": "^8.4.25",
     "postprocessing": "^6.34.1",

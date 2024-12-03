@@ -1,5 +1,4 @@
 import { usePreviousDifferent } from "rooks";
-import { useThree } from '@react-three/fiber';
 import { config } from '@react-spring/web';
 import { useSpring, animated } from '@react-spring/three';
 import { CustomRect3D } from "../hooks/use3DMondrian";
@@ -25,23 +24,21 @@ export function centerRect(rect : CustomRect3D) : [number, number, number] {
     return [ widthRect(rect)/ 2, heightRect(rect) / 2, depthRect(rect) / 2 ];
 }
 
-console.log(config.slow)
-
 interface CustomRect3DProps {
   customRect3D: CustomRect3D;
   thickness: number;
   wireframe?: boolean;
+  shapeSizes: [number, number, number];
 }
 
 // hooks contains a lots of variables between the hooks
-function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect3DProps) {
-  const { size: { width, height } } = useThree();
-  const depth = width;
+function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }: CustomRect3DProps) {
+  const [width, height, depth] = shapeSizes;
 
   const previousValueColor = usePreviousDifferent(customRect3D.color);
 
   const [xMiddle, yMiddle, zMiddle] = centerRect(customRect3D);
-  const position = [
+  const position : [number, number, number] = [
     (customRect3D.x1 + xMiddle)/width,
     (customRect3D.y1 + yMiddle)/height,
     (customRect3D.z1 + zMiddle)/depth
@@ -60,25 +57,23 @@ function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect
   });
 
 
-  const widthGeometry = (widthRect(customRect3D) - thickness)/width;
-  const heightGeometry = (heightRect(customRect3D) - thickness)/height;
-  const depthGeometry = (depthRect(customRect3D) - thickness)/depth;
-  const geometry = [widthGeometry, heightGeometry, depthGeometry];
+  const widthGeometry = (widthRect(customRect3D) - thickness)/shapeSizes[0];
+  const heightGeometry = (heightRect(customRect3D) - thickness)/shapeSizes[1];
+  const depthGeometry = (depthRect(customRect3D) - thickness)/shapeSizes[2];
+  const geometry : [number, number, number] = [widthGeometry, heightGeometry, depthGeometry];
 
 
   return (
     <animated.mesh
-      position={spring.position}
+      position={spring.position as any}
     >
       <boxGeometry args={geometry} />
       <animated.meshStandardMaterial
-        color={spring.color}
-        emisive={"#212121"}
+        color={spring.color as unknown as string}
+        emissive={"#212121"}
         roughness={0.478}
         metalness={0.122}
         wireframe={wireframe}
-        castShadow={true}
-        receiveShadow={true}
       />
     </animated.mesh>
   )

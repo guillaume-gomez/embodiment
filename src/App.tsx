@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { reverse } from "lodash";
 import ThreeJsRenderer from "./ThreeJsRenderer";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
@@ -8,15 +7,29 @@ import Range from "./components/Range";
 import CutInActionForm from "./components/CutInActionForm";
 import Select from "./components/Select";
 import Toggle from "./components/Toggle";
+import CollapseCard from "./components/CollapseCard";
+import CardBase from "./components/CardBase";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
 
 function App() {
-  const { generate, customRects3D, customRects3DStack, width, height, random, setRandom } = use3DMondrian();
+  const {
+    generate,
+    customRects3D,
+    customRects3DStack,
+    width,
+    height,
+    depth,
+    random,
+    setWidth,
+    setHeight,
+    setDepth,
+    setRandom
+  } = use3DMondrian();
   const [wireframe, setWireframe] = useState<boolean>(false);
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
-  const [chooseRandomMove, setChooseRandomMove] = useState<boolean>(true);
+  const [chooseRandomMove, _setChooseRandomMove] = useState<boolean>(true);
   const [thickness, setThickness] = useState<number>(25);
   const [customRects3DStackIndex, setCustomRects3DStackIndex] = useState<number>(-1);
   const selectedCustomRects3D = useMemo(() => {
@@ -39,10 +52,19 @@ function App() {
         githubRepositoryUrl={githubRepositoryUrl}
       />
       <div className="flex md:flex-row flex-col gap-3 flex-grow">
-        <div className="card bg-primary text-primary-content">
-          <div className="card-body">
-            <h2 className="card-title font-regular">Options</h2>
+        <div className="md:w-3/12">
+          <CardBase title="Options">
             <div className="flex flex-col gap-3">
+            <Range
+                label="Random"
+                float
+                min={0.1}
+                max={1}
+                value={random}
+                step={0.1}
+                onChange={(value) => setRandom(value)}
+              />
+            <CollapseCard>
               {
                 chooseRandomMove ?
                   <Range
@@ -56,14 +78,10 @@ function App() {
                   :
                   <CutInActionForm onChange={() => {}} maxCoord={500} />
               }
-              <Range
-                label="Random"
-                float
-                min={0.1}
-                max={1}
-                value={random}
-                step={0.1}
-                onChange={(value) => setRandom(value)}
+              <Toggle
+                label="Wireframe"
+                value={wireframe}
+                toggle={() => setWireframe(!wireframe)}
               />
               <Range
                 label="Thickness"
@@ -73,10 +91,29 @@ function App() {
                 step={1}
                 onChange={(value) => setThickness(value)}
               />
-              <Toggle
-                label="Wireframe"
-                value={wireframe}
-                toggle={() => setWireframe(!wireframe)}
+              <Range
+                label="Width"
+                min={100}
+                max={1000}
+                value={width}
+                step={10}
+                onChange={(value) => setWidth(value)}
+              />
+              <Range
+                label="Height"
+                min={100}
+                max={1000}
+                value={height}
+                step={10}
+                onChange={(value) => setHeight(value)}
+              />
+              <Range
+                label="Depth"
+                min={100}
+                max={1000}
+                value={depth}
+                step={10}
+                onChange={(value) => setDepth(value)}
               />
               <Select
                 label="History"
@@ -88,22 +125,22 @@ function App() {
                   )
                 }
               />
+            </CollapseCard>
+            <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
             </div>
-          </div>
+          </CardBase>
         </div>
-        <div className="card bg-primary text-primary-content">
-          <div className="card-body">
-            <h2 className="card-title font-regular">Render</h2>
-            <div className="flex flex-col gap-3">
+        <div className="md:w-9/12 h-full">
+          <CardBase title="Render">
               <ThreeJsRenderer
-                shapeSizes={[width, height, 1]}
+                shapeSizes={[width, height, width]}
                 thickness={thickness}
                 wireframe={wireframe}
                 customRects3D={selectedCustomRects3D}
+                handleGenerate={() => generate(numberOfIteration)}
               />
-              <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
-            </div>
-          </div>
+              <button className="btn btn-secondary md:hidden" onClick={() => generate(numberOfIteration)}>Generate</button>
+          </CardBase>
         </div>
       </div>
       <Footer githubRepositoryUrl={githubRepositoryUrl} />

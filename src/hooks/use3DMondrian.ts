@@ -1,5 +1,9 @@
 import { useState, useMemo, useEffect } from 'react';
-import { partition, flatten, sample, shuffle, sampleSize } from "lodash";
+import partition from "lodash/partition";
+import flatten from "lodash/flatten";
+import sample from "lodash/sample";
+import shuffle from "lodash/shuffle";
+import sampleSize from "lodash/sampleSize";
 
 
 export interface CustomRect3D{
@@ -36,8 +40,8 @@ function getRandomInt(min: number, max: number) : number {
 type AxisType = "X" | "Y" | "Z";
 
 function use3DMondrian() {
-  const [xPad, setXPad] = useState<number>(50);
-  const [yPad, setYPad] = useState<number>(50);
+  const [xPad, _setXPad] = useState<number>(50);
+  const [_yPad, _setYPad] = useState<number>(50);
   const [width, setWidth] = useState<number>(500);
   const [height, setHeight] = useState<number>(500);
   const [depth, setDepth] = useState<number>(500);
@@ -56,6 +60,10 @@ function use3DMondrian() {
   }, [customRects3DStack]);
 
   useEffect(() => {
+    randomize();
+  }, [random]);
+
+  function randomize() {
     const randomCustomRects3DStack = initialCustomRects3DStack.map(customRects3DItem =>
       ({
         ...customRects3DItem,
@@ -63,7 +71,7 @@ function use3DMondrian() {
       })
     )
     setCustomRects3DStack(randomCustomRects3DStack);
-  }, [random]);
+  }
 
   function selectedCustomsRects3D(customRects3D: CustomRect3D[], axis: AxisType, coord: number): [CustomRect3D[], CustomRect3D[]] {
     switch(axis) {
@@ -77,7 +85,7 @@ function use3DMondrian() {
     }
   }
 
-  function cutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
+  function cutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) : CustomRect3D[] {
     switch(axis) {
       case "X":
       default:
@@ -89,7 +97,7 @@ function use3DMondrian() {
     }
   }
 
-  function subCutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) {
+  function subCutIn(customRects3D: CustomRect3D[], axis: AxisType, coord: number) : CustomRect3D[] {
     // convert the axis make sur the cut is the right direction
     let axisTarget : AxisType = "Y";
     if (axis === "X") {
@@ -103,7 +111,7 @@ function use3DMondrian() {
     const [candidates, _others] = selectedCustomsRects3D(customRects3D, axisTarget, coord);
     if(candidates.length === 0) {
       console.info("does not work");
-      return;
+      return customRects3D;
     }
 
     const choose = sample(candidates)!; // candidates cannot be empty
@@ -113,7 +121,7 @@ function use3DMondrian() {
     return [...partition, ...others];
   }
 
-  function cutInXY(customRects3D: CustomRect3D[], coord: number) {
+  function cutInXY(customRects3D: CustomRect3D[], coord: number) : CustomRect3D[] {
     const [candidates, others] = selectedCustomsRects3D(customRects3D, "Z", coord);
 
     const result = candidates.map(customRect3D => {
@@ -134,7 +142,7 @@ function use3DMondrian() {
     return [...flatten(result), ...others];
   }
 
-  function cutInYZ(customRects3D: CustomRect3D[], coord: number) {
+  function cutInYZ(customRects3D: CustomRect3D[], coord: number) : CustomRect3D[] {
     const [candidates, others] = selectedCustomsRects3D(customRects3D, "X", coord);
 
     const result = candidates.map(customRect3D => {
@@ -156,7 +164,7 @@ function use3DMondrian() {
   }
 
 
-  function cutInXZ(customRects3D: CustomRect3D[], coord: number) {
+  function cutInXZ(customRects3D: CustomRect3D[], coord: number) : CustomRect3D[] {
     const [candidates, others] =  selectedCustomsRects3D(customRects3D, "Y", coord);
 
     const result = candidates.map(customRect3D => {
@@ -189,7 +197,7 @@ function use3DMondrian() {
     );
   }
 
-  function generate(numberIteration: number) {
+  function generate(numberIteration: number) : void {
     const init : CustomRect3D = {
       x1: 0, x2: width,
       y1: 0, y2: height,
@@ -199,7 +207,7 @@ function use3DMondrian() {
     const functions = [cutIn, subCutIn];
 
     let currentCustomRects : CustomRect3D[] = [init];
-    let newCustomRects3DStack : customRects3DStackItem[] = [];
+    let newCustomRects3DStack : CustomRects3DStackItem[] = [];
 
     for(let i=0; i < numberIteration; i++) {
       const randomCoord = getRandomInt(xPad, width - xPad);
@@ -216,13 +224,23 @@ function use3DMondrian() {
     setCustomRects3DStack(newCustomRects3DStack);
     // save for randomness
     setInitialCustomRects3DStack(newCustomRects3DStack);
-    setRandom(1.0);
+    if(random !== 1.0) {
+      randomize();
+    }
   }
 
-  function cutInAction(axis: AxisType, coord: number) {
+  function cutInAction(axis: AxisType, coord: number): void {
     const newCustomRects3D = cutIn(customRects3D, axis, coord);
-    setCustomRects3D(newCustomRects3D);
+
+    const newCustomRects3DStack = [...customRects3DStack, {
+      position: customRects3DStack.length,
+      action: `rotation-${axis}`,
+      customRects3D: newCustomRects3D
+    }];
+    setCustomRects3DStack(newCustomRects3DStack);
   }
+
+  console.log("depth ", depth);
 
   return {
     generate,
@@ -231,9 +249,11 @@ function use3DMondrian() {
     customRects3DStack,
     setWidth,
     setHeight,
+    setDepth,
     setRandom,
     width,
     height,
+    depth,
     random,
   };
 
