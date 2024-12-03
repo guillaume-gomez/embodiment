@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ThreeJsRenderer from "./ThreeJsRenderer";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
@@ -44,6 +44,10 @@ function App() {
     },
     [customRects3D, customRects3DStack, customRects3DStackIndex]
   );
+
+  useEffect(() => {
+    generate(numberOfIteration);
+  }, []);
 
   return (
     <div className="flex flex-col gap-2 h-screen items-center bg-gradient-to-tl from-fuchsia-900 to-indigo-900">

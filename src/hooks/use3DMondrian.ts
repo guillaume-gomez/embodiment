@@ -240,8 +240,6 @@ function use3DMondrian() {
     setCustomRects3DStack(newCustomRects3DStack);
   }
 
-  console.log("depth ", depth);
-
   return {
     generate,
     cutInAction,
