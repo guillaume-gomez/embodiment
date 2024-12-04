@@ -5,11 +5,13 @@ import { OrbitControls, GizmoHelper, GizmoViewport, Stage, Grid, Bounds } from '
 import CustomRect3DRenderer from "./ThreeComponents/CustomRect3D";
 import { CustomRect3D } from "./hooks/use3DMondrian";
 import Scanline from "./ThreeComponents/Scanline";
+import FallBackLoader from "./ThreeComponents/FallBackLoader";
 import ShapeBounds, { ExternalActionInterface } from "./ThreeComponents/ShapeBounds";
 
 interface MondrianThreeJsProps {
   shapeSizes: [number, number, number];
   thickness: number;
+  wireframe: boolean;
   customRects3D: CustomRect3D[];
   handleGenerate: () => void;
 }
@@ -17,6 +19,7 @@ interface MondrianThreeJsProps {
 function ThreejsRenderer({
   shapeSizes,
   thickness,
+  wireframe,
   customRects3D,
   handleGenerate
 } : MondrianThreeJsProps ): React.ReactElement {
@@ -47,7 +50,7 @@ function ThreejsRenderer({
         </button>
       </div>
       <Canvas
-        camera={{ position: [0,0, 1.75], fov: 75, far: 5 }}
+        camera={{ position: [0,0.75, 1.5], fov: 75, far: 5 }}
         dpr={window.devicePixelRatio}
         shadows
         onDoubleClick={() => {
@@ -56,26 +59,27 @@ function ThreejsRenderer({
         }}
       >
         <color attach="background" args={['#06092c']} />
-        <Suspense fallback={null}>
-          <Stage preset="rembrandt" intensity={1} environment="studio">
+        <Suspense fallback={<FallBackLoader/>}>
+          <Stage preset="rembrandt" adjustCamera={false} intensity={0.5} environment="studio">
             <Bounds fit clip observe margin={2}>
               <ShapeBounds ref={groupRef}>
-              <group
-                position={[-0.5, -0.5, -0.5]}
-              >
-                {
-                customRects3D.map((customRect3D, index) => {
-                  return (
-                    <CustomRect3DRenderer
-                      key={index}
-                      shapeSizes={shapeSizes}
-                      customRect3D={customRect3D}
-                      thickness={thickness}
-                    />
-                  );
-                })
-               }
-             </group>
+                <group
+                  position={[-0.5, -0.5, -0.5]}
+                >
+                  {
+                  customRects3D.map((customRect3D, index) => {
+                    return (
+                      <CustomRect3DRenderer
+                        key={index}
+                        shapeSizes={shapeSizes}
+                        customRect3D={customRect3D}
+                        thickness={thickness}
+                        wireframe={wireframe}
+                      />
+                    );
+                  })
+                 }
+               </group>
              </ShapeBounds>
              </Bounds>
           </Stage>

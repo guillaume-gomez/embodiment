@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ThreeJsRenderer from "./ThreeJsRenderer";
 import use3DMondrian from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import Range from "./components/Range";
 import CutInActionForm from "./components/CutInActionForm";
 import Select from "./components/Select";
+import Toggle from "./components/Toggle";
 import CollapseCard from "./components/CollapseCard";
 import CardBase from "./components/CardBase";
 
@@ -26,6 +27,7 @@ function App() {
     setDepth,
     setRandom
   } = use3DMondrian();
+  const [wireframe, setWireframe] = useState<boolean>(false);
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
   const [chooseRandomMove, _setChooseRandomMove] = useState<boolean>(true);
   const [thickness, setThickness] = useState<number>(25);
@@ -42,6 +44,10 @@ function App() {
     },
     [customRects3D, customRects3DStack, customRects3DStackIndex]
   );
+
+  useEffect(() => {
+    generate(numberOfIteration);
+  }, []);
 
   return (
     <div className="flex flex-col gap-2 h-screen items-center bg-gradient-to-tl from-fuchsia-900 to-indigo-900">
@@ -76,15 +82,10 @@ function App() {
                   :
                   <CutInActionForm onChange={() => {}} maxCoord={500} />
               }
-              <Select
-                label="History"
-                value={customRects3DStackIndex}
-                onChange={(value) => setCustomRects3DStackIndex(value)}
-                options={
-                  customRects3DStack.map(
-                    customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
-                  )
-                }
+              <Toggle
+                label="Wireframe"
+                value={wireframe}
+                toggle={() => setWireframe(!wireframe)}
               />
               <Range
                 label="Thickness"
@@ -118,6 +119,16 @@ function App() {
                 step={10}
                 onChange={(value) => setDepth(value)}
               />
+              <Select
+                label="History"
+                value={customRects3DStackIndex}
+                onChange={(value) => setCustomRects3DStackIndex(value)}
+                options={
+                  customRects3DStack.map(
+                    customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
+                  )
+                }
+              />
             </CollapseCard>
             <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
             </div>
@@ -128,6 +139,7 @@ function App() {
               <ThreeJsRenderer
                 shapeSizes={[width, height, width]}
                 thickness={thickness}
+                wireframe={wireframe}
                 customRects3D={selectedCustomRects3D}
                 handleGenerate={() => generate(numberOfIteration)}
               />
