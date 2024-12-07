@@ -47,7 +47,7 @@ function App() {
 
   useEffect(() => {
     generate(numberOfIteration);
-  }, []);
+  }, [width, height, depth, thickness, numberOfIteration]);
 
   return (
     <div className="flex flex-col gap-2 h-screen items-center bg-gradient-to-tl from-fuchsia-900 to-indigo-900">
@@ -137,7 +137,7 @@ function App() {
         <div className="md:w-9/12 h-full">
           <CardBase title="Render">
               <ThreeJsRenderer
-                shapeSizes={[width, height, width]}
+                shapeSizes={[width, height, depth]}
                 thickness={thickness}
                 wireframe={wireframe}
                 customRects3D={selectedCustomRects3D}
