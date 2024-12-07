@@ -9,13 +9,18 @@ interface SelectProps {
   value: any;
   options: OptionData[];
   onChange: (value: any) => void;
+  svgIcon: string;
 }
 
-function Select({label, value, options, onChange } : SelectProps) {
+function Select({label, value, options, svgIcon, onChange } : SelectProps) {
 
   return (
-    <div className="form-control">
-      <span className="label-text">{label}</span>
+    <div className="form-control gap-1">
+      <span className="label-text flex flex-row gap-2 items-center justify-between">
+        <div className="flex flex-row gap-1 justify-center items-center">
+          <img src={svgIcon} alt={label} />  {label}
+        </div>
+      </span>
       <select
         className="select select-accent"
         onChange={(e) =>onChange(e.target.value) }
