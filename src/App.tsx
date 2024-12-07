@@ -98,7 +98,7 @@ function App() {
               <Range
                 label="Width"
                 min={100}
-                max={1000}
+                max={2000}
                 value={width}
                 step={10}
                 onChange={(value) => setWidth(value)}
@@ -106,7 +106,7 @@ function App() {
               <Range
                 label="Height"
                 min={100}
-                max={1000}
+                max={2000}
                 value={height}
                 step={10}
                 onChange={(value) => setHeight(value)}
@@ -114,7 +114,7 @@ function App() {
               <Range
                 label="Depth"
                 min={100}
-                max={1000}
+                max={2000}
                 value={depth}
                 step={10}
                 onChange={(value) => setDepth(value)}
