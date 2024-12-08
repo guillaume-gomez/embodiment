@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 
 interface RangeProps {
   label: string;
@@ -7,13 +8,17 @@ interface RangeProps {
   step?: number;
   onChange: (value: number) => void;
   float?: boolean;
+  svgIcon: ReactNode;
 }
 
-function Range({label, min, max, value, step = 1, onChange, float= false } : RangeProps ) {
+function Range({label, min, max, value, step = 1, onChange, float= false, svgIcon } : RangeProps ) {
   return (
-    <div className="form-control">
-      <span className="label-text">
-          {label} - <span className="font-bold">({value})</span>
+    <div className="form-control gap-1">
+      <span className="label-text flex flex-row gap-2 items-center justify-between">
+          <div className="flex flex-row gap-1 justify-center items-center">
+            <img src={svgIcon} alt={label} />  {label}
+          </div>
+          <span className="font-bold">( {value} )</span>
       </span>
       <input
         className="range range-accent"
