@@ -56,7 +56,7 @@ function CollapseCard({ children } : CollapseCardProps) {
     <div className="overflow-y-hidden transition-all duration-300"
       style={{ height: !collapsed ? ref.current?.offsetHeight || 0 : 0 }}
     >
-      <div ref={ref} className="flex flex-col gap-2">
+      <div ref={ref} className="flex flex-col gap-3">
       {children}
       </div>
     </div>

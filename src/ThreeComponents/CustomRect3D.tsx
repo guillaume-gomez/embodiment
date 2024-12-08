@@ -1,5 +1,4 @@
 import { usePreviousDifferent } from "rooks";
-import { config } from '@react-spring/web';
 import { useSpring, animated } from '@react-spring/three';
 import { CustomRect3D } from "../hooks/use3DMondrian";
 
@@ -49,8 +48,8 @@ function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }
     from: { color: previousValueColor, position: previousValuePosition },
     to  : { color: customRect3D.color, position },
     config: {
-      ...config.gentle,
-      duration: 500,
+      tension: 250,
+      friction: 20,
       precision: 0.0001
     },
     reset: true,

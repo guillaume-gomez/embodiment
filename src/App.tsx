@@ -9,6 +9,14 @@ import Select from "./components/Select";
 import Toggle from "./components/Toggle";
 import CollapseCard from "./components/CollapseCard";
 import CardBase from "./components/CardBase";
+import heightIcon from "/iconmonstr-cursor-15.svg";
+import widthIcon from "/iconmonstr-cursor-16.svg";
+import depthIcon from "/iconmonstr-cursor-17.svg";
+import randomIcon from "/iconmonstr-control-panel-6.svg";
+import historyIcon from "/iconmonstr-layer-11.svg";
+import iterationIcon from "/iconmonstr-layer-19.svg";
+import thicknessIcon from "/iconmonstr-ruler-24.svg";
+import wireframeIcon from "/iconmonstr-cube-6.svg";
 
 const githubRepositoryUrl = "https://github.com/guillaume-gomez/embodiment";
 const projectName ="Embodiment";
@@ -47,7 +55,7 @@ function App() {
 
   useEffect(() => {
     generate(numberOfIteration);
-  }, []);
+  }, [width, height, depth, thickness, numberOfIteration]);
 
   return (
     <div className="flex flex-col gap-2 h-screen items-center bg-gradient-to-tl from-fuchsia-900 to-indigo-900">
@@ -65,6 +73,7 @@ function App() {
                 min={0.1}
                 max={1}
                 value={random}
+                svgIcon={randomIcon}
                 step={0.1}
                 onChange={(value) => setRandom(value)}
               />
@@ -74,6 +83,7 @@ function App() {
                   <Range
                     label="Number of Iterations"
                     value={numberOfIteration}
+                    svgIcon={iterationIcon}
                     min={1}
                     max={20}
                     step={1}
@@ -84,6 +94,7 @@ function App() {
               }
               <Toggle
                 label="Wireframe"
+                svgIcon={wireframeIcon}
                 value={wireframe}
                 toggle={() => setWireframe(!wireframe)}
               />
@@ -92,6 +103,7 @@ function App() {
                 min={0}
                 max={100}
                 value={thickness}
+                svgIcon={thicknessIcon}
                 step={1}
                 onChange={(value) => setThickness(value)}
               />
@@ -100,6 +112,7 @@ function App() {
                 min={100}
                 max={1000}
                 value={width}
+                svgIcon={widthIcon}
                 step={10}
                 onChange={(value) => setWidth(value)}
               />
@@ -108,6 +121,7 @@ function App() {
                 min={100}
                 max={1000}
                 value={height}
+                svgIcon={heightIcon}
                 step={10}
                 onChange={(value) => setHeight(value)}
               />
@@ -116,11 +130,13 @@ function App() {
                 min={100}
                 max={1000}
                 value={depth}
+                svgIcon={depthIcon}
                 step={10}
                 onChange={(value) => setDepth(value)}
               />
               <Select
                 label="History"
+                svgIcon={historyIcon}
                 value={customRects3DStackIndex}
                 onChange={(value) => setCustomRects3DStackIndex(value)}
                 options={
@@ -137,7 +153,7 @@ function App() {
         <div className="md:w-9/12 h-full">
           <CardBase title="Render">
               <ThreeJsRenderer
-                shapeSizes={[width, height, width]}
+                shapeSizes={[width, height, depth]}
                 thickness={thickness}
                 wireframe={wireframe}
                 customRects3D={selectedCustomRects3D}
