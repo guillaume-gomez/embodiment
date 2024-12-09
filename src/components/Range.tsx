@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 interface RangeProps {
   label: string;
   min: number;
@@ -8,7 +6,7 @@ interface RangeProps {
   step?: number;
   onChange: (value: number) => void;
   float?: boolean;
-  svgIcon: ReactNode;
+  svgIcon: string;
 }
 
 function Range({label, min, max, value, step = 1, onChange, float= false, svgIcon } : RangeProps ) {

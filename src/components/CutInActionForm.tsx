@@ -14,12 +14,14 @@ function CutInActionForm({ onChange, maxCoord } : CutInActionFormProps) {
     <div>
       <Select
         label={"Axis cut"}
+        svgIcon="cut-icon"
         value={axis}
         onChange={(value) => setAxis(value)}
         options={[{label: "X", value: "X"}, {label: "Y", value: "Y"}, {label: "Z", value: "Z"}]}
       />
       <Range
         label="Coord"
+        svgIcon="coord-icon"
         value={coord}
         step={1}
         min={0}
