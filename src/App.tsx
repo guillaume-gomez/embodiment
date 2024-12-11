@@ -90,7 +90,7 @@ function App() {
                     onChange={(value) => setNumberOfIteration(value)}
                   />
                   :
-                  <CutInActionForm onChange={() => {}} maxCoord={500} />
+                  <CutInActionForm onChange={() => {}} maxCoords={[width, height, depth]} />
               }
               <Toggle
                 label="Wireframe"
