@@ -16,6 +16,8 @@ interface MondrianThreeJsProps {
   handleGenerate: () => void;
 }
 
+const SCALE = 1000;
+
 function ThreejsRenderer({
   shapeSizes,
   thickness,
@@ -41,6 +43,7 @@ function ThreejsRenderer({
     groupRef.current.recenter();
   }
 
+  const [width, height, depth] = shapeSizes;
 
   return (
     <div ref={canvasContainerRef} className="w-full h-full max-h-[92%]">
@@ -64,7 +67,8 @@ function ThreejsRenderer({
             <Bounds fit clip observe margin={2}>
               <ShapeBounds ref={groupRef}>
                 <group
-                  position={[-0.5, -0.5, -0.5]}
+                  scale={1/SCALE}
+                  position={[-((width/2)/SCALE), 0, -(depth/2)/SCALE]}
                 >
                   {
                   customRects3D.map((customRect3D, index) => {
@@ -82,14 +86,14 @@ function ThreejsRenderer({
                </group>
              </ShapeBounds>
              </Bounds>
+             <Grid args={[50, 50]} position={[0,0,0]} cellColor='white' />
           </Stage>
           <Scanline />
-          <Grid args={[10, 10]} position={[0,-0.5,0]} cellColor='white' />
         </Suspense>
         <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
           <GizmoViewport labelColor="white" axisHeadScale={1} />
         </GizmoHelper>
-        <OrbitControls makeDefault />
+        <OrbitControls makeDefault maxDistance={5} />
       </Canvas>
     </div>
   );

@@ -110,7 +110,7 @@ function App() {
               <Range
                 label="Width"
                 min={100}
-                max={1000}
+                max={2000}
                 value={width}
                 svgIcon={widthIcon}
                 step={10}
@@ -119,7 +119,7 @@ function App() {
               <Range
                 label="Height"
                 min={100}
-                max={1000}
+                max={2000}
                 value={height}
                 svgIcon={heightIcon}
                 step={10}
@@ -128,7 +128,7 @@ function App() {
               <Range
                 label="Depth"
                 min={100}
-                max={1000}
+                max={2000}
                 value={depth}
                 svgIcon={depthIcon}
                 step={10}

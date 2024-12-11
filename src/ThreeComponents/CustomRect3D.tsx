@@ -38,9 +38,9 @@ function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }
 
   const [xMiddle, yMiddle, zMiddle] = centerRect(customRect3D);
   const position : [number, number, number] = [
-    (customRect3D.x1 + xMiddle)/width,
-    (customRect3D.y1 + yMiddle)/height,
-    (customRect3D.z1 + zMiddle)/depth
+    (customRect3D.x1 + xMiddle),
+    (customRect3D.y1 + yMiddle),
+    (customRect3D.z1 + zMiddle)
   ]
   const previousValuePosition = usePreviousDifferent(position);
 
@@ -56,9 +56,9 @@ function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }
   });
 
 
-  const widthGeometry = (widthRect(customRect3D) - thickness)/shapeSizes[0];
-  const heightGeometry = (heightRect(customRect3D) - thickness)/shapeSizes[1];
-  const depthGeometry = (depthRect(customRect3D) - thickness)/shapeSizes[2];
+  const widthGeometry = (widthRect(customRect3D) - thickness);
+  const heightGeometry = (heightRect(customRect3D) - thickness);
+  const depthGeometry = (depthRect(customRect3D) - thickness);
   const geometry : [number, number, number] = [widthGeometry, heightGeometry, depthGeometry];
 
 
