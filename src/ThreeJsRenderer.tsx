@@ -43,7 +43,7 @@ function ThreejsRenderer({
     groupRef.current.recenter();
   }
 
-  const [width, height, depth] = shapeSizes;
+  const [width, _height, depth] = shapeSizes;
 
   return (
     <div ref={canvasContainerRef} className="w-full h-full max-h-[92%]">
@@ -75,7 +75,6 @@ function ThreejsRenderer({
                     return (
                       <CustomRect3DRenderer
                         key={index}
-                        shapeSizes={shapeSizes}
                         customRect3D={customRect3D}
                         thickness={thickness}
                         wireframe={wireframe}

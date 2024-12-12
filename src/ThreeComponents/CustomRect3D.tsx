@@ -27,13 +27,10 @@ interface CustomRect3DProps {
   customRect3D: CustomRect3D;
   thickness: number;
   wireframe?: boolean;
-  shapeSizes: [number, number, number];
 }
 
 // hooks contains a lots of variables between the hooks
-function CustomRect3D({ customRect3D, thickness, shapeSizes, wireframe = false }: CustomRect3DProps) {
-  const [width, height, depth] = shapeSizes;
-
+function CustomRect3D({ customRect3D, thickness, wireframe = false }: CustomRect3DProps) {
   const previousValueColor = usePreviousDifferent(customRect3D.color);
 
   const [xMiddle, yMiddle, zMiddle] = centerRect(customRect3D);
