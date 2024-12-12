@@ -63,8 +63,8 @@ function App() {
         projectTitle={projectName}
         githubRepositoryUrl={githubRepositoryUrl}
       />
-      <div className="flex md:flex-row flex-col gap-3 flex-grow">
-        <div className="md:w-3/12">
+      <div className="container p-2 flex md:flex-row flex-col gap-3 flex-grow">
+        <div className="lg:w-3/12 md:w-4/12">
           <CardBase title="Options">
             <div className="flex flex-col gap-3">
             <Range
@@ -81,7 +81,7 @@ function App() {
               {
                 chooseRandomMove ?
                   <Range
-                    label="Number of Iterations"
+                    label="Number of Cuts"
                     value={numberOfIteration}
                     svgIcon={iterationIcon}
                     min={1}
@@ -150,7 +150,7 @@ function App() {
             </div>
           </CardBase>
         </div>
-        <div className="md:w-9/12 h-full">
+        <div className="lg:w-9/12 md:w-8/12 h-full">
           <CardBase title="Render">
               <ThreeJsRenderer
                 shapeSizes={[width, height, depth]}
