@@ -11,7 +11,7 @@ function GithubButton({githubRepositoryUrl} : GithubButtonProps) {
         target="_blank"
         href={githubRepositoryUrl}
         rel="noopener, noreferrer"
-        className="btn btn-ghost drawer-button btn-square normal-case"
+        className="btn btn-outline drawer-button btn-square normal-case"
       >
         <svg 
           width="20" 

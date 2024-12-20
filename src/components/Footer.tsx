@@ -1,15 +1,11 @@
-import GithubButton from "./GithubButton";
-
 interface FooterProps {
-  githubRepositoryUrl: string;
 }
 
-function Footer({ githubRepositoryUrl }: FooterProps) {
+function Footer({  }: FooterProps) {
   return (
-    <footer className="footer items-center p-4">
-      <div className="items-center grid-flow-col">
-        <p>Made by Guillaume Gomez - 2023</p>
-        <GithubButton githubRepositoryUrl={githubRepositoryUrl} />
+    <footer className="flex flex-row items-center p-4">
+      <div className="flex items-center">
+        <span>Made by Guillaume Gomez - 2024</span>
       </div> 
     </footer>
   )
