@@ -57,113 +57,128 @@ function App() {
     generate(numberOfIteration);
   }, [width, height, depth, thickness, numberOfIteration]);
 
+  function computeSnapForSizes(axis: string, value: number) : number {
+    if(width === height && height === depth) {
+      return width;
+    }
+
+
+  }
+
   return (
-    <div className="flex flex-col gap-2 h-screen items-center bg-gradient-to-tl from-fuchsia-900 to-indigo-900">
-      <Navbar
-        projectTitle={projectName}
-        githubRepositoryUrl={githubRepositoryUrl}
-      />
-      <div className="container p-2 flex md:flex-row flex-col gap-3 flex-grow">
-        <div className="lg:w-3/12 md:w-4/12">
-          <CardBase title="Options">
-            <div className="flex flex-col gap-3">
-            <Range
-                label="Random"
-                float
-                min={0.1}
-                max={1}
-                value={random}
-                svgIcon={randomIcon}
-                step={0.1}
-                onChange={(value) => setRandom(value)}
-              />
-            <CollapseCard>
-              {
-                chooseRandomMove ?
-                  <Range
-                    label="Number of Cuts"
-                    value={numberOfIteration}
-                    svgIcon={iterationIcon}
-                    min={1}
-                    max={20}
-                    step={1}
-                    onChange={(value) => setNumberOfIteration(value)}
-                  />
-                  :
-                  <CutInActionForm onChange={() => {}} maxCoord={500} />
-              }
-              <Toggle
-                label="Wireframe"
-                svgIcon={wireframeIcon}
-                value={wireframe}
-                toggle={() => setWireframe(!wireframe)}
-              />
+    <div className="bg-gradient-to-tl from-fuchsia-900 to-blue-900">
+      <div className="m-auto container flex flex-col gap-2 h-screen items-center">
+        <Navbar
+          projectTitle={projectName}
+          githubRepositoryUrl={githubRepositoryUrl}
+        />
+        <div className="container p-2 flex md:flex-row flex-col gap-3 flex-grow">
+          <div className="lg:w-3/12 md:w-4/12">
+            <CardBase title="Options">
+              <div className="flex flex-col gap-3">
               <Range
-                label="Thickness"
-                min={0}
-                max={100}
-                value={thickness}
-                svgIcon={thicknessIcon}
-                step={1}
-                onChange={(value) => setThickness(value)}
-              />
-              <Range
-                label="Width"
-                min={100}
-                max={2000}
-                value={width}
-                svgIcon={widthIcon}
-                step={10}
-                onChange={(value) => setWidth(value)}
-              />
-              <Range
-                label="Height"
-                min={100}
-                max={2000}
-                value={height}
-                svgIcon={heightIcon}
-                step={10}
-                onChange={(value) => setHeight(value)}
-              />
-              <Range
-                label="Depth"
-                min={100}
-                max={2000}
-                value={depth}
-                svgIcon={depthIcon}
-                step={10}
-                onChange={(value) => setDepth(value)}
-              />
-              <Select
-                label="History"
-                svgIcon={historyIcon}
-                value={customRects3DStackIndex}
-                onChange={(value) => setCustomRects3DStackIndex(value)}
-                options={
-                  customRects3DStack.map(
-                    customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
-                  )
+                  label="Random"
+                  float
+                  min={0.1}
+                  max={1}
+                  value={random}
+                  svgIcon={randomIcon}
+                  step={0.1}
+                  onChange={(value) => setRandom(value)}
+                />
+              <CollapseCard>
+                {
+                  chooseRandomMove ?
+                    <Range
+                      label="Number of Cuts"
+                      value={numberOfIteration}
+                      svgIcon={iterationIcon}
+                      min={1}
+                      max={20}
+                      step={1}
+                      snap={10}
+                      onChange={(value) => setNumberOfIteration(value)}
+                    />
+                    :
+                    <CutInActionForm onChange={() => {}} maxCoord={500} />
                 }
-              />
-            </CollapseCard>
-            <button className="btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
-            </div>
-          </CardBase>
+                <Toggle
+                  label="Wireframe"
+                  svgIcon={wireframeIcon}
+                  value={wireframe}
+                  toggle={() => setWireframe(!wireframe)}
+                />
+                <Range
+                  label="Thickness"
+                  min={0}
+                  max={100}
+                  value={thickness}
+                  svgIcon={thicknessIcon}
+                  snap={25}
+                  step={1}
+                  onChange={(value) => setThickness(value)}
+                />
+                <Range
+                  label="Width"
+                  min={100}
+                  max={2000}
+                  value={width}
+                  svgIcon={widthIcon}
+                  snap={computeSnapForSizes()}
+                  step={10}
+                  onChange={(value) => setWidth(value)}
+                />
+                <Range
+                  label="Height"
+                  min={100}
+                  max={2000}
+                  value={height}
+                  svgIcon={heightIcon}
+                  snap={computeSnapForSizes()}
+                  step={10}
+                  onChange={(value) => setHeight(value)}
+                />
+                <Range
+                  label="Depth"
+                  min={100}
+                  max={2000}
+                  value={depth}
+                  svgIcon={depthIcon}
+                  snap={computeSnapForSizes()}
+                  step={10}
+                  onChange={(value) => setDepth(value)}
+                />
+                <Select
+                  label="History"
+                  svgIcon={historyIcon}
+                  value={customRects3DStackIndex}
+                  onChange={(value) => setCustomRects3DStackIndex(value)}
+                  options={
+                    customRects3DStack.map(
+                      customRect3DItem => ({label: `Action ${customRect3DItem.position} - ${customRect3DItem.action}`, value: customRect3DItem.position })
+                    )
+                  }
+                />
+              </CollapseCard>
+              <button className="hidden md:block btn btn-secondary" onClick={() => generate(numberOfIteration)}>Generate</button>
+              </div>
+            </CardBase>
+          </div>
+          <div className="lg:w-9/12 md:w-8/12 h-full">
+            <CardBase title="Render">
+                <ThreeJsRenderer
+                  shapeSizes={[width, height, depth]}
+                  thickness={thickness}
+                  wireframe={wireframe}
+                  customRects3D={selectedCustomRects3D}
+                  handleGenerate={() => generate(numberOfIteration)}
+                />
+                <button className="btn btn-secondary md:hidden" onClick={() => generate(numberOfIteration)}>Generate</button>
+            </CardBase>
+          </div>
         </div>
-        <div className="lg:w-9/12 md:w-8/12 h-full">
-          <CardBase title="Render">
-              <ThreeJsRenderer
-                shapeSizes={[width, height, depth]}
-                thickness={thickness}
-                wireframe={wireframe}
-                customRects3D={selectedCustomRects3D}
-                handleGenerate={() => generate(numberOfIteration)}
-              />
-              <button className="btn btn-secondary md:hidden" onClick={() => generate(numberOfIteration)}>Generate</button>
-          </CardBase>
-        </div>
+        <Footer />
       </div>
-      <Footer githubRepositoryUrl={githubRepositoryUrl} />
     </div>
   )
 }
