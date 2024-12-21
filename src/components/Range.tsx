@@ -7,9 +7,10 @@ interface RangeProps {
   onChange: (value: number) => void;
   float?: boolean;
   svgIcon: string;
+  snap: number
 }
 
-function Range({label, min, max, value, step = 1, onChange, float= false, svgIcon } : RangeProps ) {
+function Range({label, min, max, value, step = 1, onChange, float= false, svgIcon, snap = 1 } : RangeProps ) {
   return (
     <div className="form-control gap-1">
       <span className="label-text flex flex-row gap-2 items-center justify-between">
@@ -31,7 +32,12 @@ function Range({label, min, max, value, step = 1, onChange, float= false, svgIco
           } else {
             onChange(parseInt(event.target.value));
           }
-        }} />
+        }}
+        list={`my-snap-${label}`}
+        />
+        <datalist id={`my-snap-${label}`}>
+          <option value={snap} />
+        </datalist>
     </div>
   )
 }
