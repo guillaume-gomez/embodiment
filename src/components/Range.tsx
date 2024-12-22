@@ -10,6 +10,12 @@ interface RangeProps {
   snap: number
 }
 
+function camelize(str: string) : string {
+  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+    return index === 0 ? word.toLowerCase() : word.toUpperCase();
+  }).replace(/\s+/g, '');
+}
+
 function Range({label, min, max, value, step = 1, onChange, float= false, svgIcon, snap = 1 } : RangeProps ) {
   return (
     <div className="form-control gap-1">
@@ -33,9 +39,9 @@ function Range({label, min, max, value, step = 1, onChange, float= false, svgIco
             onChange(parseInt(event.target.value));
           }
         }}
-        list={`my-snap-${label}`}
+        list={`my-snap-${camelize(label)}`}
         />
-        <datalist id={`my-snap-${label}`}>
+        <datalist id={`my-snap-${camelize(label)}`}>
           <option value={snap} />
         </datalist>
     </div>
