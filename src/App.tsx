@@ -57,12 +57,35 @@ function App() {
     generate(numberOfIteration);
   }, [width, height, depth, thickness, numberOfIteration]);
 
-  function computeSnapForSizes(axis: string, value: number) : number {
+  function computeSnapForSizes(axis: string, currentValue: number) : number {
     if(width === height && height === depth) {
       return width;
     }
 
+    if(width === height)
+    {
+      return width;
+    }
 
+    if(height === depth) {
+      return height;
+    }
+
+    if(width === height) {
+      return width;
+    }
+
+    switch(axis) {
+    case "width":
+      return Math.abs(currentValue - height) < Math.abs(currentValue - depth) ? height: depth;
+    case "height":
+      return Math.abs(currentValue - width) < Math.abs(currentValue - depth) ? width: depth;
+    case "depth":
+      return Math.abs(currentValue - height) < Math.abs(currentValue - width) ? height: width;
+    default:
+      return 0;
+    }
+    return 0;
   }
 
   return (
@@ -84,6 +107,7 @@ function App() {
                   value={random}
                   svgIcon={randomIcon}
                   step={0.1}
+                  snap={0.7}
                   onChange={(value) => setRandom(value)}
                 />
               <CollapseCard>
@@ -124,7 +148,7 @@ function App() {
                   max={2000}
                   value={width}
                   svgIcon={widthIcon}
-                  snap={computeSnapForSizes()}
+                  snap={computeSnapForSizes('width', width)}
                   step={10}
                   onChange={(value) => setWidth(value)}
                 />
@@ -134,7 +158,7 @@ function App() {
                   max={2000}
                   value={height}
                   svgIcon={heightIcon}
-                  snap={computeSnapForSizes()}
+                  snap={computeSnapForSizes('height', height)}
                   step={10}
                   onChange={(value) => setHeight(value)}
                 />
@@ -144,7 +168,7 @@ function App() {
                   max={2000}
                   value={depth}
                   svgIcon={depthIcon}
-                  snap={computeSnapForSizes()}
+                  snap={computeSnapForSizes('depth', depth)}
                   step={10}
                   onChange={(value) => setDepth(value)}
                 />
