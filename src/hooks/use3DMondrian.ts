@@ -36,6 +36,8 @@ export const palettes : Palette[] = [
   ["#DD367C", "#F7F8C9", "#F5DA7C", "#00BD75", "#7700D7", "#EC586B"], // 60s Retro Color Scheme
   ["#300350", "#94167F", "#E93479", "#F9AC53", "#F62E97", "#153CB4"], // Vaporwave Color Scheme
   ["#001D80", "#0951FD", "#F9FE0E", "#00FBD6", "#FF01FD", "#001D80"], // Retro Game Screen
+  ["#D95F3B", "#F0984A", "#FCD6A5", "#7AA9A3", "#338F9A", "#1C4C70"], // Retro Gradient Color Scheme
+  ["#0C1565", "#A82437", "#461659", "#A3209A", "#F3BA24", "#3094C6"], // Darkwave Color Scheme
 ]
 
 function randomColor() : string {
