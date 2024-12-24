@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
 import ThreeJsRenderer from "./ThreeJsRenderer";
-import use3DMondrian from "./hooks/use3DMondrian";
+import use3DMondrian, { palettes } from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Range from "./components/Range";
 import CutInActionForm from "./components/CutInActionForm";
 import Select from "./components/Select";
+import SelectPalette from "./components/SelectPalette";
 import Toggle from "./components/Toggle";
 import CollapseCard from "./components/CollapseCard";
 import CardBase from "./components/CardBase";
@@ -30,10 +31,12 @@ function App() {
     height,
     depth,
     random,
+    paletteIndex,
     setWidth,
     setHeight,
     setDepth,
-    setRandom
+    setRandom,
+    setPaletteIndex
   } = use3DMondrian();
   const [wireframe, setWireframe] = useState<boolean>(false);
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
@@ -57,12 +60,35 @@ function App() {
     generate(numberOfIteration);
   }, [width, height, depth, thickness, numberOfIteration]);
 
-  function computeSnapForSizes(axis: string, value: number) : number {
+  function computeSnapForSizes(currentValue: number, axis: string) : number {
     if(width === height && height === depth) {
       return width;
     }
 
+    if(width === height)
+    {
+      return width;
+    }
 
+    if(height === depth) {
+      return height;
+    }
+
+    if(width === height) {
+      return width;
+    }
+
+    switch(axis) {
+    case "width":
+      return Math.abs(currentValue - height) < Math.abs(currentValue - depth) ? height: depth;
+    case "height":
+      return Math.abs(currentValue - width) < Math.abs(currentValue - depth) ? width: depth;
+    case "depth":
+      return Math.abs(currentValue - height) < Math.abs(currentValue - width) ? height: width;
+    default:
+      return 0;
+    }
+    return 0;
   }
 
   return (
@@ -84,6 +110,7 @@ function App() {
                   value={random}
                   svgIcon={randomIcon}
                   step={0.1}
+                  snap={0.7}
                   onChange={(value) => setRandom(value)}
                 />
               <CollapseCard>
@@ -124,7 +151,7 @@ function App() {
                   max={2000}
                   value={width}
                   svgIcon={widthIcon}
-                  snap={computeSnapForSizes()}
+                  snap={computeSnapForSizes(width, 'width')}
                   step={10}
                   onChange={(value) => setWidth(value)}
                 />
@@ -134,7 +161,7 @@ function App() {
                   max={2000}
                   value={height}
                   svgIcon={heightIcon}
-                  snap={computeSnapForSizes()}
+                  snap={computeSnapForSizes(height, 'height')}
                   step={10}
                   onChange={(value) => setHeight(value)}
                 />
@@ -144,9 +171,18 @@ function App() {
                   max={2000}
                   value={depth}
                   svgIcon={depthIcon}
-                  snap={computeSnapForSizes()}
+                  snap={computeSnapForSizes(depth, 'depth')}
                   step={10}
                   onChange={(value) => setDepth(value)}
+                />
+                <SelectPalette
+                  value={paletteIndex}
+                  onChange={(value) => setPaletteIndex(value)}
+                  options={
+                    palettes.map(
+                      (palette, position) => ({ palette, value: position })
+                    )
+                  }
                 />
                 <Select
                   label="History"

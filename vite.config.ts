@@ -6,7 +6,7 @@ import checker from 'vite-plugin-checker';
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "/embodiment/",
-  build: {
+  /*build: {
     rollupOptions: {
       output: {
         manualChunks(id: string) {
@@ -16,13 +16,13 @@ export default defineConfig({
         }
       }
     }
-  },
+  },*/
   plugins: [
     react(),
     checker({
       // e.g. use TypeScript check
       typescript: true,
     }),
-    splitVendorChunkPlugin(),
+    //splitVendorChunkPlugin(),
   ],
 });
