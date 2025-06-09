@@ -60,7 +60,7 @@ function App() {
     generate(numberOfIteration);
   }, [width, height, depth, thickness, numberOfIteration]);
 
-  function computeSnapForSizes(currentValue: number, axis: string) : number {
+  function computeSnapForSizes(axis: string, currentValue: number) : number {
     if(width === height && height === depth) {
       return width;
     }
@@ -72,10 +72,6 @@ function App() {
 
     if(height === depth) {
       return height;
-    }
-
-    if(width === height) {
-      return width;
     }
 
     switch(axis) {
@@ -151,7 +147,7 @@ function App() {
                   max={2000}
                   value={width}
                   svgIcon={widthIcon}
-                  snap={computeSnapForSizes(width, 'width')}
+                  snap={computeSnapForSizes('width', width)}
                   step={10}
                   onChange={(value) => setWidth(value)}
                 />
@@ -161,7 +157,7 @@ function App() {
                   max={2000}
                   value={height}
                   svgIcon={heightIcon}
-                  snap={computeSnapForSizes(height, 'height')}
+                  snap={computeSnapForSizes('height', height)}
                   step={10}
                   onChange={(value) => setHeight(value)}
                 />
@@ -171,7 +167,7 @@ function App() {
                   max={2000}
                   value={depth}
                   svgIcon={depthIcon}
-                  snap={computeSnapForSizes(depth, 'depth')}
+                  snap={computeSnapForSizes('depth', depth)}
                   step={10}
                   onChange={(value) => setDepth(value)}
                 />

@@ -89,9 +89,11 @@ function ThreejsRenderer({
           </Stage>
           <Scanline />
         </Suspense>
-        <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
-          <GizmoViewport labelColor="white" axisHeadScale={1} />
-        </GizmoHelper>
+        {import.meta.env.MODE === "development" &&
+          <GizmoHelper renderPriority={2} alignment="bottom-right" margin={[100, 100]}>
+            <GizmoViewport labelColor="white" axisHeadScale={1} />
+          </GizmoHelper>
+        }
         <OrbitControls makeDefault maxDistance={5} />
       </Canvas>
     </div>
