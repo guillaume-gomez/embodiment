@@ -22,6 +22,24 @@ interface CustomRects3DStackItem {
   customRects3D: CustomRect3D[];
 }
 
+export type Palette = [string, string, string, string, string, string];
+
+export const palettes : Palette[] = [
+  ["#270245", "#871A85", "#FF2941", "#FEFF38", "#FE18D3", "#4206F1"],
+  ["#3B7573", "#493770", "#7F4D85", "#B8587B", "#EEBE8F", "#EEBE8F"],
+  ["#A414D9", "#FF802B", "#F9E105", "#34C7A5", "#5D50CE", "#5D50CE"],
+  ["#493E90", "#493E90", "#FDF60C", "#14C898", "#DD2268", "#DD2268"],
+  ["#00A8BC", "#B20E21", "#FFE101", "#FFCD04", "#F79212", "#EB3510"],
+  ["#C6460F", "#F7892E", "#EAC761", "#E8DF9C", "#B7CF99", "#4FAAA7"],
+  ["#FF0000", "#FF0000", "#0000FF", "#0000FF", "#FFFFFF", "#FFFFFF"],
+  ["#FF0004", "#7A0080", "#FFFF00", "#30C030", "#002CFF", "#FF7E00"], // retro gaming
+  ["#DD367C", "#F7F8C9", "#F5DA7C", "#00BD75", "#7700D7", "#EC586B"], // 60s Retro Color Scheme
+  ["#300350", "#94167F", "#E93479", "#F9AC53", "#F62E97", "#153CB4"], // Vaporwave Color Scheme
+  ["#001D80", "#0951FD", "#F9FE0E", "#00FBD6", "#FF01FD", "#001D80"], // Retro Game Screen
+  ["#D95F3B", "#F0984A", "#FCD6A5", "#7AA9A3", "#338F9A", "#1C4C70"], // Retro Gradient Color Scheme
+  ["#0C1565", "#A82437", "#461659", "#A3209A", "#F3BA24", "#3094C6"], // Darkwave Color Scheme
+]
+
 function randomColor() : string {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -31,11 +49,17 @@ function randomColor() : string {
   return color;
 }
 
+function randomColorFromPalette(palette: string[]) : string {
+  const colorIndex = Math.floor(Math.random() * 6);
+  return palette[colorIndex];
+}
+
 function getRandomInt(min: number, max: number) : number {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
+
 
 type AxisType = "X" | "Y" | "Z";
 
@@ -46,6 +70,7 @@ function use3DMondrian() {
   const [height, setHeight] = useState<number>(500);
   const [depth, setDepth] = useState<number>(500);
   const [random, setRandom] = useState<number>(1.0);
+  const [paletteIndex, setPaletteIndex] = useState<number>(-1);
 
   const [customRects3DStack, setCustomRects3DStack] = useState<CustomRects3DStackItem[]>([]);
   // use for randomness
@@ -62,6 +87,14 @@ function use3DMondrian() {
   useEffect(() => {
     randomize();
   }, [random]);
+
+  function computeColor() {
+    if(paletteIndex === -1) {
+      return randomColor();
+    }
+
+    return randomColorFromPalette(palettes[paletteIndex]);
+  }
 
   function randomize() {
     const randomCustomRects3DStack = initialCustomRects3DStack.map(customRects3DItem =>
@@ -128,12 +161,12 @@ function use3DMondrian() {
       const a : CustomRect3D = {
         ...customRect3D,
         z2: coord,
-        color: randomColor()
+        color: computeColor()
       };
       const b : CustomRect3D = {
         ...customRect3D,
         z1: coord,
-        color: randomColor()
+        color: computeColor()
       };
 
       return [a,b]
@@ -149,12 +182,12 @@ function use3DMondrian() {
       const a : CustomRect3D = {
         ...customRect3D,
         x2: coord,
-        color: randomColor()
+        color: computeColor()
       };
       const b : CustomRect3D = {
         ...customRect3D,
         x1: coord,
-        color: randomColor()
+        color: computeColor()
       };
 
       return [a,b]
@@ -171,12 +204,12 @@ function use3DMondrian() {
       const a : CustomRect3D = {
         ...customRect3D,
         y1: coord,
-        color: randomColor()
+        color: computeColor()
       };
       const b : CustomRect3D = {
         ...customRect3D,
         y2: coord,
-        color: randomColor()
+        color: computeColor()
       };
 
       return [a,b]
@@ -249,10 +282,12 @@ function use3DMondrian() {
     setHeight,
     setDepth,
     setRandom,
+    setPaletteIndex,
     width,
     height,
     depth,
     random,
+    paletteIndex,
   };
 
 }

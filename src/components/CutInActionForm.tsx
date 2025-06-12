@@ -25,8 +25,8 @@ function CutInActionForm({ onChange, maxCoord } : CutInActionFormProps) {
         value={coord}
         step={1}
         min={0}
+        snap={0}
         max={maxCoord}
-        snap={500}
         onChange={(value) => setCoord(value)}
       />
       <button onClick={() => {

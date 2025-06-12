@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
 import ThreeJsRenderer from "./ThreeJsRenderer";
-import use3DMondrian from "./hooks/use3DMondrian";
+import use3DMondrian, { palettes } from "./hooks/use3DMondrian";
 import Navbar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Range from "./components/Range";
 import CutInActionForm from "./components/CutInActionForm";
 import Select from "./components/Select";
+import SelectPalette from "./components/SelectPalette";
 import Toggle from "./components/Toggle";
 import CollapseCard from "./components/CollapseCard";
 import CardBase from "./components/CardBase";
@@ -30,10 +31,12 @@ function App() {
     height,
     depth,
     random,
+    paletteIndex,
     setWidth,
     setHeight,
     setDepth,
-    setRandom
+    setRandom,
+    setPaletteIndex
   } = use3DMondrian();
   const [wireframe, setWireframe] = useState<boolean>(false);
   const [numberOfIteration, setNumberOfIteration] = useState<number>(10);
@@ -55,7 +58,7 @@ function App() {
 
   useEffect(() => {
     generate(numberOfIteration);
-  }, [width, height, depth, thickness, numberOfIteration]);
+  }, [width, height, depth, thickness, numberOfIteration, paletteIndex]);
 
   function computeSnapForSizes(axis: string, currentValue: number) : number {
     if(width === height && height === depth) {
@@ -69,10 +72,6 @@ function App() {
 
     if(height === depth) {
       return height;
-    }
-
-    if(width === height) {
-      return width;
     }
 
     switch(axis) {
@@ -126,6 +125,15 @@ function App() {
                     :
                     <CutInActionForm onChange={() => {}} maxCoord={500} />
                 }
+                <SelectPalette
+                  value={paletteIndex}
+                  onChange={(value) => setPaletteIndex(value)}
+                  options={
+                    palettes.map(
+                      (palette, position) => ({ palette, value: position })
+                    )
+                  }
+                />
                 <Toggle
                   label="Wireframe"
                   svgIcon={wireframeIcon}
