@@ -22,7 +22,7 @@ interface CustomRects3DStackItem {
   customRects3D: CustomRect3D[];
 }
 
-type Palette = [string, string, string, string, string, string];
+export type Palette = [string, string, string, string, string, string];
 
 export const palettes : Palette[] = [
   ["#270245", "#871A85", "#FF2941", "#FEFF38", "#FE18D3", "#4206F1"],

@@ -20,8 +20,7 @@ export default defineConfig({
   plugins: [
     react(),
     checker({
-      // e.g. use TypeScript check
-      typescript: true,
+      typescript: "tsconfig.app.json",
     }),
     //splitVendorChunkPlugin(),
   ],

@@ -58,7 +58,7 @@ function App() {
 
   useEffect(() => {
     generate(numberOfIteration);
-  }, [width, height, depth, thickness, numberOfIteration]);
+  }, [width, height, depth, thickness, numberOfIteration, paletteIndex]);
 
   function computeSnapForSizes(axis: string, currentValue: number) : number {
     if(width === height && height === depth) {
@@ -125,6 +125,15 @@ function App() {
                     :
                     <CutInActionForm onChange={() => {}} maxCoord={500} />
                 }
+                <SelectPalette
+                  value={paletteIndex}
+                  onChange={(value) => setPaletteIndex(value)}
+                  options={
+                    palettes.map(
+                      (palette, position) => ({ palette, value: position })
+                    )
+                  }
+                />
                 <Toggle
                   label="Wireframe"
                   svgIcon={wireframeIcon}
@@ -170,15 +179,6 @@ function App() {
                   snap={computeSnapForSizes('depth', depth)}
                   step={10}
                   onChange={(value) => setDepth(value)}
-                />
-                <SelectPalette
-                  value={paletteIndex}
-                  onChange={(value) => setPaletteIndex(value)}
-                  options={
-                    palettes.map(
-                      (palette, position) => ({ palette, value: position })
-                    )
-                  }
                 />
                 <Select
                   label="History"
