@@ -10,6 +10,8 @@ The algorithm start from a plain shape, then cut it a certain number of times.
 ![embodiment2](https://github.com/user-attachments/assets/b3559715-3d82-45e8-981e-0c7301f98d75)
 ![embodiment3](https://github.com/user-attachments/assets/f8114459-56fe-4544-94a6-e5f04d308d00)
 
+[focus.webm](https://github.com/user-attachments/assets/82ad8393-d561-4095-8948-ecf5f5e416ad)
+[big-picture.webm](https://github.com/user-attachments/assets/1fbc4dc2-d14d-4c38-b357-3cebe0cea98d)
 
 ## Resources
 - [Font](https://www.dafont.com/alien-encounters.font)
